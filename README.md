@@ -38,34 +38,47 @@ A modern, responsive, and animated portfolio website built with **React**, **Fra
 |--------------|----------|
 | ![Hero](./assets/screenshots/hero.png) | ![Projects](./assets/screenshots/projects.png) |
 
-> *(Make sure to add actual screenshots under `/assets/screenshots`)*
-
 ---
 
 ## 📁 Folder Structure
 
-src/
-│
-├── components/
-│ ├── AboutSection.jsx
-│ ├── ContactSection.jsx
-│ ├── HeroSection.jsx
-│ ├── ProjectsSection.jsx
-│ ├── SkillsSection.jsx
-│ └── Navbar.jsx
-│
-├── styles/
-│ ├── AboutSection.css
-│ ├── ContactSection.css
-│ ├── HeroSection.css
-│ ├── ProjectsSection.css
-│ ├── SkillsSection.css
-│ └── Navbar.css
-│
-├── assets/
-│ └── images/
-│
-└── App.jsx
+src:
+  assets:
+    images:
+      - profile.jpg
+      - project-1.png
+      - project-2.png
+      - ...
+    screenshots:
+      - hero.png
+      - projects.png
+      - skills.png
+  components:
+    - AboutSection.jsx
+    - ContactSection.jsx
+    - HeroSection.jsx
+    - ProjectsSection.jsx
+    - SkillsSection.jsx
+    - Navbar.jsx
+    - Footer.jsx
+  styles:
+    - AboutSection.css
+    - ContactSection.css
+    - HeroSection.css
+    - ProjectsSection.css
+    - SkillsSection.css
+    - Navbar.css
+    - Footer.css
+  App.jsx
+  main.jsx
+public:
+  - index.html
+  - favicon.ico
+README.md
+package.json
+vite.config.js
+.gitignore
+
 
 
 ---
@@ -107,9 +120,4 @@ npm run dev
 This project is licensed under the MIT License.
 
 ---
-
-### ✅ To Use:
-1. Replace `[sunilkumarkv9535@gmail.com]`, `[https://www.linkedin.com/in/sunilkumarkv44/]`, `[https://sunilcraft.vercel.app/]`, and image paths if needed.
-2. Place screenshots in `src/assets/screenshots/`.
-
 
