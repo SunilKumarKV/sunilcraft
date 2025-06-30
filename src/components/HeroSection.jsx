@@ -4,6 +4,7 @@ import AboutSection from "./AboutSection.jsx";
 import ProjectsSection from "./ProjectsSection.jsx";
 import SkillsSection from "./SkillsSection.jsx";
 import ContactSection from "./ContactSection.jsx";
+import HeroPic from "../assets/images/pic.png";
 import "../styles/HeroSection.css";
 
 export default function HeroSection() {
@@ -32,7 +33,7 @@ export default function HeroSection() {
         </motion.div>
 
         <div className="hero-image">
-          <img src="https://via.placeholder.com/400" alt="Profile" />
+          <img src={HeroPic} alt="Profile" />
         </div>
       </section>
 
