@@ -18,12 +18,14 @@ section:nth-of-type(odd) {
   flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
+  height: 100vh;
+  padding: 0px 20px;
   background: linear-gradient(135deg, #fdfdfd 0%, #eef7ff 100%);
   text-align: center;
   gap: 2rem;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .hero-content {
@@ -162,6 +164,7 @@ section + section {
   .hero {
     flex-direction: row;
     text-align: left;
+    padding: 0px 40px;
     gap: 4rem;
   }
 
