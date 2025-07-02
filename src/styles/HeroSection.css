@@ -72,7 +72,10 @@ section:nth-of-type(odd) {
 
 /* Scroll down indicator */
 .scroll-indicator {
+  position: absolute;
   margin-top: 30px;
+  top: 57rem;
+  left: 43rem;
   display: flex;
   justify-content: center;
   align-items: center;

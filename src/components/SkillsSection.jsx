@@ -10,7 +10,7 @@ const skillsData = {
       name: "HTML5",
       icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
       level: 90,
-      tooltip: "3+ years of experience",
+      tooltip: "3+ years of hands on experience",
     },
     {
       name: "CSS3",
