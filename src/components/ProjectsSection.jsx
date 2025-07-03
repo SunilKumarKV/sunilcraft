@@ -35,6 +35,32 @@ const ProjectsSection = () => {
         "Built a full-featured e-commerce site with React, including filters, cart, authentication, and payment integration. Scalable and component-driven.",
       link: "#",
     },
+    {
+      title: "E-Commerce Platform",
+      image: img2,
+      category: "Web Development",
+      description:
+        "Built a full-featured e-commerce site with React, including filters, cart, authentication, and payment integration. Scalable and component-driven.",
+      link: "#",
+    },
+    {
+      title: "⏱️ Countdown Timer with Dark/Light Mode & Animation",
+      image:
+        "	https://adoric.com/blog/wp-content/uploads/2020/07/creating-countdown-timer.jpg",
+      category: "HTML5, CSS3, JavaScript",
+      description:
+        "A modern, responsive countdown timer built with HTML, CSS, and JavaScript. This project dynamically counts down to the next New Year with an easy-to-read UI, dark/light mode toggle, and smooth tick animations on the timer digits.",
+      link: "https://sunilkumarkv.github.io/Countdown-Timer/",
+    },
+    {
+      title: "🔍 SunilSearch – Google Search Clone",
+      image:
+        "https://www.google.com/chrome/static/images/dev-components/chrome-gallery-1-2x.webp",
+      category: "HTML5, CSS3, JavaScript",
+      description:
+        "A polished and responsive replica of the Google Search homepage, enhanced with modern web features for an improved user experience. This project showcases front-end skills in layout design, accessibility, and browser APIs.",
+      link: "https://sunilkumarkv.github.io/Google-Chrome-Page/",
+    },
   ];
 
   return (
