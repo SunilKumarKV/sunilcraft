@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import "../styles/ProjectsSection.css";
-import img1 from "../assets/images/img.jpg";
-import img2 from "../assets/images/project-3.jpg";
+import img1 from "/assets/images/img.jpg";
+import img2 from "/assets/images/project-3.jpg";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },

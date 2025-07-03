@@ -5,6 +5,7 @@ import Hero from "./components/HeroSection";
 import About from "./components/AboutSection";
 import Projects from "./components/ProjectsSection";
 import Skills from "./components/SkillsSection";
+import RewardsPage from "./components/CertificateGallery";
 import Contact from "./components/ContactSection";
 import "./App.css";
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/skills" element={<Skills />} />
+        <Route path="/rewards" element={<RewardsPage />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
       <Footer />
