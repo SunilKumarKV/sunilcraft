@@ -36,6 +36,15 @@ const ProjectsSection = () => {
       link: "#",
     },
     {
+      title: "🤖 ChatBot",
+      image:
+        "https://chat-bot-three-green-58.vercel.app/",
+      category: "ReactJS, TailwindCSS",
+      description:
+        "A fully responsive React chatbot built with Vite and Tailwind CSS. Features include voice input using the Web Speech API, dark/light mode toggle, auto-scroll behavior, localStorage chat history, and a dummy AI response engine for practice or prototyping. Ideal for learning React basics, working with browser APIs, and building modern UIs.",
+      link: "https://chat-bot-three-green-58.vercel.app/",
+    },
+    {
       title: "E-Commerce Platform",
       image: img2,
       category: "Web Development",
