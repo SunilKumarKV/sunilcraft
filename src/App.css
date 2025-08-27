@@ -1,23 +1,50 @@
 :root {
   --bg-color: #f8fcff;
   --text-color: #333;
+  --text-secondary: #666;
   --accent-color: #007bff;
   --card-bg: #fff;
   --input-bg: #fff;
   --input-border: #ddd;
   --button-bg: #1f1f1f;
   --button-hover-bg: #333;
+  --hero-bg: linear-gradient(135deg, #fdfdfd 0%, #eef7ff 100%);
+  --about-bg: linear-gradient(135deg, #e0f7fa, #ffffff);
+  --projects-bg: linear-gradient(135deg, #f3f8ff, #ffffff);
+  --contact-bg: linear-gradient(to right, #ffffff, #ebf8ff);
+  --skills-bg: linear-gradient(135deg, #fdfbfb, #ebedee);
+  --footer-bg: #05b3a4;
+  --navbar-bg: rgba(254, 247, 239, 0.6);
+  --shadow-light: 0 8px 20px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 [data-theme="dark"] {
   --bg-color: #121212;
   --text-color: #eaeaea;
+  --text-secondary: #bbb;
   --accent-color: #00bfff;
   --card-bg: #1a1a1a;
   --input-bg: #222;
   --input-border: #444;
   --button-bg: #00bfff;
   --button-hover-bg: #0099cc;
+  --hero-bg: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  --about-bg: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+  --projects-bg: linear-gradient(135deg, #0e0e0e, #1a1a1a);
+  --contact-bg: linear-gradient(to right, #1a1a1a, #0f0f0f);
+  --skills-bg: linear-gradient(135deg, #111, #1e1e1e);
+  --footer-bg: #034a42;
+  --navbar-bg: rgba(18, 18, 18, 0.6);
+  --shadow-light: 0 8px 20px rgba(255, 255, 255, 0.05);
+  --shadow-medium: 0 8px 24px rgba(255, 255, 255, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
 }
 
 body {
@@ -54,36 +81,123 @@ a:hover {
   color: var(--bg-color);
 }
 
-/* Example update for cards and inputs */
+/* Global styles for components to use theme variables */
+.hero {
+  background: var(--hero-bg) !important;
+}
+
+.about {
+  background: var(--about-bg) !important;
+}
+
+.projects {
+  background: var(--projects-bg) !important;
+}
+
+.contact {
+  background: var(--contact-bg) !important;
+}
+
+.skills-section {
+  background: var(--skills-bg) !important;
+}
+
+.footer {
+  background: var(--footer-bg) !important;
+}
+
+/* Cards and inputs */
 .about-card,
 .project-card,
-.skill-card,
-.contact-form input,
-.contact-form textarea {
-  background: var(--card-bg);
-  color: var(--text-color);
-  border-color: var(--input-border);
+.skill-card {
+  background: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  box-shadow: var(--shadow-light) !important;
 }
 
 .contact-form input,
 .contact-form textarea {
-  background-color: var(--input-bg);
-  border: 1px solid var(--input-border);
-  color: var(--text-color);
+  background-color: var(--input-bg) !important;
+  border: 1px solid var(--input-border) !important;
+  color: var(--text-color) !important;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  border-color: var(--accent-color);
+  border-color: var(--accent-color) !important;
   outline: none;
 }
 
 .contact-form button {
-  background-color: var(--button-bg);
-  color: var(--bg-color);
+  background-color: var(--button-bg) !important;
+  color: var(--bg-color) !important;
   transition: background-color 0.3s ease;
 }
 
 .contact-form button:hover {
-  background-color: var(--button-hover-bg);
+  background-color: var(--button-hover-bg) !important;
+}
+
+/* Text colors */
+.hero-subtitle,
+.hero-title,
+.about-title,
+.projects-title,
+.contact-title,
+.skills-title,
+.category-title {
+  color: var(--text-color) !important;
+}
+
+.hero-description,
+.about-description,
+.projects-subtitle,
+.contact-subtitle,
+.project-description {
+  color: var(--text-secondary) !important;
+}
+
+.project-title,
+.skill-card p {
+  color: var(--text-color) !important;
+}
+
+.project-category {
+  color: var(--text-secondary) !important;
+}
+
+/* Navbar theming */
+.navbar {
+  background-color: var(--navbar-bg) !important;
+}
+
+.logo,
+.menu-item {
+  color: var(--text-color) !important;
+}
+
+.menu-item:hover {
+  color: var(--accent-color) !important;
+}
+
+/* Certificate gallery theming */
+.cert-card {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  box-shadow: var(--shadow-light) !important;
+}
+
+.modal-content {
+  background: var(--card-bg) !important;
+  color: var(--text-color) !important;
+}
+
+.cert-info h3,
+.modal-text h3 {
+  color: var(--text-color) !important;
+}
+
+.cert-info p,
+.modal-text p {
+  color: var(--text-secondary) !important;
 }

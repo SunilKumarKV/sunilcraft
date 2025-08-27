@@ -5,14 +5,6 @@ section {
   box-sizing: border-box;
 }
 
-section:nth-of-type(even) {
-  background-color: #f9f9f9;
-}
-
-section:nth-of-type(odd) {
-  background-color: #ffffff;
-}
-
 .hero {
   display: flex;
   flex-direction: column-reverse;
@@ -20,12 +12,13 @@ section:nth-of-type(odd) {
   justify-content: center;
   height: 100vh;
   padding: 0px 20px;
-  background: linear-gradient(135deg, #fdfdfd 0%, #eef7ff 100%);
+  background: var(--hero-bg);
   text-align: center;
   gap: 2rem;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
+  transition: background 0.3s ease;
 }
 
 .hero-content {
@@ -37,19 +30,19 @@ section:nth-of-type(odd) {
   font-size: 60px;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #1f1f1f;
+  color: var(--text-color);
 }
 
 .hero-title {
   font-size: 36px;
   font-weight: bold;
-  color: #1f1f1f;
+  color: var(--text-color);
   margin-bottom: 16px;
 }
 
 .hero-description {
   font-size: 18px;
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 30px;
 }
@@ -57,8 +50,8 @@ section:nth-of-type(odd) {
 .hero-button {
   display: inline-block;
   padding: 14px 32px;
-  background-color: #1f1f1f;
-  color: #fff;
+  background-color: var(--button-bg);
+  color: var(--card-bg);
   text-decoration: none;
   font-size: 18px;
   border-radius: 50px;
@@ -67,7 +60,7 @@ section:nth-of-type(odd) {
 }
 
 .hero-button:hover {
-  background-color: #333;
+  background-color: var(--button-hover-bg);
 }
 
 /* Scroll down indicator */
@@ -85,7 +78,7 @@ section:nth-of-type(odd) {
   display: inline-block;
   width: 24px;
   height: 40px;
-  border: 2px solid #1e90ff;
+  border: 2px solid var(--accent-color);
   border-radius: 30px;
   position: relative;
 }
@@ -97,7 +90,7 @@ section:nth-of-type(odd) {
   left: 50%;
   width: 6px;
   height: 6px;
-  background-color: #1e90ff;
+  background-color: var(--accent-color);
   border-radius: 50%;
   transform: translateX(-50%);
   animation: scroll-down 1.5s infinite;
@@ -126,7 +119,7 @@ section:nth-of-type(odd) {
 .hero-image img {
   max-width: 100%;
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-medium);
   object-fit: cover;
   position: relative;
   z-index: 10;
@@ -140,7 +133,7 @@ section:nth-of-type(odd) {
   left: -20px;
   width: 120%;
   height: 120%;
-  background: radial-gradient(circle at 30% 30%, #1e90ff, #00bfff);
+  background: radial-gradient(circle at 30% 30%, var(--accent-color), #00bfff);
   border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   z-index: 1;
   animation: morph 8s infinite linear;

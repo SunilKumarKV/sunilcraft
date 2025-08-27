@@ -1,6 +1,6 @@
 .contact {
   padding: 100px 10%;
-  background: linear-gradient(to right, #ffffff, #ebf8ff);
+  background: var(--contact-bg);
   text-align: center;
   transition: background 0.3s ease, color 0.3s ease;
 }
@@ -13,12 +13,12 @@
   font-size: 48px;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #1f1f1f;
+  color: var(--text-color);
 }
 
 .contact-subtitle {
   font-size: 18px;
-  color: #555;
+  color: var(--text-secondary);
   max-width: 650px;
   margin: 0 auto;
   line-height: 1.8;
@@ -36,11 +36,11 @@
 .contact-form textarea {
   width: 100%;
   padding: 18px 20px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--input-border);
   border-radius: 12px;
   font-size: 16px;
-  background: #fff;
-  color: #333;
+  background: var(--input-bg);
+  color: var(--text-color);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   resize: none;
   outline: none;
@@ -48,14 +48,14 @@
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  border-color: #00b894;
+  border-color: var(--accent-color);
   box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.15);
 }
 
 .contact-form button {
   padding: 16px 0;
-  background: linear-gradient(135deg, #00b894, #00cec9);
-  color: #fff;
+  background: var(--button-bg);
+  color: var(--card-bg);
   border: none;
   font-size: 18px;
   font-weight: 500;
@@ -65,7 +65,7 @@
 }
 
 .contact-form button:hover {
-  background: linear-gradient(135deg, #00cec9, #00b894);
+  background: var(--button-hover-bg);
   transform: scale(1.02);
 }
 
@@ -78,49 +78,11 @@
 }
 
 .form-status.success {
-  color: #00b894;
-}
-
-.form-status.error {
-  color: #d63031;
+  color: var(--accent-color);
 }
 
 .form-status.error {
   color: #e74c3c;
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  .contact {
-    background: linear-gradient(to right, #1a1a1a, #0f0f0f);
-    color: #f5f5f5;
-  }
-
-  .contact-title,
-  .contact-subtitle {
-    color: #eee;
-  }
-
-  .contact-form input,
-  .contact-form textarea {
-    background: #111;
-    color: #eee;
-    border: 1px solid #333;
-  }
-
-  .contact-form input:focus,
-  .contact-form textarea:focus {
-    border-color: #00cec9;
-    box-shadow: 0 0 0 3px rgba(0, 206, 201, 0.2);
-  }
-
-  .form-status {
-    color: #00cec9;
-  }
-
-  .form-status.error {
-    color: #ff7675;
-  }
 }
 
 /* Responsive */

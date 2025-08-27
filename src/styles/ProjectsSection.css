@@ -1,12 +1,8 @@
 .projects {
   padding: 100px 10%;
-  background: linear-gradient(135deg, #f3f8ff, #ffffff);
+  background: var(--projects-bg);
   text-align: center;
-  transition: background-color 0.3s ease;
-}
-
-.dark-mode .projects {
-  background: linear-gradient(135deg, #0e0e0e, #1a1a1a);
+  transition: background 0.3s ease;
 }
 
 .projects-header {
@@ -17,23 +13,15 @@
   font-size: 48px;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #1f1f1f;
-}
-
-.dark-mode .projects-title {
-  color: #ffffff;
+  color: var(--text-color);
 }
 
 .projects-subtitle {
   font-size: 18px;
-  color: #666;
+  color: var(--text-secondary);
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.8;
-}
-
-.dark-mode .projects-subtitle {
-  color: #bbb;
 }
 
 .project-list {
@@ -44,22 +32,17 @@
 }
 
 .project-card {
-  background: #ffffff;
+  background: var(--card-bg);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-light);
   max-width: 360px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.dark-mode .project-card {
-  background: #1e1e1e;
-  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.05);
-}
-
 .project-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-medium);
 }
 
 .project-image {
@@ -76,48 +59,32 @@
 
 .project-category {
   font-size: 14px;
-  color: #999;
+  color: var(--text-secondary);
   margin-bottom: 8px;
-}
-
-.dark-mode .project-category {
-  color: #aaa;
 }
 
 .project-title {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 16px;
-  color: #1f1f1f;
-}
-
-.dark-mode .project-title {
-  color: #fff;
+  color: var(--text-color);
 }
 
 .project-description {
   font-size: 16px;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 20px;
-}
-
-.dark-mode .project-description {
-  color: #ccc;
 }
 
 .project-link {
   display: inline-block;
   font-size: 16px;
-  color: #1f1f1f;
+  color: var(--accent-color);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
-.dark-mode .project-link {
-  color: #00bfff;
-}
-
 .project-link:hover {
-  color: #007acc;
+  color: var(--text-color);
 }

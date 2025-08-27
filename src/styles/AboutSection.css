@@ -3,9 +3,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 100px 10%;
-  background: linear-gradient(135deg, #e0f7fa, #ffffff);
+  background: var(--about-bg);
   gap: 60px;
   box-sizing: border-box;
+  transition: background 0.3s ease;
 }
 
 .about-content {
@@ -17,22 +18,12 @@
   font-size: 48px;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #1f1f1f;
-}
-
-.about-title,
-.about-card h3 {
-  color: #333;
-}
-
-.about-description,
-.about-card p {
-  color: #555;
+  color: var(--text-color);
 }
 
 .about-description {
   font-size: 18px;
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.8;
   margin-bottom: 40px;
 }
@@ -43,29 +34,30 @@
 }
 
 .about-card {
-  background: #f7f7f7;
+  background: var(--card-bg);
   padding: 30px;
   border-radius: 16px;
   text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-light);
   flex: 1;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: default;
 }
 
 .about-card:hover {
   transform: translateY(-8px);
+  box-shadow: var(--shadow-medium);
 }
 
 .about-card h3 {
   font-size: 36px;
-  color: #1f1f1f;
+  color: var(--text-color);
   margin-bottom: 10px;
 }
 
 .about-card p {
   font-size: 16px;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .about-image {
@@ -77,7 +69,7 @@
 .about-image img {
   max-width: 400px;
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-medium);
   object-fit: cover;
 }
 

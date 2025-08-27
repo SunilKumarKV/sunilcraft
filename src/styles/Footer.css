@@ -1,6 +1,6 @@
 .footer {
   position: relative;
-  background: #05b3a4;
+  background: var(--footer-bg);
   min-height: 100px;
   padding: 20px 50px;
   display: flex;
@@ -8,6 +8,7 @@
   align-items: center;
   flex-direction: column;
   margin-top: 23%;
+  transition: background 0.3s ease;
 }
 
 .footer-bottom {
@@ -46,8 +47,10 @@
   display: inline-block;
   transition: 0.5s;
 }
+
 .social-icon__link:hover {
   transform: translateY(-10px);
+  color: var(--accent-color);
 }
 
 .footer p {
