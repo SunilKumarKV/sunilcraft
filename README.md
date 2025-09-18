@@ -117,7 +117,7 @@ npm run dev
 - React Icons
 
 ## 📜 License
-This project is licensed under the MIT License.
+This project is licensed under Sunil the MIT License.
 
 ---
 
