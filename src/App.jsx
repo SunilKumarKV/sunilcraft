@@ -11,7 +11,7 @@ import Contact from "./components/ContactSection";
 // Problems pages
 import ProblemsHome from "./problems/ProblemsHome";
 import JavaScriptProblems from "./problems/javascript/JavaScriptProblems";
-import ProblemLayout from "./problems/javascript/30days/ProblemLayout";
+import ProblemLayout from "./problems/javascript/30Days/ProblemLayout";
 import "./App.css";
 
 function App() {
