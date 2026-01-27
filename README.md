@@ -18,7 +18,7 @@ A modern, responsive, and animated portfolio website built with **React**, **Fra
 - 💡 EmailJS (Contact Form Integration)
 - 📦 GitHub for Version Control
 
----
+----
 
 ## 📂 Features
 
