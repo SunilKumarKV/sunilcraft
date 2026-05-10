@@ -10,6 +10,7 @@ const ContactSection = () => {
     message: "",
   });
   const [status, setStatus] = useState({ message: "", type: "" });
+  const [isSending, setIsSending] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,21 +20,30 @@ const ContactSection = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.message) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       setStatus({ message: "Please fill in all fields.", type: "error" });
       return;
     }
 
+    if (!emailPattern.test(formData.email)) {
+      setStatus({ message: "Please enter a valid email address.", type: "error" });
+      return;
+    }
+
+    setIsSending(true);
+
     emailjs
       .send(
-        "service_nfl29v7", // Replace with your EmailJS service ID
-        "templatey11143o", // Replace with your EmailJS template ID
+        import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_nfl29v7",
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "templatey11143o",
         {
           from_name: formData.name,
           reply_to: formData.email,
           message: formData.message,
         },
-        "53BbXZraEZXEW23Oh" // Replace with your EmailJS public key
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "53BbXZraEZXEW23Oh"
       )
       .then(() => {
         setStatus({
@@ -48,7 +58,8 @@ const ContactSection = () => {
           message: "Failed to send message. Please try again later.",
           type: "error",
         });
-      });
+      })
+      .finally(() => setIsSending(false));
   };
 
   const inputVariants = {
@@ -104,10 +115,11 @@ const ContactSection = () => {
 
         <motion.button
           type="submit"
-          whileHover={{ scale: 1.05 }}
+          disabled={isSending}
+          whileHover={{ scale: isSending ? 1 : 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          Send Message
+          {isSending ? "Sending..." : "Send Message"}
         </motion.button>
 
         {status.message && (

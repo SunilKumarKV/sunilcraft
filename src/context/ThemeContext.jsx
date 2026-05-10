@@ -1,11 +1,10 @@
-import React, { createContext, useEffect, useState } from "react";
-
-export const ThemeContext = createContext();
+import React, { useEffect, useState } from "react";
+import { ThemeContext } from "./theme";
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem("theme") || "light"
-  );
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "light";
+  });
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";

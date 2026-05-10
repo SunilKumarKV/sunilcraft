@@ -16,26 +16,27 @@ const AboutSection = () => {
         <h2 className="about-title">About Me</h2>
 
         <p className="about-description">
-          Hello! I’m <strong>Sunil Kumar</strong>, a passionate front-end React
-          developer from India. I love building clean, responsive, and
-          user-friendly web applications with React, JavaScript, and modern UI
-          frameworks.
+          Hello! I’m <strong>Sunil Kumar K V</strong>, a full-stack and front-end
+          developer from India. I build clean, responsive, and user-friendly
+          applications using React, JavaScript, Node.js, Express, and modern UI
+          tools.
           <br />
-          My strengths are in pixel-perfect UI design, component-based
-          architecture, and integrating APIs for dynamic data-driven apps. I’m
-          constantly learning and experimenting with new technologies.
+          I am currently studying MCA and improving production-level project
+          skills through real deployments like SunilCraft, ChessPlay, and
+          DevWithSunil. My strengths are component-based architecture, UI/UX
+          improvement, API integration, debugging, and learning in public.
           <br />
-          <strong>Skills:</strong> React, JavaScript, HTML5, CSS3, Vite, Git,
-          Framer Motion.
+          <strong>Skills:</strong> React, JavaScript, HTML5, CSS3, Tailwind CSS,
+          Node.js, Express, MongoDB, Git, Vite, Framer Motion.
         </p>
         <div className="about-details">
           <div className="about-card">
-            <h3>50+</h3>
-            <p>Projects Completed</p>
+            <h3>10+</h3>
+            <p>Projects Built</p>
           </div>
           <div className="about-card">
-            <h3>30</h3>
-            <p>Happy Clients</p>
+            <h3>3+</h3>
+            <p>Live Deployments</p>
           </div>
           <div className="about-card">
             <h3>2+</h3>

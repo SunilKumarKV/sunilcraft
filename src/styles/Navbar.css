@@ -187,3 +187,30 @@ html {
     margin-right: 0;
   }
 }
+
+.logo {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.logo:focus-visible,
+.menu-item:focus-visible,
+.theme-toggle:focus-visible,
+.menu-icon:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent-color) 45%, transparent);
+  outline-offset: 4px;
+  border-radius: 10px;
+}
+
+@media (max-width: 480px) {
+  .logo-text {
+    font-size: 1.35rem;
+  }
+
+  .logo-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+  }
+}

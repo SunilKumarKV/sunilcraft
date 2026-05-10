@@ -1,58 +1,29 @@
-import { footer } from "framer-motion/client";
+import React from "react";
 import { FaGithub, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import "../styles/Footer.css";
+
+const socialLinks = [
+  { label: "GitHub", href: "https://github.com/SunilKumarKV", icon: <FaGithub /> },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/sunilkumarkv44/", icon: <FaLinkedinIn /> },
+  { label: "X", href: "https://x.com/Sunil_KVB", icon: <FaTwitter /> },
+  { label: "Instagram", href: "https://www.instagram.com/kaiser2op/", icon: <FaInstagram /> },
+];
 
 function Footer() {
   return (
     <footer className="footer">
-      <div className="waves">
-        <div className="wave" id="wave1"></div>
-        <div className="wave" id="wave2"></div>
-        <div className="wave" id="wave3"></div>
-        <div className="wave" id="wave4"></div>
-      </div>
       <div className="footer-bottom">
-        <ul className="social-icon">
-          <li className="social-icon__item">
-            <a
-              className="social-icon__link"
-              href="https://github.com/SunilKumarKV"
-              target="_blank"
-            >
-              <FaGithub />
-            </a>
-          </li>
-          <li className="social-icon__item">
-            <a
-              className="social-icon__link"
-              href="https://www.linkedin.com/in/sunilkumarkv44/"
-              target="_blank"
-            >
-              <FaLinkedinIn />
-            </a>
-          </li>
-          <li className="social-icon__item">
-            <a
-              className="social-icon__link"
-              href="https://x.com/Sunil_KVB"
-              target="_blank"
-            >
-              <FaTwitter />
-            </a>
-          </li>
-          <li className="social-icon__item">
-            <a
-              className="social-icon__link"
-              href="https://www.instagram.com/kaiser2op/"
-              target="_blank"
-            >
-              <FaInstagram />
-            </a>
-          </li>
+        <p className="footer-brand">SunilCraft</p>
+        <ul className="social-icon" aria-label="Social links">
+          {socialLinks.map((item) => (
+            <li className="social-icon__item" key={item.label}>
+              <a className="social-icon__link" href={item.href} target="_blank" rel="noreferrer" aria-label={item.label}>
+                {item.icon}
+              </a>
+            </li>
+          ))}
         </ul>
-        <p className="footer-text">
-          © {new Date().getFullYear()} Sunil Kumar K V
-        </p>
+        <p className="footer-text">© {new Date().getFullYear()} Sunil Kumar K V. All rights reserved.</p>
       </div>
     </footer>
   );

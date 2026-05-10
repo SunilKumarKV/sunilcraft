@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
-import { ThemeContext } from "../context/ThemeContext";
+import { ThemeContext } from "../context/theme";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaSun, FaMoon } from "react-icons/fa";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/Navbar.css";
 
 export default function Navbar() {
@@ -40,17 +40,17 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="container">
           {/* Logo */}
-          <div className="logo">
+          <button className="logo" type="button" onClick={() => handleNavClick("home")} aria-label="Go to home">
             <div className="logo-icon">S</div>
             <div className="logo-text">SunilCraft</div>
-          </div>
+          </button>
 
           {/* Theme Toggle + Hamburger */}
           <div className="right-controls">
             <button
               className="theme-toggle"
               onClick={toggleTheme}
-              aria-label="Toggle Dark Mode"
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             >
               {theme === "dark" ? <FaSun /> : <FaMoon />}
             </button>
@@ -61,7 +61,7 @@ export default function Navbar() {
               aria-label="Toggle menu"
               role="button"
               tabIndex={0}
-              onKeyPress={(e) => {
+              onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") handleShowNavbar();
               }}
             >
@@ -77,6 +77,8 @@ export default function Navbar() {
                 "about",
                 "projects",
                 "skills",
+                "services",
+                "journey",
                 "Rewards",
                 "Problems",
                 "contact",
@@ -84,7 +86,8 @@ export default function Navbar() {
                 <li key={id}>
                   <button
                     onClick={() => handleNavClick(id)}
-                    className="menu-item"
+                    className={`menu-item ${location.pathname === `/${id.toLowerCase()}` || (location.pathname === "/" && id === "home") ? "active" : ""}`}
+                    aria-current={location.pathname === `/${id.toLowerCase()}` ? "page" : undefined}
                     style={{
                       background: "none",
                       border: "none",

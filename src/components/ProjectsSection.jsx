@@ -1,109 +1,64 @@
 import React from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
+import { projectsData } from "../data/projects";
 import "../styles/ProjectsSection.css";
-import img1 from "/assets/images/img.jpg";
-import img2 from "/assets/images/project-3.jpg";
+
+const filters = ["All", "React", "Full-stack", "JavaScript", "UI"];
 
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.2,
-      duration: 0.6,
-      ease: "easeOut",
-    },
-  }),
+  visible: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.45, ease: "easeOut" } }),
 };
 
 const ProjectsSection = () => {
-  const projectsData = [
-    {
-      title: "Personal Portfolio Website",
-      image: img1,
-      category: "Web Developer",
-      description:
-        "A personal portfolio website showcasing projects and skills. Developed a responsive layout using HTML, CSS, and JavaScript with added animations and SEO optimization.",
-      link: "https://sunilkumarkv.github.io/Personal-Portfolio/",
-    },
-    {
-      title: "E-Commerce Platform",
-      image: img2,
-      category: "Web Development",
-      description:
-        "Built a full-featured e-commerce site with React, including filters, cart, authentication, and payment integration. Scalable and component-driven.",
-      link: "#",
-    },
-    {
-      title: "🤖 ChatBot",
-      image:
-        "https://chat-bot-three-green-58.vercel.app/",
-      category: "ReactJS, TailwindCSS",
-      description:
-        "A fully responsive React chatbot built with Vite and Tailwind CSS. Features include voice input using the Web Speech API, dark/light mode toggle, auto-scroll behavior, localStorage chat history, and a dummy AI response engine for practice or prototyping. Ideal for learning React basics, working with browser APIs, and building modern UIs.",
-      link: "https://chat-bot-three-green-58.vercel.app/",
-    },
-    {
-      title: "E-Commerce Platform",
-      image: img2,
-      category: "Web Development",
-      description:
-        "Built a full-featured e-commerce site with React, including filters, cart, authentication, and payment integration. Scalable and component-driven.",
-      link: "#",
-    },
-    {
-      title: "⏱️ Countdown Timer with Dark/Light Mode & Animation",
-      image:
-        "	https://adoric.com/blog/wp-content/uploads/2020/07/creating-countdown-timer.jpg",
-      category: "HTML5, CSS3, JavaScript",
-      description:
-        "A modern, responsive countdown timer built with HTML, CSS, and JavaScript. This project dynamically counts down to the next New Year with an easy-to-read UI, dark/light mode toggle, and smooth tick animations on the timer digits.",
-      link: "https://sunilkumarkv.github.io/Countdown-Timer/",
-    },
-    {
-      title: "🔍 SunilSearch – Google Search Clone",
-      image:
-        "https://www.google.com/chrome/static/images/dev-components/chrome-gallery-1-2x.webp",
-      category: "HTML5, CSS3, JavaScript",
-      description:
-        "A polished and responsive replica of the Google Search homepage, enhanced with modern web features for an improved user experience. This project showcases front-end skills in layout design, accessibility, and browser APIs.",
-      link: "https://sunilkumarkv.github.io/Google-Chrome-Page/",
-    },
-  ];
+  const [activeFilter, setActiveFilter] = useState("All");
+  const filteredProjects = useMemo(
+    () => activeFilter === "All" ? projectsData : projectsData.filter((project) => project.category === activeFilter),
+    [activeFilter]
+  );
 
   return (
     <section className="projects" id="projects">
       <div className="projects-header">
+        <span className="section-eyebrow">Selected Work</span>
         <h2 className="projects-title">Featured Projects</h2>
-        <p className="projects-subtitle">
-          A selection of recent works where creativity meets code. Explore some
-          of my favorite projects.
-        </p>
+        <p className="projects-subtitle">Real deployed URLs, responsive layouts, clean interfaces, and practical full-stack/front-end implementation.</p>
+      </div>
+
+      <div className="featured-banner">
+        <span>Featured</span>
+        <strong>ChessPlay</strong>
+        <p>React + Node + Socket.IO + MongoDB + Stockfish chess platform.</p>
+        <a href="https://chessplay1.vercel.app/" target="_blank" rel="noreferrer">Open ChessPlay</a>
+      </div>
+
+      <div className="filter-tabs" aria-label="Project filters">
+        {filters.map((filter) => (
+          <button key={filter} type="button" className={activeFilter === filter ? "active" : ""} onClick={() => setActiveFilter(filter)}>{filter}</button>
+        ))}
       </div>
 
       <div className="project-list">
-        {projectsData.map((proj, idx) => (
-          <motion.div
-            className="project-card"
-            key={idx}
-            custom={idx}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={cardVariants}
-            whileHover={{ scale: 1.03 }}
-          >
-            <img src={proj.image} alt={proj.title} className="project-image" />
-            <div className="project-info">
-              <h3 className="project-title">{proj.title}</h3>
-              <p className="project-category">{proj.category}</p>
-              <p className="project-description">{proj.description}</p>
-              <a href={proj.link} className="project-link" target="_blank">
-                View Project →
-              </a>
+        {filteredProjects.map((proj, idx) => (
+          <motion.article className="project-card" key={proj.title} custom={idx} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={cardVariants} whileHover={{ y: -8 }}>
+            <div className="project-image-wrap">
+              <img src={proj.image} alt={`${proj.title} preview screenshot`} className="project-image" loading="lazy" />
+              <span className="project-status">{proj.status}</span>
             </div>
-          </motion.div>
+            <div className="project-info">
+              <p className="project-category">{proj.stack}</p>
+              <h3 className="project-title">{proj.title}</h3>
+              <p className="project-description">{proj.description}</p>
+              <div className="project-actions">
+                <a href={proj.live} className="project-link primary" target="_blank" rel="noreferrer">Live Demo <FaExternalLinkAlt aria-hidden="true" /></a>
+                <a href={proj.github} className="project-link" target="_blank" rel="noreferrer">Code <FaGithub aria-hidden="true" /></a>
+                <Link to={`/projects/${proj.slug}`} className="project-link">Details</Link>
+              </div>
+            </div>
+          </motion.article>
         ))}
       </div>
     </section>
