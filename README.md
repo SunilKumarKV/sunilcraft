@@ -1,77 +1,72 @@
-# SunilCraft 🚀
+# SunilCraft
 
-A modern production-ready developer portfolio built using React.js + Vite + Tailwind CSS showcasing projects, coding practice, UI/UX skills, full-stack applications, and real-world production implementations.
+Production-ready personal developer portfolio built to showcase full-stack projects, frontend engineering, product-focused applications, and professional developer branding.
 
-## 🌐 Live Demo
+## Live Links
 
-### Portfolio
-https://sunilcraft.vercel.app
+- Portfolio: https://sunilcraft.vercel.app
+- ChessPlay: https://getchessplay.vercel.app/
+- DevWithSunil: https://devwithsunil.vercel.app
+- GitHub: https://github.com/SunilKumarKV
+- LinkedIn: https://www.linkedin.com/in/sunilkumarkv44/
 
-### ChessPlay
-https://chessplay1.vercel.app
+## Overview
 
-### DevWithSunil
-https://devwithsunil.vercel.app
+SunilCraft is the public portfolio platform for showcasing projects, technical skills, UI/UX work, real-world applications, and professional developer identity.
 
----
+The goal of this project is to present production-quality work in a clean, modern, recruiter-friendly interface.
 
-# ✨ Features
+## Core Features
 
-- Responsive Modern UI
-- Dark / Light Theme
-- Animated Hero Section
-- Resume Download
-- Sticky Navigation
-- Smooth Page Transitions
-- SEO Optimized
-- Mobile Responsive
-- Modern Glassmorphism UI
-- Project Filtering
-- Project Detail Pages
-- Services Section
-- Testimonials Section
-- Experience Timeline
-- Education Section
-- Contact Form Integration
-- GitHub & Live Demo Links
+### Portfolio Experience
 
----
+- Responsive modern UI
+- Dark / Light theme
+- Animated hero section
+- Sticky navigation
+- Smooth page transitions
+- Resume access
+- Contact integration
+- SEO optimization
+- Mobile-first responsiveness
 
-# 🧠 Problem Solving Section
+### Project Showcase
 
-- JavaScript 30 Days
-- JavaScript 10 Days Code
-- Java Problems
-- ReactJS Problems
-- Search Functionality
-- Difficulty Filters
-- Show / Hide Solutions
-- Copy Code Button
-- Progress Tracking
-- Interview Questions
-- MCA Lab Programs
+- Project listings
+- Live demo links
+- GitHub repository links
+- Featured product showcase
+- Full-stack application presentation
 
----
+### Learning / Problem Solving Section
 
-# 🛠️ Tech Stack
+- JavaScript practice content
+- React problem-solving content
+- Interview question preparation
+- Coding challenge organization
+- Search/filter capability
+- Progress-oriented learning sections
 
-## Frontend
+## Tech Stack
+
+### Frontend
+
 - React.js
 - Vite
 - Tailwind CSS
 - Framer Motion
 - React Router DOM
 
-## Backend / APIs
+### Integrations
+
 - EmailJS
 - REST APIs
 
-## Deployment
+### Deployment
+
 - Vercel
 
----
-
-# 🚀 Getting Started
+## Development Setup
 
 ```bash
 git clone https://github.com/SunilKumarKV/sunilcraft.git
@@ -80,29 +75,42 @@ npm install
 npm run dev
 ```
 
----
-
-# ⚙️ Production Build
+## Production Build
 
 ```bash
 npm run build
 npm run preview
 ```
 
----
+## Product Positioning
 
-# 📬 Contact
+This repository serves as:
 
-## LinkedIn
-https://www.linkedin.com/in/sunilkumarkv44/
+- public developer portfolio
+- recruiter-facing project showcase
+- personal brand website
+- technical credibility platform
 
-## GitHub
-https://github.com/SunilKumarKV
+## Featured Products
 
----
+### ChessPlay
 
-# 👨‍💻 Author
+Production real-time chess platform with multiplayer gameplay, AI mode, authentication, dashboards, and live deployment.
+
+### AttendanceTracker
+
+Production attendance management platform for institutes with scalable architecture.
+
+### GetCompressly
+
+Production SaaS PDF/image compression platform.
+
+### DevWithSunil
+
+Developer education and content platform.
+
+## Author
 
 Sunil Kumar K V
 
-Full-Stack Developer | React Specialist | MCA Student
+Full Stack Developer | React Specialist | MCA Student
