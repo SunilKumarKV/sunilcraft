@@ -17,6 +17,13 @@ export const problemCategories = [
     stats: "20+ Tasks",
     description: "React components, props, state, hooks, routing, forms, API handling, and UI practice tasks.",
   },
+  {
+  title: "LeetCode Problems",
+  to: "/problems/leetcode",
+  stats: "Auto Updated",
+  description:
+    "Automatically synced LeetCode solved problems, difficulty stats, and recent accepted submissions.",
+},
 ];
 
 export const js30Days = [

@@ -20,6 +20,7 @@ import ProblemLayout from "./problems/javascript/30Days/ProblemLayout";
 import TenDaysCode from "./problems/javascript/10DaysCode";
 import JavaProblems from "./problems/java/JavaProblems";
 import ReactProblems from "./problems/reactjs/ReactProblems";
+import LeetCodeProblems from "./problems/leetcode/LeetCodeProblems";
 import "./App.css";
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <Route path="/problems/javascript/10days" element={<TenDaysCode />} />
         <Route path="/problems/java" element={<JavaProblems />} />
         <Route path="/problems/reactjs" element={<ReactProblems />} />
+        <Route path="/problems/leetcode" element={<LeetCodeProblems />} />
         <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
