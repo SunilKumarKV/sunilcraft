@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { recentSolved } from "./recentSolved";
 
 const LEETCODE_USERNAME = "Sunil-Kumar-K-V";
 
@@ -11,6 +12,23 @@ export default function LeetCodeProblems() {
       .then(setStats)
       .catch(console.error);
   }, []);
+  
+  <section className="section-panel">
+  <span className="section-eyebrow">Recent Practice</span>
+  <h2>Recently Solved Problems</h2>
+
+  <div className="feature-grid">
+    {recentSolved.map((problem) => (
+      <article className="glass-card" key={problem.title}>
+        <h3>{problem.title}</h3>
+        <p>{problem.platform} • {problem.difficulty}</p>
+        <a href={problem.url} target="_blank" rel="noreferrer">
+          View Problem →
+        </a>
+      </article>
+    ))}
+  </div>
+</section>
 
   return (
     <main className="page-shell">
