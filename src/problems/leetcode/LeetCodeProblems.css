@@ -157,6 +157,15 @@
   font-weight: 700;
 }
 
+.leetcode-detail-link {
+  color: var(--text-color);
+}
+
+.leetcode-detail-link:hover {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
 .leetcode-problem-title {
   display: grid;
   gap: 4px;
@@ -232,6 +241,35 @@
 
 .leetcode-mobile-row strong {
   color: var(--text-color);
+}
+
+.leetcode-detail-block {
+  display: grid;
+  gap: 14px;
+}
+
+.leetcode-detail-block p {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.leetcode-detail-block pre {
+  background: #111827;
+  color: #bbf7d0;
+  border-radius: 18px;
+  padding: 18px;
+  overflow: auto;
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+.leetcode-detail-block code {
+  font-family: "Fira Code", "Consolas", monospace;
+}
+
+.leetcode-link-title {
+  word-break: break-word;
 }
 
 @media (max-width: 760px) {

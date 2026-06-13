@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import "./LeetCodeProblems.css";
 
 const STATS_URL =
@@ -224,7 +225,12 @@ export default function LeetCodeProblems() {
                     <tr key={problem.slug || problem.title}>
                       <td>
                         <div className="leetcode-problem-title">
-                          <strong>{problem.title}</strong>
+                          <Link
+                            className="leetcode-detail-link"
+                            to={`/problems/leetcode/${problem.slug}`}
+                          >
+                            <strong>{problem.title}</strong>
+                          </Link>
                           <small>Solved on {formatDate(problem.solvedAt)}</small>
                         </div>
                       </td>
@@ -236,9 +242,7 @@ export default function LeetCodeProblems() {
                       <td>{problem.platform}</td>
                       <td>{problem.status}</td>
                       <td>
-                        <a href={problem.url} target="_blank" rel="noreferrer">
-                          Open Problem
-                        </a>
+                        <Link to={`/problems/leetcode/${problem.slug}`}>Open Details</Link>
                       </td>
                     </tr>
                   ))}
@@ -250,7 +254,12 @@ export default function LeetCodeProblems() {
               {filteredProblems.map((problem) => (
                 <article className="leetcode-mobile-card" key={problem.slug || problem.title}>
                   <div className="leetcode-problem-title">
-                    <strong>{problem.title}</strong>
+                    <Link
+                      className="leetcode-detail-link"
+                      to={`/problems/leetcode/${problem.slug}`}
+                    >
+                      <strong>{problem.title}</strong>
+                    </Link>
                     <small>Solved on {formatDate(problem.solvedAt)}</small>
                   </div>
                   <div className="leetcode-mobile-row">
@@ -267,9 +276,7 @@ export default function LeetCodeProblems() {
                     <span>Status</span>
                     <strong>{problem.status}</strong>
                   </div>
-                  <a href={problem.url} target="_blank" rel="noreferrer">
-                    View Problem →
-                  </a>
+                  <Link to={`/problems/leetcode/${problem.slug}`}>View Details →</Link>
                 </article>
               ))}
             </div>
