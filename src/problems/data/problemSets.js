@@ -18,12 +18,19 @@ export const problemCategories = [
     description: "React components, props, state, hooks, routing, forms, API handling, and UI practice tasks.",
   },
   {
-  title: "LeetCode Problems",
-  to: "/problems/leetcode",
-  stats: "Auto Updated",
-  description:
-    "Automatically synced LeetCode solved problems, difficulty stats, and recent accepted submissions.",
-},
+    title: "LeetCode Problems",
+    to: "/problems/leetcode",
+    stats: "Auto Updated",
+    description:
+      "Automatically synced LeetCode solved problems, difficulty stats, and recent accepted submissions.",
+  },
+  {
+    title: "DSA Roadmap",
+    to: "/problems/dsa",
+    stats: "8 Topics",
+    description:
+      "Arrays, strings, linked lists, stacks, queues, trees, graphs, and dynamic programming.",
+  },
 ];
 
 export const js30Days = [

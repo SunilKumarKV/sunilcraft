@@ -21,6 +21,7 @@ import TenDaysCode from "./problems/javascript/10DaysCode";
 import JavaProblems from "./problems/java/JavaProblems";
 import ReactProblems from "./problems/reactjs/ReactProblems";
 import LeetCodeProblems from "./problems/leetcode/LeetCodeProblems";
+import DsaRoadmap from "./problems/dsa/DsaRoadmap";
 import "./App.css";
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
         <Route path="/problems/java" element={<JavaProblems />} />
         <Route path="/problems/reactjs" element={<ReactProblems />} />
         <Route path="/problems/leetcode" element={<LeetCodeProblems />} />
+        <Route path="/problems/dsa" element={<DsaRoadmap />} />
         <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
