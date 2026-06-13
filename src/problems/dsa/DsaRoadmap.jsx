@@ -1,64 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-const roadmapTopics = [
-  {
-    title: "Arrays",
-    difficulty: "Beginner",
-    problems: "12 Problems",
-    description: "Start with traversal, prefix sums, two pointers, and sliding window basics.",
-    status: "In Progress",
-  },
-  {
-    title: "Strings",
-    difficulty: "Beginner",
-    problems: "10 Problems",
-    description: "Build confidence with frequency maps, pattern matching, and substring practice.",
-    status: "Planned",
-  },
-  {
-    title: "Linked List",
-    difficulty: "Intermediate",
-    problems: "8 Problems",
-    description: "Practice node traversal, reversal, fast-slow pointers, and cycle detection.",
-    status: "Planned",
-  },
-  {
-    title: "Stack",
-    difficulty: "Intermediate",
-    problems: "7 Problems",
-    description: "Learn LIFO problem solving with balanced brackets, monotonic stacks, and undo-style flows.",
-    status: "Planned",
-  },
-  {
-    title: "Queue",
-    difficulty: "Intermediate",
-    problems: "6 Problems",
-    description: "Cover FIFO thinking with BFS foundations, deque patterns, and scheduling problems.",
-    status: "Planned",
-  },
-  {
-    title: "Trees",
-    difficulty: "Intermediate",
-    problems: "11 Problems",
-    description: "Work through DFS, BFS, recursion, binary tree properties, and traversal patterns.",
-    status: "Planned",
-  },
-  {
-    title: "Graphs",
-    difficulty: "Advanced",
-    problems: "9 Problems",
-    description: "Explore adjacency lists, traversal, connected components, and shortest path ideas.",
-    status: "Planned",
-  },
-  {
-    title: "Dynamic Programming",
-    difficulty: "Advanced",
-    problems: "10 Problems",
-    description: "Finish with memoization, tabulation, state transitions, and optimization strategies.",
-    status: "Completed",
-  },
-];
+import { dsaTopics } from "./dsaTopics";
 
 export default function DsaRoadmap() {
   return (
@@ -73,15 +15,15 @@ export default function DsaRoadmap() {
       </div>
 
       <div className="problem-grid">
-        {roadmapTopics.map((topic, index) => (
-          <article className="problem-card" key={topic.title}>
-            <span className="problem-stat">Step {index + 1}</span>
+        {dsaTopics.map((topic) => (
+          <Link className="problem-card" key={topic.slug} to={`/problems/dsa/${topic.slug}`}>
+            <span className="problem-stat">Step {topic.roadmapOrder}</span>
             <h2>{topic.title}</h2>
             <p>{topic.description}</p>
             <strong>{topic.difficulty}</strong>
-            <p>{topic.problems}</p>
+            <p>{topic.problems.length} Problems</p>
             <p>Status: {topic.status}</p>
-          </article>
+          </Link>
         ))}
       </div>
 
@@ -114,7 +56,7 @@ export default function DsaRoadmap() {
               Begin with arrays to learn indexing, traversal, brute-force optimization, and the
               most common interview building blocks.
             </p>
-            <Link to="/problems/javascript" className="page-button">
+            <Link to="/problems/dsa/arrays" className="page-button">
               Start with Arrays
             </Link>
           </article>
