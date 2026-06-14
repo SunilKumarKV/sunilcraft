@@ -346,9 +346,47 @@ a:hover {
   border-color: var(--accent-color);
 }
 
+.problem-toolbar select {
+  min-height: 48px;
+  border: 1px solid var(--input-border);
+  background: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 999px;
+  padding: 0 16px;
+  box-shadow: var(--shadow-light);
+}
+
+.problem-toolbar select:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+.problem-toolbar-wrap {
+  flex-wrap: wrap;
+}
+
 .page-button.compact {
   margin-top: 0;
   white-space: nowrap;
+}
+
+.problem-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 999px;
+  padding: 10px 16px;
+  box-shadow: var(--shadow-light);
+  margin-bottom: 18px;
+}
+
+.problem-copy-state {
+  color: var(--accent-color);
+  font-weight: 700;
+  align-self: center;
 }
 
 .problem-list {
