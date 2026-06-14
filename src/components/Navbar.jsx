@@ -25,6 +25,8 @@ export default function Navbar() {
       navigate("/codebase");
     } else if (id === "Dashboard") {
       navigate("/dashboard");
+    } else if (id === "Journey") {
+      navigate("/journey");
     } else {
       if (location.pathname !== "/") {
         navigate("/");
@@ -82,7 +84,7 @@ export default function Navbar() {
                 "projects",
                 "skills",
                 "services",
-                "journey",
+                "Journey",
                 "Rewards",
                 "Problems",
                 "Codebase",

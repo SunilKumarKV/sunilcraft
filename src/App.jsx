@@ -20,6 +20,7 @@ const ProblemDetailPage = lazy(() => import("./problems/ProblemDetailPage"));
 const CodebasePage = lazy(() => import("./codebase/CodebasePage"));
 const CodebaseDetailPage = lazy(() => import("./codebase/CodebaseDetailPage"));
 const DashboardPage = lazy(() => import("./dashboard/DashboardPage"));
+const JourneyPage = lazy(() => import("./journey/JourneyPage"));
 
 function RouteFallback() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/projects/:slug" element={<ProjectDetail />} />
             <Route path="/skills" element={<Skills />} />
+            <Route path="/journey" element={<JourneyPage />} />
             <Route path="/rewards" element={<RewardsPage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/problems" element={<ProblemsHome />} />
