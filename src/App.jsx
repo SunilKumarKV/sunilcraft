@@ -19,6 +19,7 @@ const ProblemsHome = lazy(() => import("./problems/ProblemsHome"));
 const ProblemDetailPage = lazy(() => import("./problems/ProblemDetailPage"));
 const CodebasePage = lazy(() => import("./codebase/CodebasePage"));
 const CodebaseDetailPage = lazy(() => import("./codebase/CodebaseDetailPage"));
+const DashboardPage = lazy(() => import("./dashboard/DashboardPage"));
 
 function RouteFallback() {
   return (
@@ -52,6 +53,7 @@ function App() {
             <Route path="/problems/:platform/:slug" element={<ProblemDetailPage />} />
             <Route path="/codebase" element={<CodebasePage />} />
             <Route path="/codebase/:platform/:slug" element={<CodebaseDetailPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

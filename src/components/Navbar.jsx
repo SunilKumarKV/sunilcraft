@@ -23,6 +23,8 @@ export default function Navbar() {
       navigate("/problems");
     } else if (id === "Codebase") {
       navigate("/codebase");
+    } else if (id === "Dashboard") {
+      navigate("/dashboard");
     } else {
       if (location.pathname !== "/") {
         navigate("/");
@@ -84,6 +86,7 @@ export default function Navbar() {
                 "Rewards",
                 "Problems",
                 "Codebase",
+                "Dashboard",
                 "contact",
               ].map((id) => (
                 <li key={id}>
