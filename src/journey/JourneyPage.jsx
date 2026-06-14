@@ -5,6 +5,11 @@ import {
   getJournalProjects,
   getJournalStats,
 } from "../lib/codingJournal";
+import PageHeader from "../components/ui/PageHeader";
+import SectionPanel from "../components/ui/SectionPanel";
+import LoadingState from "../components/ui/LoadingState";
+import ErrorState from "../components/ui/ErrorState";
+import EmptyState from "../components/ui/EmptyState";
 
 function monthLabel(dateValue) {
   const parsed = new Date(dateValue);
@@ -255,36 +260,25 @@ export default function JourneyPage() {
 
   return (
     <main className="page-shell">
-      <div className="page-header">
-        <span className="section-eyebrow">Developer Journey</span>
-        <h1>Journey</h1>
-        <p>
-          A live timeline of coding-journal milestones, repository movement, and achievements
-          grouped by month and year.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Developer Journey"
+        title="Journey"
+        description="A timeline of the projects, problems, and milestones I’m building over time."
+        align="left"
+      />
 
       {loading ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Loading journey</h3>
-            <p>Fetching live timeline signals from coding-journal.</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Loading" title="Journey">
+          <LoadingState title="Loading journey" message="Fetching live timeline signals from coding-journal." />
+        </SectionPanel>
       ) : error ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Unable to load journey</h3>
-            <p>{error}</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Issue" title="Journey">
+          <ErrorState title="Unable to load journey" message={error} />
+        </SectionPanel>
       ) : !journey.groupedTimeline.length && !journey.projectCount && !journey.problemCount ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>No journey data found</h3>
-            <p>The coding-journal feeds did not return enough data to build a journey view.</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Empty" title="Journey">
+          <EmptyState title="No journey data found" message="The coding-journal feeds did not return enough data to build a journey view." />
+        </SectionPanel>
       ) : (
         <>
           <section className="section-panel">

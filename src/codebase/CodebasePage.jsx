@@ -5,6 +5,13 @@ import {
   toPlatformSegment,
   uniqueValues,
 } from "../lib/codingJournal";
+import PageHeader from "../components/ui/PageHeader";
+import SectionPanel from "../components/ui/SectionPanel";
+import FilterBar from "../components/ui/FilterBar";
+import LoadingState from "../components/ui/LoadingState";
+import ErrorState from "../components/ui/ErrorState";
+import EmptyState from "../components/ui/EmptyState";
+import Badge from "../components/ui/Badge";
 
 export default function CodebasePage() {
   const [problems, setProblems] = useState([]);
@@ -129,14 +136,12 @@ export default function CodebasePage() {
 
   return (
     <main className="page-shell">
-      <div className="page-header">
-        <span className="section-eyebrow">Coding Journal Codebase</span>
-        <h1>Codebase</h1>
-        <p>
-          Browse solved code grouped by language, tags, and platform with live entries pulled
-          directly from coding-journal.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Coding Journal Codebase"
+        title="Codebase"
+        description="My personal solution library with source code, tests, explanations, and complexity notes."
+        align="left"
+      />
 
       <section className="section-panel">
         <span className="section-eyebrow">Workflow Guide</span>
@@ -165,20 +170,11 @@ export default function CodebasePage() {
         <h2>By Language, Platform, and Tag</h2>
 
         {loading ? (
-          <article className="glass-card">
-            <h3>Loading code groups</h3>
-            <p>Fetching grouped codebase data from coding-journal.</p>
-          </article>
+          <LoadingState title="Loading code groups" message="Fetching grouped codebase data from coding-journal." />
         ) : error ? (
-          <article className="glass-card">
-            <h3>Unable to load code groups</h3>
-            <p>{error}</p>
-          </article>
+          <ErrorState title="Unable to load code groups" message={error} />
         ) : !problems.length ? (
-          <article className="glass-card">
-            <h3>No code entries found</h3>
-            <p>coding-journal returned an empty problems feed.</p>
-          </article>
+          <EmptyState title="No code entries found" message="coding-journal returned an empty problems feed." />
         ) : (
           <div className="feature-grid">
             <article className="glass-card">
@@ -201,7 +197,7 @@ export default function CodebasePage() {
         <span className="section-eyebrow">Explorer</span>
         <h2>Browse Solved Code</h2>
 
-        <div className="problem-toolbar problem-toolbar-wrap">
+        <FilterBar>
           <input
             type="search"
             value={query}
@@ -235,23 +231,14 @@ export default function CodebasePage() {
               </option>
             ))}
           </select>
-        </div>
+        </FilterBar>
 
         {loading ? (
-          <article className="glass-card">
-            <h3>Loading codebase</h3>
-            <p>Fetching solved code entries from coding-journal.</p>
-          </article>
+          <LoadingState title="Loading codebase" message="Fetching solved code entries from coding-journal." />
         ) : error ? (
-          <article className="glass-card">
-            <h3>Unable to load codebase</h3>
-            <p>{error}</p>
-          </article>
+          <ErrorState title="Unable to load codebase" message={error} />
         ) : !filteredProblems.length ? (
-          <article className="glass-card">
-            <h3>No matching code entries</h3>
-            <p>Try clearing one or more filters to see more solved code.</p>
-          </article>
+          <EmptyState title="No matching code entries" message="Try clearing one or more filters to see more solved code." />
         ) : (
           <div className="problem-grid">
             {filteredProblems.map((problem) => (
@@ -260,12 +247,22 @@ export default function CodebasePage() {
                 className="problem-card"
                 to={`/codebase/${toPlatformSegment(problem.platform)}/${problem.slug}`}
               >
-                <span className="problem-stat">{problem.language || "Unknown"}</span>
+                <div className="card-row">
+                  <Badge tone="accent">{problem.platform}</Badge>
+                  <Badge>{problem.difficulty || "Unknown"}</Badge>
+                  <Badge>{problem.language || "Unknown"}</Badge>
+                  {problem.verified ? <Badge tone="success">Verified</Badge> : null}
+                </div>
                 <h2>{problem.title}</h2>
-                <p>Platform: {problem.platform}</p>
-                <p>Difficulty: {problem.difficulty || "Unknown"}</p>
-                <p>Verified: {problem.verified ? "Yes" : "No"}</p>
-                <strong>{(problem.tags || []).length ? problem.tags.join(", ") : "Open Code"}</strong>
+                {(problem.tags || []).length ? (
+                  <div className="card-row">
+                    {problem.tags.slice(0, 4).map((tagName) => (
+                      <Badge key={tagName}>{tagName}</Badge>
+                    ))}
+                  </div>
+                ) : (
+                  <p>Open the entry for source code, notes, and verification details.</p>
+                )}
               </Link>
             ))}
           </div>

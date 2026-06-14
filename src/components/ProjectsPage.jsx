@@ -108,7 +108,7 @@ export default function ProjectsPage() {
       <PageHeader
         eyebrow="Work"
         title="Projects, featured builds, and repo explorer"
-        description="A cleaner work hub for flagship products, featured projects, and the live GitHub repository feed synced from coding-journal."
+        description="Projects I’m actively building or maintaining, synced from my GitHub repositories."
         align="left"
       />
 
@@ -117,7 +117,7 @@ export default function ProjectsPage() {
       <SectionPanel
         eyebrow="Highlights"
         title="Featured Projects"
-        description="Priority work appears first so the portfolio reads like a curated engineering showcase instead of a long repository dump."
+        description="Featured work rises to the top first, then the full repository feed stays available below."
       >
         {loading ? (
           <LoadingState title="Loading featured projects" message="Fetching priority projects from coding-journal." />
@@ -136,6 +136,13 @@ export default function ProjectsPage() {
                 <h2>{project.name}</h2>
                 <p>{project.description || "No repository description provided."}</p>
                 <p>Priority: {project.priority ?? "Unranked"} • Stars: {project.stars || 0}</p>
+                {(project.topics || []).length ? (
+                  <div className="card-row">
+                    {project.topics.slice(0, 4).map((topicName) => (
+                      <Badge key={topicName}>{topicName}</Badge>
+                    ))}
+                  </div>
+                ) : null}
                 <div className="project-actions">
                   <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">
                     GitHub
@@ -158,7 +165,7 @@ export default function ProjectsPage() {
       <SectionPanel
         eyebrow="Explorer"
         title="GitHub Repo Explorer"
-        description="Search across the live repository feed while keeping the portfolio surface focused and easy to scan."
+        description="Search the synced GitHub feed by language, topic, or featured status."
       >
         <FilterBar>
           <input
@@ -212,7 +219,15 @@ export default function ProjectsPage() {
                 <p>{project.description || "No repository description provided."}</p>
                 <p>Stars: {project.stars || 0} • Forks: {project.forks || 0}</p>
                 <p>Updated: {formatDate(project.updatedAt) || "Unknown"}</p>
-                <p>Topics: {(project.topics || []).length ? project.topics.join(", ") : "None"}</p>
+                {(project.topics || []).length ? (
+                  <div className="card-row">
+                    {project.topics.slice(0, 5).map((topicName) => (
+                      <Badge key={topicName}>{topicName}</Badge>
+                    ))}
+                  </div>
+                ) : (
+                  <p>Topics: None</p>
+                )}
                 <div className="project-actions">
                   <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">
                     GitHub

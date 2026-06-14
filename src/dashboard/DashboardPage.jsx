@@ -230,7 +230,7 @@ export default function DashboardPage() {
       <PageHeader
         eyebrow="Developer Analytics"
         title="Dashboard"
-        description="A cleaner control center for live metrics, journey snapshots, achievements, and the coding-journal publishing workflow."
+        description="A live snapshot of my developer activity across projects, problem solving, and verified code."
         align="left"
       />
 

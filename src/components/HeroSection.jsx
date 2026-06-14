@@ -83,11 +83,11 @@ export default function HeroSection() {
           transition={{ duration: 0.6 }}
         >
           <span className="availability-badge">● {profile.status}</span>
-          <h4 className="hero-subtitle">Premium portfolio, live engineering data</h4>
-          <h1 className="hero-title">{profile.name}</h1>
+          <h4 className="hero-subtitle">{profile.name}</h4>
+          <h1 className="hero-title">I build web apps that turn learning, coding, and workflows into usable products.</h1>
           <p className="hero-description">
-            {profile.role}. SunilCraft brings together selected work, coding problem progress,
-            verified solution entries, and developer analytics in one cleaner engineering surface.
+            I&apos;m a full-stack focused developer building SunilCraft, coding-journal, and
+            product-style tools with React, Node.js, GitHub workflows, and real project systems.
           </p>
           <div className="hero-actions">
             <Link to="/projects" className="hero-button">Explore Work</Link>
@@ -113,7 +113,7 @@ export default function HeroSection() {
         <SectionPanel
           eyebrow="Selected Work"
           title="Featured Projects"
-          description="Top portfolio builds are surfaced first, while the full repository explorer stays available in the Work hub."
+          description="Projects I’m actively building or maintaining, synced from my GitHub repositories."
         >
           {loading ? (
             <LoadingState title="Loading featured projects" message="Fetching the latest work preview from coding-journal." />
@@ -133,6 +133,13 @@ export default function HeroSection() {
                     <h2>{project.name}</h2>
                     <p>{project.description || "No repository description provided."}</p>
                     <p>Stars: {project.stars || 0} • Forks: {project.forks || 0}</p>
+                    {(project.topics || []).length ? (
+                      <div className="card-row">
+                        {project.topics.slice(0, 4).map((topic) => (
+                          <Badge key={topic}>{topic}</Badge>
+                        ))}
+                      </div>
+                    ) : null}
                     <div className="project-actions">
                       <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">
                         GitHub
@@ -152,7 +159,7 @@ export default function HeroSection() {
         <SectionPanel
           eyebrow="Problem Solving"
           title="Problem Solving Preview"
-          description="A live summary of problem volume, verification progress, and direct paths into the explorer."
+          description="A verified record of coding problems I’ve solved, tested, and documented."
         >
           {loading ? (
             <LoadingState title="Loading problem preview" message="Preparing a live problem snapshot from coding-journal." />
@@ -186,9 +193,10 @@ export default function HeroSection() {
                     <div className="card-row">
                       <Badge tone="accent">{problem.platform}</Badge>
                       <Badge tone="success">Verified</Badge>
+                      <Badge>{problem.difficulty || "Unknown"}</Badge>
+                      <Badge>{problem.language || "Unknown"}</Badge>
                     </div>
                     <h2>{problem.title}</h2>
-                    <p>{problem.difficulty || "Unknown difficulty"} • {problem.language || "Unknown language"}</p>
                     <p>{(problem.tags || []).slice(0, 4).join(", ") || "No tags added yet."}</p>
                   </Link>
                 ))}
@@ -201,7 +209,7 @@ export default function HeroSection() {
         <SectionPanel
           eyebrow="Verified Solutions"
           title="Codebase Preview"
-          description="Solution notes, explanation-backed entries, and implementation details stay one click away."
+          description="My personal solution library with source code, tests, explanations, and complexity notes."
         >
           {loading ? (
             <LoadingState title="Loading codebase preview" message="Fetching verified solution entries from coding-journal." />
@@ -219,11 +227,12 @@ export default function HeroSection() {
                     to={`/codebase/${toPlatformSegment(problem.platform)}/${problem.slug}`}
                   >
                     <div className="card-row">
-                      <Badge>{problem.language || "Unknown"}</Badge>
+                      <Badge tone="accent">{problem.platform}</Badge>
                       <Badge tone="success">Verified</Badge>
+                      <Badge>{problem.difficulty || "Unknown"}</Badge>
+                      <Badge>{problem.language || "Unknown"}</Badge>
                     </div>
                     <h2>{problem.title}</h2>
-                    <p>{problem.platform} • {problem.difficulty || "Unknown difficulty"}</p>
                     <p>Open the full entry for solution code, explanation, and complexity notes.</p>
                   </Link>
                 ))}
