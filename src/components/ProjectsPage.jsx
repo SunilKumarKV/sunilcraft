@@ -8,18 +8,29 @@ import {
   uniqueValues,
 } from "../lib/codingJournal";
 
-const sortOptions = {
-  newest: (a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0),
-  stars: (a, b) => (b.stars || 0) - (a.stars || 0) || a.name.localeCompare(b.name),
-  name: (a, b) => a.name.localeCompare(b.name),
-};
+function sortProjects(a, b) {
+  const featuredRank = Number(Boolean(b.featured)) - Number(Boolean(a.featured));
+  if (featuredRank !== 0) return featuredRank;
+
+  const priorityA = Number.isFinite(Number(a.priority)) ? Number(a.priority) : Number.MAX_SAFE_INTEGER;
+  const priorityB = Number.isFinite(Number(b.priority)) ? Number(b.priority) : Number.MAX_SAFE_INTEGER;
+  if (priorityA !== priorityB) return priorityA - priorityB;
+
+  const starRank = (b.stars || 0) - (a.stars || 0);
+  if (starRank !== 0) return starRank;
+
+  const updatedRank = new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0);
+  if (updatedRank !== 0) return updatedRank;
+
+  return a.name.localeCompare(b.name);
+}
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [query, setQuery] = useState("");
   const [language, setLanguage] = useState("All");
   const [topic, setTopic] = useState("All");
-  const [sortBy, setSortBy] = useState("newest");
+  const [featuredFilter, setFeaturedFilter] = useState("All Projects");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -71,11 +82,14 @@ export default function ProjectsPage() {
           .includes(normalizedQuery);
         const matchesLanguage = language === "All" || project.language === language;
         const matchesTopic = topic === "All" || (project.topics || []).includes(topic);
+        const matchesFeatured =
+          featuredFilter === "All Projects" ||
+          (featuredFilter === "Featured Only" && project.featured);
 
-        return matchesSearch && matchesLanguage && matchesTopic;
+        return matchesSearch && matchesLanguage && matchesTopic && matchesFeatured;
       })
-      .sort(sortOptions[sortBy]);
-  }, [language, projects, query, sortBy, topic]);
+      .sort(sortProjects);
+  }, [featuredFilter, language, projects, query, topic]);
 
   return (
     <main className="page-shell">
@@ -116,10 +130,13 @@ export default function ProjectsPage() {
               </option>
             ))}
           </select>
-          <select value={sortBy} onChange={(event) => setSortBy(event.target.value)} aria-label="Sort projects">
-            <option value="newest">Newest</option>
-            <option value="stars">Stars</option>
-            <option value="name">Name</option>
+          <select
+            value={featuredFilter}
+            onChange={(event) => setFeaturedFilter(event.target.value)}
+            aria-label="Filter by featured projects"
+          >
+            <option value="All Projects">All Projects</option>
+            <option value="Featured Only">Featured Only</option>
           </select>
         </div>
 
@@ -147,11 +164,15 @@ export default function ProjectsPage() {
           <div className="problem-grid">
             {filteredProjects.map((project) => (
               <article className="problem-card" key={project.url}>
-                <span className="problem-stat">{project.language || "Unknown"}</span>
+                <span className="problem-stat">
+                  {project.featured ? "Featured" : project.language || "Unknown"}
+                </span>
                 <h2>{project.name}</h2>
+                {project.featured ? <p><strong>Featured</strong></p> : null}
                 <p>{project.description || "No repository description provided."}</p>
                 <p>Stars: {project.stars || 0} • Forks: {project.forks || 0}</p>
                 <p>Updated: {formatDate(project.updatedAt) || "Unknown"}</p>
+                <p>Language: {project.language || "Unknown"}</p>
                 <p>Topics: {(project.topics || []).length ? project.topics.join(", ") : "None"}</p>
                 <div className="project-actions">
                   <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">
