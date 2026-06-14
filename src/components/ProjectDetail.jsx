@@ -5,6 +5,12 @@ import {
   getJournalProjects,
   toProjectSlug,
 } from "../lib/codingJournal";
+import PageHeader from "./ui/PageHeader";
+import SectionPanel from "./ui/SectionPanel";
+import LoadingState from "./ui/LoadingState";
+import ErrorState from "./ui/ErrorState";
+import EmptyState from "./ui/EmptyState";
+import Badge from "./ui/Badge";
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -40,47 +46,68 @@ export default function ProjectDetail() {
 
   if (loading) {
     return (
-      <main className="state-page">
-        <h1>Loading project detail</h1>
-        <Link to="/projects" className="hero-button">Back to Projects</Link>
+      <main className="page-shell">
+        <PageHeader eyebrow="Work Detail" title="Project Detail" description="Loading live project data from coding-journal." align="left" />
+        <SectionPanel eyebrow="Loading" title="Project Detail">
+          <LoadingState title="Loading project detail" message="Fetching repository detail from coding-journal." />
+        </SectionPanel>
       </main>
     );
   }
 
   if (error) {
     return (
-      <main className="state-page">
-        <h1>Unable to load project</h1>
-        <p>{error}</p>
-        <Link to="/projects" className="hero-button">Back to Projects</Link>
+      <main className="page-shell">
+        <PageHeader eyebrow="Work Detail" title="Project Detail" description="The repository detail could not be loaded." align="left" />
+        <SectionPanel eyebrow="Issue" title="Project Detail">
+          <ErrorState title="Unable to load project" message={error} />
+        </SectionPanel>
       </main>
     );
   }
 
   if (!project) {
     return (
-      <main className="state-page">
-        <h1>Project not found</h1>
-        <Link to="/projects" className="hero-button">Back to Projects</Link>
+      <main className="page-shell">
+        <PageHeader eyebrow="Work Detail" title="Project Detail" description="The requested project could not be found in the synced GitHub feed." align="left" />
+        <SectionPanel eyebrow="Missing" title="Project Detail">
+          <EmptyState title="Project not found" message="No synced repository matched this project slug." />
+        </SectionPanel>
       </main>
     );
   }
 
   return (
     <main className="project-detail-page">
+      <PageHeader
+        eyebrow="Work Detail"
+        title={project.name}
+        description="A live project view pulled from the synced GitHub repository feed."
+        align="left"
+      />
       <Link to="/projects" className="problem-back">← Back to Projects</Link>
       <section className="project-detail-hero">
         <div>
-          <span className="project-status">{project.language || "Unknown"}</span>
+          <div className="card-row">
+            <Badge tone="accent">{project.language || "Unknown"}</Badge>
+            {project.featured ? <Badge tone="success">Featured</Badge> : null}
+          </div>
           <h1>{project.name}</h1>
           <p>{project.description || "No repository description provided."}</p>
           <p className="project-category">
             Stars: {project.stars || 0} • Forks: {project.forks || 0} • Updated: {formatDate(project.updatedAt) || "Unknown"}
           </p>
+          {(project.topics || []).length ? (
+            <div className="card-row">
+              {project.topics.slice(0, 6).map((item) => (
+                <Badge key={item}>{item}</Badge>
+              ))}
+            </div>
+          ) : null}
           <div className="project-actions">
             <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">GitHub</a>
             {project.homepage ? (
-              <a href={project.homepage} className="project-link" target="_blank" rel="noreferrer">Homepage</a>
+              <a href={project.homepage} className="project-link" target="_blank" rel="noreferrer">Live Project</a>
             ) : null}
           </div>
         </div>

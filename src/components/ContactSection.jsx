@@ -52,7 +52,7 @@ const ContactSection = () => {
       )
       .then(() => {
         setStatus({
-          message: "Message sent successfully! 🚀",
+          message: "Message sent successfully.",
           type: "success",
         });
         setFormData({ name: "", email: "", message: "" });

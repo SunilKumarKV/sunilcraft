@@ -11,7 +11,7 @@
   position: absolute;
   border-radius: 999px;
   filter: blur(40px);
-  opacity: 0.45;
+  opacity: 0.32;
 }
 
 .bg-light-blob {
@@ -67,13 +67,13 @@
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 18px rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.08);
 }
 
 .bg-particles.light .bg-particle {
-  background: rgba(0, 123, 255, 0.16);
-  box-shadow: 0 0 16px rgba(0, 123, 255, 0.12);
+  background: rgba(0, 123, 255, 0.12);
+  box-shadow: 0 0 12px rgba(0, 123, 255, 0.08);
 }
 
 .bg-code-rain {
@@ -84,7 +84,7 @@
 .bg-code-symbol {
   position: absolute;
   top: -10%;
-  color: rgba(162, 220, 255, 0.12);
+  color: rgba(162, 220, 255, 0.08);
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -136,7 +136,7 @@
   }
   50% {
     transform: translate3d(0, 18px, 0);
-    opacity: 0.46;
+    opacity: 0.34;
   }
 }
 
@@ -148,7 +148,7 @@
   }
   50% {
     transform: translate3d(0, -14px, 0) scale(1.12);
-    opacity: 0.65;
+    opacity: 0.38;
   }
 }
 
@@ -158,10 +158,10 @@
     opacity: 0;
   }
   12% {
-    opacity: 0.18;
+    opacity: 0.12;
   }
   88% {
-    opacity: 0.1;
+    opacity: 0.08;
   }
   100% {
     transform: translate3d(0, 110vh, 0);
