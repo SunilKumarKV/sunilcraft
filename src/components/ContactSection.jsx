@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
+import { FaEnvelope, FaGithub, FaLinkedinIn, FaMapMarkerAlt } from "react-icons/fa";
+import { profile } from "../data/profile";
+import PageHeader from "./ui/PageHeader";
+import SectionPanel from "./ui/SectionPanel";
+import Badge from "./ui/Badge";
 import "../styles/ContactSection.css";
 
 const ContactSection = () => {
@@ -72,67 +77,134 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="contact" id="contact">
-      <div className="contact-header">
-        <h2 className="contact-title">Let's Work Together</h2>
-        <p className="contact-subtitle">
-          Have a project or idea? I'd love to hear from you.
-        </p>
-      </div>
+    <main className="page-shell">
+      <PageHeader
+        eyebrow="Contact"
+        title="Let’s build something useful and well-crafted"
+        description="For frontend polish, dashboard architecture, portfolio systems, and production-ready React work, this page is designed to make the next step easy."
+        align="left"
+      />
 
-      <form onSubmit={handleSubmit} className="contact-form">
-        {["name", "email", "message"].map((field, i) => (
-          <motion.div
-            key={field}
-            custom={i}
-            initial="hidden"
-            animate="visible"
-            variants={inputVariants}
-          >
-            {field !== "message" ? (
-              <input
-                type={field === "email" ? "email" : "text"}
-                name={field}
-                placeholder={`Your ${
-                  field.charAt(0).toUpperCase() + field.slice(1)
-                }`}
-                value={formData[field]}
-                onChange={handleChange}
-                required
-              />
-            ) : (
-              <textarea
-                name="message"
-                placeholder="Your Message"
-                value={formData.message}
-                onChange={handleChange}
-                rows="5"
-                required
-              ></textarea>
-            )}
-          </motion.div>
-        ))}
+      <SectionPanel
+        eyebrow="Collaboration"
+        title="Start a conversation"
+        description="Reach out with a feature idea, UI cleanup request, portfolio upgrade, or product concept. I’m most helpful when the work needs both technical structure and visual refinement."
+      >
+        <div className="contact-layout">
+          <div className="contact-column contact-summary">
+            <div className="card-row">
+              <Badge tone="accent">Frontend Systems</Badge>
+              <Badge>React + Vite</Badge>
+              <Badge tone="success">Available</Badge>
+            </div>
 
-        <motion.button
-          type="submit"
-          disabled={isSending}
-          whileHover={{ scale: isSending ? 1 : 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {isSending ? "Sending..." : "Send Message"}
-        </motion.button>
+            <div className="contact-intro">
+              <h3>Best fit engagements</h3>
+              <p>Developer portfolios, engineering dashboards, routing cleanup, mobile-first UI refinement, and production-ready frontend/full-stack features.</p>
+            </div>
 
-        {status.message && (
-          <motion.p
-            className={`form-status ${status.type}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            {status.message}
-          </motion.p>
-        )}
-      </form>
-    </section>
+            <div className="contact-methods">
+              <a href={`mailto:${profile.email}`} className="contact-method">
+                <FaEnvelope />
+                <div>
+                  <strong>Email</strong>
+                  <span>{profile.email}</span>
+                </div>
+              </a>
+              <a href={profile.github} target="_blank" rel="noreferrer" className="contact-method">
+                <FaGithub />
+                <div>
+                  <strong>GitHub</strong>
+                  <span>See active builds and coding-journal sync</span>
+                </div>
+              </a>
+              <a href={profile.linkedin} target="_blank" rel="noreferrer" className="contact-method">
+                <FaLinkedinIn />
+                <div>
+                  <strong>LinkedIn</strong>
+                  <span>Professional profile and collaboration context</span>
+                </div>
+              </a>
+              <div className="contact-method static">
+                <FaMapMarkerAlt />
+                <div>
+                  <strong>Location</strong>
+                  <span>{profile.location}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="contact-trust-grid">
+              <article className="glass-card">
+                <h3>UI/UX Cleanup</h3>
+                <p>Turning cluttered flows into clearer, more premium product surfaces.</p>
+              </article>
+              <article className="glass-card">
+                <h3>Developer Platforms</h3>
+                <p>Problems, codebase, analytics, and synced engineering views built around live data.</p>
+              </article>
+              <article className="glass-card">
+                <h3>Production Mindset</h3>
+                <p>Routing, responsive layouts, build safety, and implementation detail all treated seriously.</p>
+              </article>
+            </div>
+          </div>
+
+          <div className="contact-column">
+            <form onSubmit={handleSubmit} className="contact-form">
+              {["name", "email", "message"].map((field, i) => (
+                <motion.div
+                  key={field}
+                  custom={i}
+                  initial="hidden"
+                  animate="visible"
+                  variants={inputVariants}
+                >
+                  {field !== "message" ? (
+                    <input
+                      type={field === "email" ? "email" : "text"}
+                      name={field}
+                      placeholder={`Your ${field.charAt(0).toUpperCase() + field.slice(1)}`}
+                      value={formData[field]}
+                      onChange={handleChange}
+                      required
+                    />
+                  ) : (
+                    <textarea
+                      name="message"
+                      placeholder="Tell me what you’re building, where it feels stuck, and what kind of help you need."
+                      value={formData.message}
+                      onChange={handleChange}
+                      rows="7"
+                      required
+                    ></textarea>
+                  )}
+                </motion.div>
+              ))}
+
+              <motion.button
+                type="submit"
+                disabled={isSending}
+                whileHover={{ scale: isSending ? 1 : 1.01 }}
+                whileTap={{ scale: 0.99 }}
+              >
+                {isSending ? "Sending..." : "Send Message"}
+              </motion.button>
+
+              {status.message && (
+                <motion.p
+                  className={`form-status ${status.type}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  {status.message}
+                </motion.p>
+              )}
+            </form>
+          </div>
+        </div>
+      </SectionPanel>
+    </main>
   );
 };
 
