@@ -139,6 +139,9 @@ header {
   cursor: pointer;
   transition: transform 0.3s ease;
   color: var(--text-color);
+  background: none;
+  border: 0;
+  padding: 0;
 }
 
 .menu-icon.open {
@@ -164,6 +167,7 @@ html {
     width: 0;
     height: calc(100vh - 60px);
     overflow: hidden;
+    overflow-y: auto;
     transition: width 0.3s ease;
     z-index: 999;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);

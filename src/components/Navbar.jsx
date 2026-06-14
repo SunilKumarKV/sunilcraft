@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ThemeContext } from "../context/theme";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaSun, FaMoon } from "react-icons/fa";
@@ -11,8 +11,24 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
   const handleShowNavbar = () => setIsOpen(!isOpen);
   const handleCloseNavbar = () => setIsOpen(false);
+
+  const isNavActive = (id) => {
+    if (id === "home") return location.pathname === "/";
+    if (id === "Problems") return location.pathname.startsWith("/problems");
+    if (id === "Codebase") return location.pathname.startsWith("/codebase");
+    if (id === "Dashboard") return location.pathname.startsWith("/dashboard");
+    if (id === "Achievements") return location.pathname.startsWith("/achievements");
+    if (id === "Journey") return location.pathname.startsWith("/journey");
+    if (id === "Rewards") return location.pathname.startsWith("/rewards");
+    if (id === "projects") return location.pathname.startsWith("/projects");
+    return location.pathname === `/${id.toLowerCase()}`;
+  };
 
   const handleNavClick = (id) => {
     handleCloseNavbar();
@@ -63,18 +79,17 @@ export default function Navbar() {
               {theme === "dark" ? <FaSun /> : <FaMoon />}
             </button>
 
-            <div
+            <button
+              type="button"
               className={`menu-icon ${isOpen ? "open" : ""}`}
               onClick={handleShowNavbar}
               aria-label="Toggle menu"
-              role="button"
-              tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") handleShowNavbar();
               }}
             >
               <GiHamburgerMenu />
-            </div>
+            </button>
           </div>
 
           {/* Navigation Menu */}
@@ -97,8 +112,8 @@ export default function Navbar() {
                 <li key={id}>
                   <button
                     onClick={() => handleNavClick(id)}
-                    className={`menu-item ${location.pathname === `/${id.toLowerCase()}` || (location.pathname === "/" && id === "home") ? "active" : ""}`}
-                    aria-current={location.pathname === `/${id.toLowerCase()}` ? "page" : undefined}
+                    className={`menu-item ${isNavActive(id) ? "active" : ""}`}
+                    aria-current={isNavActive(id) ? "page" : undefined}
                     style={{
                       background: "none",
                       border: "none",
