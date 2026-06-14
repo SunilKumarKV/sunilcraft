@@ -17,6 +17,8 @@ const NotFound = lazy(() => import("./components/NotFound"));
 const ProjectDetail = lazy(() => import("./components/ProjectDetail"));
 const ProblemsHome = lazy(() => import("./problems/ProblemsHome"));
 const ProblemDetailPage = lazy(() => import("./problems/ProblemDetailPage"));
+const CodebasePage = lazy(() => import("./codebase/CodebasePage"));
+const CodebaseDetailPage = lazy(() => import("./codebase/CodebaseDetailPage"));
 
 function RouteFallback() {
   return (
@@ -48,6 +50,8 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/problems" element={<ProblemsHome />} />
             <Route path="/problems/:platform/:slug" element={<ProblemDetailPage />} />
+            <Route path="/codebase" element={<CodebasePage />} />
+            <Route path="/codebase/:platform/:slug" element={<CodebaseDetailPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

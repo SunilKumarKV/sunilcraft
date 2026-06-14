@@ -1,5 +1,9 @@
 const CODING_JOURNAL_BASE =
   "https://raw.githubusercontent.com/SunilKumarKV/coding-journal/main/data";
+const CODING_JOURNAL_REPO_API =
+  "https://api.github.com/repos/SunilKumarKV/coding-journal/contents";
+const CODING_JOURNAL_REPO_WEB =
+  "https://github.com/SunilKumarKV/coding-journal/tree/main";
 
 const PROBLEMS_URL = `${CODING_JOURNAL_BASE}/problems.json`;
 const PROJECTS_URL = `${CODING_JOURNAL_BASE}/projects.json`;
@@ -29,6 +33,28 @@ async function fetchCachedJson(cacheKey, url) {
   return promise;
 }
 
+async function fetchCachedText(cacheKey, url) {
+  if (resourceCache.has(cacheKey)) {
+    return resourceCache.get(cacheKey);
+  }
+
+  const promise = fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Unable to load ${cacheKey} from coding-journal.`);
+      }
+
+      return response.text();
+    })
+    .catch((error) => {
+      resourceCache.delete(cacheKey);
+      throw error;
+    });
+
+  resourceCache.set(cacheKey, promise);
+  return promise;
+}
+
 export function getJournalProblems() {
   return fetchCachedJson("problems", PROBLEMS_URL);
 }
@@ -39,6 +65,23 @@ export function getJournalProjects() {
 
 export function getJournalStats() {
   return fetchCachedJson("stats", STATS_URL);
+}
+
+export function getJournalProblemFolderApiUrl(platform, slug) {
+  return `${CODING_JOURNAL_REPO_API}/problems/${toPlatformSegment(platform)}/${slug}`;
+}
+
+export function getJournalProblemFolderWebUrl(platform, slug) {
+  return `${CODING_JOURNAL_REPO_WEB}/problems/${toPlatformSegment(platform)}/${slug}`;
+}
+
+export function getJournalProblemFolderListing(platform, slug) {
+  const cacheKey = `problem-folder:${toPlatformSegment(platform)}:${slug}`;
+  return fetchCachedJson(cacheKey, getJournalProblemFolderApiUrl(platform, slug));
+}
+
+export function getCachedText(url) {
+  return fetchCachedText(`text:${url}`, url);
 }
 
 export function toPlatformSegment(platform) {
