@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   formatDate,
   getJournalProblems,
@@ -7,6 +8,10 @@ import {
   sumNumber,
   uniqueValues,
 } from "../lib/codingJournal";
+import PageHeader from "../components/ui/PageHeader";
+import SectionPanel from "../components/ui/SectionPanel";
+import LoadingState from "../components/ui/LoadingState";
+import ErrorState from "../components/ui/ErrorState";
 
 const platformOrder = [
   "LeetCode",
@@ -222,31 +227,67 @@ export default function DashboardPage() {
 
   return (
     <main className="page-shell">
-      <div className="page-header">
-        <span className="section-eyebrow">Developer Analytics</span>
-        <h1>Dashboard</h1>
-        <p>
-          A live analytics view over problems, repositories, platforms, tags, and milestones synced
-          directly from coding-journal.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Developer Analytics"
+        title="Dashboard"
+        description="A cleaner control center for live metrics, journey snapshots, achievements, and the coding-journal publishing workflow."
+        align="left"
+      />
 
       {loading ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Loading dashboard</h3>
-            <p>Fetching live analytics data from coding-journal.</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Loading" title="Preparing Dashboard">
+          <LoadingState title="Loading dashboard" message="Fetching live analytics data from coding-journal." />
+        </SectionPanel>
       ) : error ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Unable to load dashboard</h3>
-            <p>{error}</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Issue" title="Dashboard Unavailable">
+          <ErrorState title="Unable to load dashboard" message={error} />
+        </SectionPanel>
       ) : (
         <>
+          <SectionPanel
+            eyebrow="Navigation"
+            title="Developer Platform"
+            description="Use the dashboard as the top-level hub, then branch into deeper views only when you need them."
+          >
+            <div className="problem-grid">
+              <Link className="problem-card" to="/journey">
+                <span className="problem-stat">Journey</span>
+                <h2>Timeline</h2>
+                <p>Monthly developer activity grouped from problems, projects, and achievements.</p>
+              </Link>
+              <Link className="problem-card" to="/achievements">
+                <span className="problem-stat">Achievements</span>
+                <h2>Milestones</h2>
+                <p>Unlocked and in-progress milestones calculated from coding-journal data.</p>
+              </Link>
+              <Link className="problem-card" to="/problems">
+                <span className="problem-stat">Workflow</span>
+                <h2>Problem Explorer</h2>
+                <p>Move from metrics into the full problem feed and synced platform coverage.</p>
+              </Link>
+              <Link className="problem-card" to="/codebase">
+                <span className="problem-stat">Workflow</span>
+                <h2>Solution Library</h2>
+                <p>Open verified code entries, explanations, and implementation detail pages.</p>
+              </Link>
+            </div>
+
+            <div className="feature-grid" style={{ marginTop: "24px" }}>
+              {[
+                "1. Solve problem",
+                "2. Run cj add <platform> <slug>",
+                "3. Add solution + tests + explanation",
+                "4. Run cj verify",
+                "5. Run cj publish",
+                "6. Portfolio updates automatically",
+              ].map((step) => (
+                <article className="glass-card" key={step}>
+                  <h3>{step}</h3>
+                </article>
+              ))}
+            </div>
+          </SectionPanel>
+
           <section className="section-panel">
             <span className="section-eyebrow">Overview</span>
             <h2>Overview</h2>

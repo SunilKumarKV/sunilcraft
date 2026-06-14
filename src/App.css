@@ -45,12 +45,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
 }
 
 body {
   margin: 0;
-  font-family: "Arial", sans-serif;
+  font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
   background: var(--bg-color);
   color: var(--text-color);
   transition: background 0.3s ease, color 0.3s ease;
@@ -62,7 +62,7 @@ a {
 }
 
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .theme-toggle {
@@ -216,6 +216,10 @@ a:hover {
   margin-bottom: 36px;
 }
 
+.page-header.page-header-left {
+  text-align: left;
+}
+
 .page-header h1,
 .empty-state h1 {
   color: var(--text-color);
@@ -230,6 +234,17 @@ a:hover {
   line-height: 1.7;
   max-width: 680px;
   margin: 0 auto;
+}
+
+.page-header.page-header-left p {
+  margin-left: 0;
+}
+
+.page-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 22px;
 }
 
 .problem-grid {
@@ -256,6 +271,14 @@ a:hover {
   padding: 28px;
   box-shadow: var(--shadow-light);
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
 }
 
 .problem-card:hover,
@@ -455,6 +478,18 @@ a:hover {
   .page-button.compact {
     justify-content: center;
   }
+
+  .page-header.page-header-left {
+    text-align: center;
+  }
+
+  .page-header.page-header-left p {
+    margin-left: auto;
+  }
+
+  .cta-panel {
+    align-items: stretch;
+  }
 }
 
 .section-panel {
@@ -464,12 +499,20 @@ a:hover {
   border-radius: 28px;
   background: var(--card-bg);
   box-shadow: var(--shadow-light);
+  border: 1px solid color-mix(in srgb, var(--input-border) 88%, white 12%);
 }
 
 .section-panel h2 {
   font-size: clamp(2rem, 4vw, 3.2rem);
   color: var(--text-color);
   margin: 8px 0 28px;
+}
+
+.section-copy {
+  color: var(--text-secondary);
+  max-width: 780px;
+  line-height: 1.75;
+  margin: -8px 0 28px;
 }
 
 .section-eyebrow,
@@ -505,6 +548,83 @@ a:hover {
 
 .glass-card h3 { margin-bottom: 10px; }
 .glass-card p, .timeline-item p { color: var(--text-secondary); line-height: 1.7; }
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--input-border);
+  background: color-mix(in srgb, var(--card-bg) 86%, white 14%);
+  color: var(--text-color);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.ui-badge.accent {
+  color: var(--accent-color);
+  border-color: color-mix(in srgb, var(--accent-color) 35%, transparent);
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+}
+
+.ui-badge.success {
+  color: #0f7a4a;
+  border-color: rgba(15, 122, 74, 0.24);
+  background: rgba(15, 122, 74, 0.1);
+}
+
+[data-theme="dark"] .ui-badge.success {
+  color: #78e3b1;
+  border-color: rgba(120, 227, 177, 0.28);
+  background: rgba(120, 227, 177, 0.12);
+}
+
+.home-shell {
+  padding-bottom: 80px;
+}
+
+.home-page-shell {
+  padding-top: 24px;
+}
+
+.compact-grid,
+.preview-list {
+  margin-top: 24px;
+}
+
+.cta-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.embedded-section-panel {
+  overflow: hidden;
+}
+
+.embedded-section-panel > .about,
+.embedded-section-panel > .skills-section,
+.embedded-section-panel > .certificate-gallery {
+  padding: 0;
+  margin: 0;
+  max-width: none;
+}
+
+.embedded-section-panel .about-title,
+.embedded-section-panel .skills-title,
+.embedded-section-panel .certificate-gallery h2 {
+  display: none;
+}
+
+.embedded-section-panel .about,
+.embedded-section-panel .skills-section,
+.embedded-section-panel .certificate-gallery {
+  background: transparent !important;
+}
 
 .achievement-card {
   display: grid;

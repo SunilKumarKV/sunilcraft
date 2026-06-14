@@ -7,6 +7,13 @@ import {
   toProjectSlug,
   uniqueValues,
 } from "../lib/codingJournal";
+import PageHeader from "./ui/PageHeader";
+import SectionPanel from "./ui/SectionPanel";
+import FilterBar from "./ui/FilterBar";
+import LoadingState from "./ui/LoadingState";
+import ErrorState from "./ui/ErrorState";
+import EmptyState from "./ui/EmptyState";
+import Badge from "./ui/Badge";
 
 function sortProjects(a, b) {
   const featuredRank = Number(Boolean(b.featured)) - Number(Boolean(a.featured));
@@ -65,6 +72,11 @@ export default function ProjectsPage() {
     [projects]
   );
 
+  const featuredProjects = useMemo(
+    () => [...projects].filter((project) => project.featured).sort(sortProjects).slice(0, 3),
+    [projects]
+  );
+
   const filteredProjects = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
@@ -93,22 +105,62 @@ export default function ProjectsPage() {
 
   return (
     <main className="page-shell">
-      <div className="page-header">
-        <span className="section-eyebrow">Live Repository Feed</span>
-        <h1>Projects</h1>
-        <p>
-          Production repositories, GitHub metadata, and portfolio-ready project discovery powered
-          directly by coding-journal.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Work"
+        title="Projects, featured builds, and repo explorer"
+        description="A cleaner work hub for flagship products, featured projects, and the live GitHub repository feed synced from coding-journal."
+        align="left"
+      />
 
-      <DeveloperMetrics />
+      <DeveloperMetrics title="Developer Metrics" />
 
-      <section className="section-panel">
-        <span className="section-eyebrow">Repository Explorer</span>
-        <h2>Browse Projects</h2>
+      <SectionPanel
+        eyebrow="Highlights"
+        title="Featured Projects"
+        description="Priority work appears first so the portfolio reads like a curated engineering showcase instead of a long repository dump."
+      >
+        {loading ? (
+          <LoadingState title="Loading featured projects" message="Fetching priority projects from coding-journal." />
+        ) : error ? (
+          <ErrorState title="Unable to load featured projects" message={error} />
+        ) : !featuredProjects.length ? (
+          <EmptyState title="No featured projects found" message="Mark repositories as featured in coding-journal to surface them here." />
+        ) : (
+          <div className="problem-grid">
+            {featuredProjects.map((project) => (
+              <article className="problem-card" key={project.url}>
+                <div className="card-row">
+                  <Badge tone="accent">Featured</Badge>
+                  <Badge>{project.language || "Unknown"}</Badge>
+                </div>
+                <h2>{project.name}</h2>
+                <p>{project.description || "No repository description provided."}</p>
+                <p>Priority: {project.priority ?? "Unranked"} • Stars: {project.stars || 0}</p>
+                <div className="project-actions">
+                  <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">
+                    GitHub
+                  </a>
+                  {project.homepage ? (
+                    <a href={project.homepage} className="project-link" target="_blank" rel="noreferrer">
+                      Homepage
+                    </a>
+                  ) : null}
+                  <Link to={`/projects/${toProjectSlug(project.name)}`} className="project-link">
+                    Details
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </SectionPanel>
 
-        <div className="problem-toolbar problem-toolbar-wrap">
+      <SectionPanel
+        eyebrow="Explorer"
+        title="GitHub Repo Explorer"
+        description="Search across the live repository feed while keeping the portfolio surface focused and easy to scan."
+      >
+        <FilterBar>
           <input
             type="search"
             placeholder="Search repositories..."
@@ -138,41 +190,28 @@ export default function ProjectsPage() {
             <option value="All Projects">All Projects</option>
             <option value="Featured Only">Featured Only</option>
           </select>
-        </div>
+        </FilterBar>
 
         {loading ? (
-          <article className="glass-card">
-            <h3>Loading projects</h3>
-            <p>Fetching live repositories from coding-journal.</p>
-          </article>
+          <LoadingState title="Loading projects" message="Fetching live repositories from coding-journal." />
         ) : error ? (
-          <article className="glass-card">
-            <h3>Unable to load projects</h3>
-            <p>{error}</p>
-          </article>
+          <ErrorState title="Unable to load projects" message={error} />
         ) : !projects.length ? (
-          <article className="glass-card">
-            <h3>No repositories found</h3>
-            <p>coding-journal returned an empty projects feed.</p>
-          </article>
+          <EmptyState title="No repositories found" message="coding-journal returned an empty projects feed." />
         ) : !filteredProjects.length ? (
-          <article className="glass-card">
-            <h3>No matching repositories</h3>
-            <p>Try clearing one or more filters to see more projects.</p>
-          </article>
+          <EmptyState title="No matching repositories" message="Try clearing one or more filters to see more projects." />
         ) : (
           <div className="problem-grid">
             {filteredProjects.map((project) => (
               <article className="problem-card" key={project.url}>
-                <span className="problem-stat">
-                  {project.featured ? "Featured" : project.language || "Unknown"}
-                </span>
+                <div className="card-row">
+                  {project.featured ? <Badge tone="accent">Featured</Badge> : null}
+                  <Badge>{project.language || "Unknown"}</Badge>
+                </div>
                 <h2>{project.name}</h2>
-                {project.featured ? <p><strong>Featured</strong></p> : null}
                 <p>{project.description || "No repository description provided."}</p>
                 <p>Stars: {project.stars || 0} • Forks: {project.forks || 0}</p>
                 <p>Updated: {formatDate(project.updatedAt) || "Unknown"}</p>
-                <p>Language: {project.language || "Unknown"}</p>
                 <p>Topics: {(project.topics || []).length ? project.topics.join(", ") : "None"}</p>
                 <div className="project-actions">
                   <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">
@@ -191,7 +230,7 @@ export default function ProjectsPage() {
             ))}
           </div>
         )}
-      </section>
+      </SectionPanel>
     </main>
   );
 }

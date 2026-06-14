@@ -19,43 +19,43 @@ export default function Navbar() {
   const handleCloseNavbar = () => setIsOpen(false);
 
   const isNavActive = (id) => {
-    if (id === "home") return location.pathname === "/";
+    if (id === "Home") return location.pathname === "/";
+    if (id === "Work") return location.pathname.startsWith("/projects");
     if (id === "Problems") return location.pathname.startsWith("/problems");
     if (id === "Codebase") return location.pathname.startsWith("/codebase");
-    if (id === "Dashboard") return location.pathname.startsWith("/dashboard");
-    if (id === "Achievements") return location.pathname.startsWith("/achievements");
-    if (id === "Journey") return location.pathname.startsWith("/journey");
-    if (id === "Rewards") return location.pathname.startsWith("/rewards");
-    if (id === "projects") return location.pathname.startsWith("/projects");
-    return location.pathname === `/${id.toLowerCase()}`;
+    if (id === "Dashboard") {
+      return (
+        location.pathname.startsWith("/dashboard") ||
+        location.pathname.startsWith("/journey") ||
+        location.pathname.startsWith("/achievements")
+      );
+    }
+    if (id === "About") {
+      return location.pathname.startsWith("/about") || location.pathname.startsWith("/rewards");
+    }
+    if (id === "Contact") return location.pathname.startsWith("/contact");
+    return false;
   };
 
   const handleNavClick = (id) => {
     handleCloseNavbar();
 
-    if (id === "Rewards") {
-      navigate("/rewards");
+    if (id === "Home") {
+      navigate("/");
+    } else if (id === "Work") {
+      navigate("/projects");
     } else if (id === "Problems") {
       navigate("/problems");
     } else if (id === "Codebase") {
       navigate("/codebase");
     } else if (id === "Dashboard") {
       navigate("/dashboard");
-    } else if (id === "Achievements") {
-      navigate("/achievements");
-    } else if (id === "Journey") {
-      navigate("/journey");
+    } else if (id === "About") {
+      navigate("/about");
+    } else if (id === "Contact") {
+      navigate("/contact");
     } else {
-      if (location.pathname !== "/") {
-        navigate("/");
-        setTimeout(() => {
-          const el = document.getElementById(id);
-          if (el) el.scrollIntoView({ behavior: "smooth" });
-        }, 100); // wait for homepage to load
-      } else {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }
+      navigate("/");
     }
   };
 
@@ -64,7 +64,7 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="container">
           {/* Logo */}
-          <button className="logo" type="button" onClick={() => handleNavClick("home")} aria-label="Go to home">
+          <button className="logo" type="button" onClick={() => handleNavClick("Home")} aria-label="Go to home">
             <div className="logo-icon">S</div>
             <div className="logo-text">SunilCraft</div>
           </button>
@@ -96,18 +96,13 @@ export default function Navbar() {
           <div className={`menu-list ${isOpen ? "active" : ""}`}>
             <ul>
               {[
-                "home",
-                "about",
-                "projects",
-                "skills",
-                "services",
-                "Journey",
-                "Rewards",
+                "Home",
+                "Work",
                 "Problems",
                 "Codebase",
                 "Dashboard",
-                "Achievements",
-                "contact",
+                "About",
+                "Contact",
               ].map((id) => (
                 <li key={id}>
                   <button
@@ -122,7 +117,7 @@ export default function Navbar() {
                       font: "inherit",
                     }}
                   >
-                    {id.charAt(0).toUpperCase() + id.slice(1)}
+                    {id}
                   </button>
                 </li>
               ))}

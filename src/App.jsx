@@ -8,9 +8,8 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import "./App.css";
 
 const Hero = lazy(() => import("./components/HeroSection"));
-const About = lazy(() => import("./components/AboutSection"));
+const About = lazy(() => import("./components/AboutPage"));
 const ProjectsPage = lazy(() => import("./components/ProjectsPage"));
-const Skills = lazy(() => import("./components/SkillsSection"));
 const RewardsPage = lazy(() => import("./components/CertificateGallery"));
 const Contact = lazy(() => import("./components/ContactSection"));
 const NotFound = lazy(() => import("./components/NotFound"));
@@ -48,7 +47,6 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/projects/:slug" element={<ProjectDetail />} />
-            <Route path="/skills" element={<Skills />} />
             <Route path="/journey" element={<JourneyPage />} />
             <Route path="/rewards" element={<RewardsPage />} />
             <Route path="/contact" element={<Contact />} />
