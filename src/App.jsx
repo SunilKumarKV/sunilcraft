@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import Seo from "./components/Seo";
 import ScrollToTop from "./components/ScrollToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
+import AnimatedBackground from "./components/ui/AnimatedBackground";
 import "./App.css";
 
 const Hero = lazy(() => import("./components/HeroSection"));
@@ -38,28 +39,33 @@ function App() {
   return (
     <BrowserRouter>
       <ErrorBoundary>
-        <Seo />
-        <ScrollToTop />
-        <Navbar />
-        <Suspense fallback={<RouteFallback />}>
-          <Routes>
-            <Route path="/" element={<Hero />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/projects/:slug" element={<ProjectDetail />} />
-            <Route path="/journey" element={<JourneyPage />} />
-            <Route path="/rewards" element={<RewardsPage />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/problems" element={<ProblemsHome />} />
-            <Route path="/problems/:platform/:slug" element={<ProblemDetailPage />} />
-            <Route path="/codebase" element={<CodebasePage />} />
-            <Route path="/codebase/:platform/:slug" element={<CodebaseDetailPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/achievements" element={<AchievementsPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-        <Footer />
+        <div className="app-frame">
+          <Seo />
+          <ScrollToTop />
+          <AnimatedBackground />
+          <div className="app-layer">
+            <Navbar />
+            <Suspense fallback={<RouteFallback />}>
+              <Routes>
+                <Route path="/" element={<Hero />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/projects/:slug" element={<ProjectDetail />} />
+                <Route path="/journey" element={<JourneyPage />} />
+                <Route path="/rewards" element={<RewardsPage />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/problems" element={<ProblemsHome />} />
+                <Route path="/problems/:platform/:slug" element={<ProblemDetailPage />} />
+                <Route path="/codebase" element={<CodebasePage />} />
+                <Route path="/codebase/:platform/:slug" element={<CodebaseDetailPage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/achievements" element={<AchievementsPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+            <Footer />
+          </div>
+        </div>
       </ErrorBoundary>
     </BrowserRouter>
   );

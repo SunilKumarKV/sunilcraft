@@ -1,0 +1,170 @@
+.animated-background {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-light-blob,
+.bg-dark-glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+  opacity: 0.45;
+}
+
+.bg-light-blob {
+  background: radial-gradient(circle, rgba(0, 123, 255, 0.18), rgba(0, 123, 255, 0));
+}
+
+.bg-light-blob-a {
+  width: 32rem;
+  height: 32rem;
+  top: 4%;
+  left: -6%;
+}
+
+.bg-light-blob-b {
+  width: 28rem;
+  height: 28rem;
+  top: 36%;
+  right: -8%;
+}
+
+.bg-light-blob-c {
+  width: 22rem;
+  height: 22rem;
+  bottom: 8%;
+  left: 34%;
+}
+
+.bg-dark-glow {
+  background: radial-gradient(circle, rgba(0, 191, 255, 0.18), rgba(0, 191, 255, 0));
+}
+
+.bg-dark-glow-a {
+  width: 28rem;
+  height: 28rem;
+  top: 6%;
+  left: -4%;
+}
+
+.bg-dark-glow-b {
+  width: 24rem;
+  height: 24rem;
+  bottom: 8%;
+  right: -6%;
+}
+
+.bg-particles {
+  position: absolute;
+  inset: 0;
+}
+
+.bg-particle {
+  position: absolute;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.12);
+}
+
+.bg-particles.light .bg-particle {
+  background: rgba(0, 123, 255, 0.16);
+  box-shadow: 0 0 16px rgba(0, 123, 255, 0.12);
+}
+
+.bg-code-rain {
+  position: absolute;
+  inset: -10% 0 0;
+}
+
+.bg-code-symbol {
+  position: absolute;
+  top: -10%;
+  color: rgba(162, 220, 255, 0.12);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bg-light-blob {
+    animation: blobFloat 18s ease-in-out infinite;
+  }
+
+  .bg-dark-glow {
+    animation: glowFloat 20s ease-in-out infinite;
+  }
+
+  .bg-particle {
+    animation: sparkleFloat 10s ease-in-out infinite;
+  }
+
+  .bg-code-symbol {
+    animation: codeFall linear infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-light-blob,
+  .bg-dark-glow,
+  .bg-particle,
+  .bg-code-symbol {
+    animation: none !important;
+  }
+}
+
+@keyframes blobFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, 22px, 0) scale(1.06);
+  }
+}
+
+@keyframes glowFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.32;
+  }
+  50% {
+    transform: translate3d(0, 18px, 0);
+    opacity: 0.46;
+  }
+}
+
+@keyframes sparkleFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate3d(0, -14px, 0) scale(1.12);
+    opacity: 0.65;
+  }
+}
+
+@keyframes codeFall {
+  0% {
+    transform: translate3d(0, -10vh, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.18;
+  }
+  88% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translate3d(0, 110vh, 0);
+    opacity: 0;
+  }
+}

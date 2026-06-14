@@ -6,6 +6,11 @@ import {
   sumNumber,
   uniqueValues,
 } from "../lib/codingJournal";
+import PageHeader from "../components/ui/PageHeader";
+import SectionPanel from "../components/ui/SectionPanel";
+import LoadingState from "../components/ui/LoadingState";
+import ErrorState from "../components/ui/ErrorState";
+import EmptyState from "../components/ui/EmptyState";
 
 function clampProgress(value, goal) {
   if (!goal) return 0;
@@ -160,36 +165,25 @@ export default function AchievementsPage() {
 
   return (
     <main className="page-shell">
-      <div className="page-header">
-        <span className="section-eyebrow">Live Milestones</span>
-        <h1>Achievements</h1>
-        <p>
-          A live achievements board calculated from verified problems, platform coverage, repository
-          activity, and GitHub metrics in coding-journal.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Live Milestones"
+        title="Achievements"
+        description="Badges generated from real coding-journal activity, not manual claims."
+        align="left"
+      />
 
       {loading ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Loading achievements</h3>
-            <p>Fetching milestone data from coding-journal.</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Loading" title="Achievements">
+          <LoadingState title="Loading achievements" message="Fetching milestone data from coding-journal." />
+        </SectionPanel>
       ) : error ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Unable to load achievements</h3>
-            <p>{error}</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Issue" title="Achievements">
+          <ErrorState title="Unable to load achievements" message={error} />
+        </SectionPanel>
       ) : !achievements.length ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>No achievements available</h3>
-            <p>The current coding-journal feeds do not expose enough data to calculate achievements.</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Empty" title="Achievements">
+          <EmptyState title="No achievements available" message="The current coding-journal feeds do not expose enough data to calculate achievements." />
+        </SectionPanel>
       ) : (
         <section className="section-panel">
           <span className="section-eyebrow">Milestone Board</span>

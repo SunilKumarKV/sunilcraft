@@ -6,6 +6,10 @@ import {
   sumNumber,
   uniqueValues,
 } from "../lib/codingJournal";
+import SectionPanel from "./ui/SectionPanel";
+import LoadingState from "./ui/LoadingState";
+import ErrorState from "./ui/ErrorState";
+import StatCard from "./ui/StatCard";
 
 function useDeveloperMetricsData() {
   const [state, setState] = React.useState({
@@ -88,31 +92,18 @@ export default function DeveloperMetrics({ title = "Developer Metrics" }) {
   }, [projects, stats]);
 
   return (
-    <section className="section-panel">
-      <span className="section-eyebrow">Coding Journal</span>
-      <h2>{title}</h2>
-
+    <SectionPanel eyebrow="Coding Journal" title={title}>
       {loading ? (
-        <article className="glass-card">
-          <h3>Loading metrics</h3>
-          <p>Fetching the latest stats and repository totals from coding-journal.</p>
-        </article>
+        <LoadingState title="Loading metrics" message="Fetching the latest stats and repository totals from coding-journal." />
       ) : error ? (
-        <article className="glass-card">
-          <h3>Unable to load metrics</h3>
-          <p>{error}</p>
-        </article>
+        <ErrorState title="Unable to load metrics" message={error} />
       ) : (
         <div className="problem-grid">
           {metrics.map((metric) => (
-            <article className="problem-card" key={metric.label}>
-              <span className="problem-stat">{metric.label}</span>
-              <h2>{metric.value}</h2>
-              <p>{metric.description}</p>
-            </article>
+            <StatCard key={metric.label} label={metric.label} value={metric.value} description={metric.description} />
           ))}
         </div>
       )}
-    </section>
+    </SectionPanel>
   );
 }

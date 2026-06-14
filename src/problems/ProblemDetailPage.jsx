@@ -4,6 +4,12 @@ import {
   getJournalProblems,
   toPlatformSegment,
 } from "../lib/codingJournal";
+import PageHeader from "../components/ui/PageHeader";
+import SectionPanel from "../components/ui/SectionPanel";
+import LoadingState from "../components/ui/LoadingState";
+import ErrorState from "../components/ui/ErrorState";
+import EmptyState from "../components/ui/EmptyState";
+import Badge from "../components/ui/Badge";
 
 function copyText(text) {
   if (!text) return Promise.resolve();
@@ -60,16 +66,14 @@ export default function ProblemDetailPage() {
 
   return (
     <main className="page-shell">
-      <div className="page-header">
-        <span className="section-eyebrow">Coding Journal Detail</span>
-        <h1>{problem?.title || "Problem Detail"}</h1>
-        <p>
-          Live problem metadata and solution notes loaded from coding-journal without any hardcoded
-          fallback content.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Coding Journal Detail"
+        title={problem?.title || "Problem Detail"}
+        description="A verified problem entry with solution context pulled directly from coding-journal."
+        align="left"
+      />
 
-      <div className="problem-toolbar">
+      <div className="problem-toolbar problem-toolbar-wrap">
         <Link className="page-button compact" to="/problems">
           ← Back to Problems
         </Link>
@@ -81,54 +85,57 @@ export default function ProblemDetailPage() {
       </div>
 
       {loading ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Loading problem detail</h3>
-            <p>Fetching the latest solution data from coding-journal.</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Loading" title="Problem Detail">
+          <LoadingState title="Loading problem detail" message="Fetching the latest solution data from coding-journal." />
+        </SectionPanel>
       ) : error ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Unable to load problem detail</h3>
-            <p>{error}</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Issue" title="Problem Detail">
+          <ErrorState title="Unable to load problem detail" message={error} />
+        </SectionPanel>
       ) : !problem ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Problem not found</h3>
-            <p>No coding-journal problem matched this platform and slug.</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Missing" title="Problem Detail">
+          <EmptyState title="Problem not found" message="No coding-journal problem matched this platform and slug." />
+        </SectionPanel>
       ) : (
         <>
           <div className="problem-grid">
             <article className="problem-card">
-              <span className="problem-stat">Platform</span>
-              <h2>{problem.platform}</h2>
-              <p>Difficulty: {problem.difficulty || "Unknown"}</p>
+              <div className="card-row">
+                <Badge tone="accent">{problem.platform}</Badge>
+                <Badge>{problem.difficulty || "Unknown"}</Badge>
+              </div>
+              <h2>{problem.title}</h2>
+              <p>Source problem metadata synced from coding-journal.</p>
             </article>
             <article className="problem-card">
-              <span className="problem-stat">Verification</span>
-              <h2>{problem.verified ? "Verified" : "Not Verified"}</h2>
-              <p>Language: {problem.language || "Unknown"}</p>
+              <div className="card-row">
+                <Badge>{problem.language || "Unknown"}</Badge>
+                <Badge tone={problem.verified ? "success" : "default"}>
+                  {problem.verified ? "Verified" : "Unverified"}
+                </Badge>
+              </div>
+              <h2>Verification</h2>
+              <p>{problem.verified ? "This solution is marked as verified." : "This solution is not marked as verified yet."}</p>
             </article>
             <article className="problem-card">
-              <span className="problem-stat">Tags</span>
-              <h2>{(problem.tags || []).length}</h2>
-              {(problem.tags || []).length ? <p>{problem.tags.join(", ")}</p> : null}
+              <div className="card-row">
+                {(problem.tags || []).slice(0, 4).map((tagName) => (
+                  <Badge key={tagName}>{tagName}</Badge>
+                ))}
+              </div>
+              <h2>Tags</h2>
+              <p>{(problem.tags || []).length ? `${(problem.tags || []).length} tags attached to this solution entry.` : "No tags added yet."}</p>
             </article>
             <article className="problem-card">
-              <span className="problem-stat">Complexity</span>
+              <div className="card-row">
+                <Badge>Complexity</Badge>
+              </div>
               <h2>{complexity || "Unavailable"}</h2>
-              <p>Time and space notes update directly from coding-journal.</p>
+              <p>Time and space notes come from the coding-journal entry.</p>
             </article>
           </div>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Solution</span>
-            <h2>{problem.title}</h2>
+          <SectionPanel eyebrow="Solution" title={problem.title}>
             <div className="feature-grid">
               {problem.explanation ? (
                 <article className="glass-card">
@@ -155,14 +162,13 @@ export default function ProblemDetailPage() {
                 </article>
               ) : null}
             </div>
-          </section>
+          </SectionPanel>
 
           {solutionCode ? (
-            <section className="section-panel">
-              <span className="section-eyebrow">Implementation</span>
-              <h2>Solution Code</h2>
+            <SectionPanel eyebrow="Implementation" title="Solution Code">
               <div className="problem-actions-row">
                 <button
+                  className={`copy-button ${copyState ? "copied" : ""}`}
                   type="button"
                   onClick={() => {
                     copyText(solutionCode).then(() => {
@@ -180,7 +186,7 @@ export default function ProblemDetailPage() {
                   <code>{solutionCode}</code>
                 </pre>
               </article>
-            </section>
+            </SectionPanel>
           ) : null}
         </>
       )}

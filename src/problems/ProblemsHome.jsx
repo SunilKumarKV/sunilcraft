@@ -1,6 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import DeveloperMetrics from "../components/DeveloperMetrics";
+import PageHeader from "../components/ui/PageHeader";
+import SectionPanel from "../components/ui/SectionPanel";
+import FilterBar from "../components/ui/FilterBar";
+import LoadingState from "../components/ui/LoadingState";
+import ErrorState from "../components/ui/ErrorState";
+import EmptyState from "../components/ui/EmptyState";
+import Badge from "../components/ui/Badge";
 import { getJournalProblems, toPlatformSegment, uniqueValues } from "../lib/codingJournal";
 
 export default function ProblemsHome() {
@@ -85,22 +92,18 @@ export default function ProblemsHome() {
 
   return (
     <main className="page-shell problems-home">
-      <div className="page-header">
-        <span className="section-eyebrow">Coding Journal</span>
-        <h1>Problems</h1>
-        <p>
-          Search and filter verified coding problems across platforms with data loaded live from
-          coding-journal.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Coding Journal"
+        title="Problems"
+        description="A verified record of coding problems I’ve solved, tested, and documented."
+        align="left"
+      />
 
       <DeveloperMetrics />
 
-      <section className="section-panel">
-        <span className="section-eyebrow">Problem Explorer</span>
-        <h2>Browse Problems</h2>
+      <SectionPanel eyebrow="Problem Explorer" title="Browse Problems">
 
-        <div className="problem-toolbar problem-toolbar-wrap">
+        <FilterBar>
           <input
             type="search"
             value={query}
@@ -134,28 +137,16 @@ export default function ProblemsHome() {
               </option>
             ))}
           </select>
-        </div>
+        </FilterBar>
 
         {loading ? (
-          <article className="glass-card">
-            <h3>Loading problems</h3>
-            <p>Fetching the latest problems feed from coding-journal.</p>
-          </article>
+          <LoadingState title="Loading problems" message="Fetching the latest problems feed from coding-journal." />
         ) : error ? (
-          <article className="glass-card">
-            <h3>Unable to load problems</h3>
-            <p>{error}</p>
-          </article>
+          <ErrorState title="Unable to load problems" message={error} />
         ) : !problems.length ? (
-          <article className="glass-card">
-            <h3>No problems found</h3>
-            <p>coding-journal returned an empty problems feed.</p>
-          </article>
+          <EmptyState title="No problems found" message="coding-journal returned an empty problems feed." />
         ) : !filteredProblems.length ? (
-          <article className="glass-card">
-            <h3>No matching problems</h3>
-            <p>Try clearing one or more filters to see more results.</p>
-          </article>
+          <EmptyState title="No matching problems" message="Try clearing one or more filters to see more results." />
         ) : (
           <div className="problem-grid">
             {filteredProblems.map((problem) => (
@@ -164,17 +155,25 @@ export default function ProblemsHome() {
                 className="problem-card"
                 key={`${problem.platform}-${problem.slug}`}
               >
-                <span className="problem-stat">{problem.platform}</span>
+                <div className="card-row">
+                  <Badge tone="accent">{problem.platform}</Badge>
+                  <Badge>{problem.difficulty || "Unknown"}</Badge>
+                  <Badge>{problem.language || "Unknown"}</Badge>
+                  {problem.verified ? <Badge tone="success">Verified</Badge> : null}
+                </div>
                 <h2>{problem.title}</h2>
-                <p>Difficulty: {problem.difficulty || "Unknown"}</p>
-                <p>Verified: {problem.verified ? "Yes" : "No"}</p>
-                <p>Tags: {(problem.tags || []).length ? problem.tags.join(", ") : "None"}</p>
-                <strong>{problem.language || "Unknown language"}</strong>
+                {(problem.tags || []).length ? (
+                  <div className="card-row">
+                    {problem.tags.slice(0, 4).map((tagName) => (
+                      <Badge key={tagName}>{tagName}</Badge>
+                    ))}
+                  </div>
+                ) : null}
               </Link>
             ))}
           </div>
         )}
-      </section>
+      </SectionPanel>
     </main>
   );
 }

@@ -7,6 +7,12 @@ import {
   getJournalProblems,
   toPlatformSegment,
 } from "../lib/codingJournal";
+import PageHeader from "../components/ui/PageHeader";
+import SectionPanel from "../components/ui/SectionPanel";
+import LoadingState from "../components/ui/LoadingState";
+import ErrorState from "../components/ui/ErrorState";
+import EmptyState from "../components/ui/EmptyState";
+import Badge from "../components/ui/Badge";
 
 function extractSection(markdown, heading) {
   if (!markdown) return "";
@@ -126,14 +132,12 @@ export default function CodebaseDetailPage() {
 
   return (
     <main className="page-shell">
-      <div className="page-header">
-        <span className="section-eyebrow">Codebase Detail</span>
-        <h1>{detail?.title || problem?.title || "Code Entry"}</h1>
-        <p>
-          Review live question notes, implementation, explanation, and complexity data pulled from
-          the coding-journal repository.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Codebase Detail"
+        title={detail?.title || problem?.title || "Code Entry"}
+        description="A source-backed solution entry with code, explanation, and complexity notes from coding-journal."
+        align="left"
+      />
 
       <div className="problem-toolbar problem-toolbar-wrap">
         <Link className="page-button compact" to="/codebase">
@@ -152,54 +156,57 @@ export default function CodebaseDetailPage() {
       </div>
 
       {loading ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Loading code entry</h3>
-            <p>Fetching problem files, solution code, and explanation data from coding-journal.</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Loading" title="Code Entry">
+          <LoadingState title="Loading code entry" message="Fetching problem files, solution code, and explanation data from coding-journal." />
+        </SectionPanel>
       ) : error ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Unable to load code entry</h3>
-            <p>{error}</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Issue" title="Code Entry">
+          <ErrorState title="Unable to load code entry" message={error} />
+        </SectionPanel>
       ) : !detail ? (
-        <section className="section-panel">
-          <article className="glass-card">
-            <h3>Code entry not found</h3>
-            <p>No coding-journal code entry matched this platform and slug.</p>
-          </article>
-        </section>
+        <SectionPanel eyebrow="Missing" title="Code Entry">
+          <EmptyState title="Code entry not found" message="No coding-journal code entry matched this platform and slug." />
+        </SectionPanel>
       ) : (
         <>
           <div className="problem-grid">
             <article className="problem-card">
-              <span className="problem-stat">Platform</span>
-              <h2>{detail.platform}</h2>
-              <p>Difficulty: {detail.difficulty || "Unknown"}</p>
+              <div className="card-row">
+                <Badge tone="accent">{detail.platform}</Badge>
+                <Badge>{detail.difficulty || "Unknown"}</Badge>
+              </div>
+              <h2>{detail.title}</h2>
+              <p>Original problem metadata synced from coding-journal.</p>
             </article>
             <article className="problem-card">
-              <span className="problem-stat">Verification</span>
-              <h2>{detail.verified ? "Verified" : "Unverified"}</h2>
-              <p>Language: {detail.language || "Unknown"}</p>
+              <div className="card-row">
+                <Badge>{detail.language || "Unknown"}</Badge>
+                <Badge tone={detail.verified ? "success" : "default"}>
+                  {detail.verified ? "Verified" : "Unverified"}
+                </Badge>
+              </div>
+              <h2>Verification</h2>
+              <p>{detail.verified ? "This solution is marked as verified." : "This solution is not marked as verified yet."}</p>
             </article>
             <article className="problem-card">
-              <span className="problem-stat">Tags</span>
-              <h2>{(detail.tags || []).length}</h2>
-              {(detail.tags || []).length ? <p>{detail.tags.join(", ")}</p> : null}
+              <div className="card-row">
+                {(detail.tags || []).slice(0, 4).map((tagName) => (
+                  <Badge key={tagName}>{tagName}</Badge>
+                ))}
+              </div>
+              <h2>Tags</h2>
+              <p>{(detail.tags || []).length ? `${(detail.tags || []).length} tags attached to this entry.` : "No tags added yet."}</p>
             </article>
             <article className="problem-card">
-              <span className="problem-stat">Complexity</span>
+              <div className="card-row">
+                <Badge>Complexity</Badge>
+              </div>
               <h2>{detail.timeComplexity || "Unavailable"}</h2>
               <p>{detail.spaceComplexity ? `Space: ${detail.spaceComplexity}` : "Space complexity unavailable."}</p>
             </article>
           </div>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Question</span>
-            <h2>{detail.title}</h2>
+          <SectionPanel eyebrow="Question" title={detail.title}>
             <div className="feature-grid">
               {detail.question ? (
                 <article className="glass-card">
@@ -224,14 +231,13 @@ export default function CodebaseDetailPage() {
                 <p>{detail.verified ? "Verified solution" : "Unverified solution"}</p>
               </article>
             </div>
-          </section>
+          </SectionPanel>
 
           {detail.solutionCode ? (
-            <section className="section-panel">
-              <span className="section-eyebrow">Implementation</span>
-              <h2>Solution Code</h2>
+            <SectionPanel eyebrow="Implementation" title="Solution Code">
               <div className="problem-actions-row">
                 <button
+                  className={`copy-button ${copyState ? "copied" : ""}`}
                   type="button"
                   onClick={() => {
                     copyText(detail.solutionCode).then(() => {
@@ -249,7 +255,7 @@ export default function CodebaseDetailPage() {
                   <code>{detail.solutionCode}</code>
                 </pre>
               </article>
-            </section>
+            </SectionPanel>
           ) : null}
         </>
       )}
