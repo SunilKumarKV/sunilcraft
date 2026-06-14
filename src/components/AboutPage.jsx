@@ -4,14 +4,15 @@ import SkillsSection from "./SkillsSection";
 import CertificateGallery from "./CertificateGallery";
 import PageHeader from "./ui/PageHeader";
 import SectionPanel from "./ui/SectionPanel";
+import { profile } from "../data/profile";
 
 export default function AboutPage() {
   return (
     <main className="page-shell">
       <PageHeader
         eyebrow="About SunilCraft"
-        title="Builder profile, skills, and rewards"
-        description="A cleaner view of the person behind SunilCraft: engineering focus, practical skills, and milestone snapshots."
+        title="Builder profile, craft, and credibility"
+        description={`A premium overview of ${profile.name}: product thinking, frontend craft, full-stack execution, and the rewards that reflect that growth.`}
         align="left"
       />
 
