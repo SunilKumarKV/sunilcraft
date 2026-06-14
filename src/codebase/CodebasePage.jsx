@@ -111,6 +111,22 @@ export default function CodebasePage() {
     };
   }, [problems]);
 
+  const workflowSteps = [
+    "Solve problem",
+    "Run `cj add <platform> <slug>`",
+    "Add solution + tests + explanation",
+    "Run `cj verify`",
+    "Run `cj publish`",
+    "Portfolio updates automatically",
+  ];
+
+  const syncBadges = [
+    "Verified by tests",
+    "Powered by coding-journal",
+    "No mock data",
+    "Multi-platform ready",
+  ];
+
   return (
     <main className="page-shell">
       <div className="page-header">
@@ -121,6 +137,28 @@ export default function CodebasePage() {
           directly from coding-journal.
         </p>
       </div>
+
+      <section className="section-panel">
+        <span className="section-eyebrow">Workflow Guide</span>
+        <h2>How this Codebase updates</h2>
+        <div className="feature-grid">
+          {workflowSteps.map((step, index) => (
+            <article className="glass-card" key={step}>
+              <h3>Step {index + 1}</h3>
+              <p>{step}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="problem-grid" style={{ marginTop: "24px" }}>
+          {syncBadges.map((badge) => (
+            <article className="problem-card" key={badge}>
+              <span className="problem-stat">Codebase</span>
+              <h2>{badge}</h2>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <section className="section-panel">
         <span className="section-eyebrow">Code Groups</span>
