@@ -21,6 +21,7 @@ const CodebasePage = lazy(() => import("./codebase/CodebasePage"));
 const CodebaseDetailPage = lazy(() => import("./codebase/CodebaseDetailPage"));
 const DashboardPage = lazy(() => import("./dashboard/DashboardPage"));
 const JourneyPage = lazy(() => import("./journey/JourneyPage"));
+const AchievementsPage = lazy(() => import("./achievements/AchievementsPage"));
 
 function RouteFallback() {
   return (
@@ -56,6 +57,7 @@ function App() {
             <Route path="/codebase" element={<CodebasePage />} />
             <Route path="/codebase/:platform/:slug" element={<CodebaseDetailPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/achievements" element={<AchievementsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
