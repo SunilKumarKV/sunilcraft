@@ -73,6 +73,10 @@ body {
   z-index: 1;
 }
 
+.route-scene {
+  min-height: 50vh;
+}
+
 a {
   text-decoration: none;
   color: var(--accent-color);
@@ -121,7 +125,7 @@ a:hover {
 }
 
 .footer {
-  background: var(--footer-bg) !important;
+  background: transparent !important;
 }
 
 /* Cards and inputs */
@@ -358,8 +362,12 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: var(--card-bg);
-  border: 1px solid color-mix(in srgb, var(--input-border) 88%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--card-bg) 96%, transparent),
+    color-mix(in srgb, var(--card-bg) 88%, var(--accent-color) 3%)
+  );
+  border: 1px solid color-mix(in srgb, var(--accent-color) 14%, var(--input-border));
   border-radius: 22px;
   padding: 24px;
   box-shadow: var(--shadow-light);
@@ -369,6 +377,9 @@ a:hover {
   min-width: 0;
   height: 100%;
   overflow: hidden;
+  position: relative;
+  isolation: isolate;
+  transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
 
 .card-row {
@@ -442,6 +453,9 @@ a:hover {
   background: color-mix(in srgb, var(--card-bg) 88%, transparent);
   box-shadow: var(--shadow-light);
   transition: transform 0.18s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .problem-card strong,
@@ -693,6 +707,10 @@ a:hover {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   animation: pageFadeUp 0.55s ease both;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transform: perspective(1400px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
 
 .showcase-panel,
@@ -751,10 +769,73 @@ a:hover {
   overflow: hidden;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  isolation: isolate;
+  transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
 
 .glass-card h3 { margin-bottom: 10px; line-height: 1.25; }
 .glass-card p, .timeline-item p { color: var(--text-secondary); line-height: 1.7; }
+
+.problem-card::before,
+.glass-card::before,
+.section-panel::before,
+.problem-detail-card::before,
+.hero-image-card::before,
+.hero-stat-card::before,
+.contact-method::before,
+.project-link::before,
+.page-button::before,
+.copy-button::before,
+.footer-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.46), transparent);
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.problem-card::after,
+.glass-card::after,
+.section-panel::after,
+.problem-detail-card::after,
+.hero-image-card::after,
+.hero-stat-card::after,
+.contact-method::after,
+.project-link::after,
+.page-button::after,
+.copy-button::after,
+.footer-panel::after {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  left: calc(var(--cursor-x, 50%) - 110px);
+  top: calc(var(--cursor-y, 50%) - 110px);
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-color) 16%, white 20%), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.cursor-active.problem-card::after,
+.cursor-active.glass-card::after,
+.cursor-active.section-panel::after,
+.cursor-active.problem-detail-card::after,
+.cursor-active.hero-image-card::after,
+.cursor-active.hero-stat-card::after,
+.cursor-active.contact-method::after,
+.cursor-active.project-link::after,
+.cursor-active.page-button::after,
+.cursor-active.copy-button::after,
+.cursor-active.footer-panel::after {
+  opacity: 0.68;
+}
 
 .glass-card h3,
 .timeline-item h3,
@@ -843,6 +924,9 @@ a:hover {
   cursor: pointer;
   box-shadow: var(--shadow-light);
   transition: transform 0.18s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .copy-button.copied {
@@ -889,6 +973,17 @@ textarea:focus-visible {
 .project-link:hover,
 .hero-button:hover {
   text-decoration: none;
+}
+
+.problem-card:hover,
+.glass-card:hover,
+.section-panel:hover,
+.hero-image-card:hover,
+.hero-stat-card:hover,
+.contact-method:hover,
+.footer-panel:hover {
+  box-shadow: var(--shadow-medium);
+  border-color: color-mix(in srgb, var(--accent-color) 24%, var(--input-border));
 }
 
 .project-link,
@@ -939,11 +1034,18 @@ textarea:focus-visible {
   }
 
   .problem-card,
+  .glass-card,
+  .section-panel,
+  .hero-image-card,
+  .hero-stat-card,
   .page-button,
   .copy-button,
   .hero-button,
-  .project-link {
+  .project-link,
+  .contact-method,
+  .footer-panel {
     transition: none !important;
+    transform: none !important;
   }
 }
 

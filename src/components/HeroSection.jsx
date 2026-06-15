@@ -133,6 +133,12 @@ export default function HeroSection() {
   }, [prefersReducedMotion, summary.problems, summary.repositories, summary.verified]);
 
   const heroNumber = (value) => (loading ? "--" : value || 0);
+  const handleScrollToNext = () => {
+    const nextSection = document.querySelector(".home-page-shell .section-panel");
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <main className="home-shell">
@@ -187,14 +193,28 @@ export default function HeroSection() {
 
         <div className="hero-image">
           <div className="hero-image-card">
+            <div className="hero-image-orbit hero-image-orbit-a" />
+            <div className="hero-image-orbit hero-image-orbit-b" />
             <img src={HeroPic} alt="Sunil Kumar K V profile" loading="eager" />
             <div className="hero-image-copy">
               <strong>{profile.role}</strong>
+              <div className="hero-image-tags">
+                <Badge tone="accent">Frontend Developer</Badge>
+                <Badge>React Developer</Badge>
+                <Badge tone="success">Open to Freelance</Badge>
+              </div>
               <p className="hero-image-caption">Building in public through real projects.</p>
             </div>
           </div>
         </div>
       </section>
+
+      <div className="hero-scroll-wrap">
+        <button type="button" className="hero-scroll-indicator" onClick={handleScrollToNext} aria-label="Scroll to the next section">
+          <span className="hero-scroll-text">scroll</span>
+          <span className="hero-scroll-arrow">↓</span>
+        </button>
+      </div>
 
       <div className="page-shell home-page-shell">
         <SectionPanel

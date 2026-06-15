@@ -150,6 +150,9 @@
   max-width: 100%;
   text-align: center;
   white-space: normal;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .project-link.primary,

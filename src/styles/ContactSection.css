@@ -45,6 +45,10 @@
   background: color-mix(in srgb, var(--card-bg) 92%, white 8%);
   box-shadow: var(--shadow-light);
   color: inherit;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
 
 .contact-method:hover {
