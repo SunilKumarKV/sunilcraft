@@ -73,6 +73,51 @@ export default function HeroSection() {
     };
   }, [problems, projects]);
 
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const [metricDisplay, setMetricDisplay] = useState({
+    repositories: prefersReducedMotion ? summary.repositories : 0,
+    problems: prefersReducedMotion ? summary.problems : 0,
+    verified: prefersReducedMotion ? summary.verified : 0,
+  });
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setMetricDisplay({
+        repositories: summary.repositories,
+        problems: summary.problems,
+        verified: summary.verified,
+      });
+      return undefined;
+    }
+
+    let frameId = 0;
+    const duration = 950;
+    const start = performance.now();
+
+    const step = (now) => {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+
+      setMetricDisplay({
+        repositories: Math.round(summary.repositories * eased),
+        problems: Math.round(summary.problems * eased),
+        verified: Math.round(summary.verified * eased),
+      });
+
+      if (progress < 1) {
+        frameId = window.requestAnimationFrame(step);
+      }
+    };
+
+    frameId = window.requestAnimationFrame(step);
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [prefersReducedMotion, summary.problems, summary.repositories, summary.verified]);
+
   return (
     <main className="home-shell">
       <section className="hero" id="home">
@@ -86,24 +131,41 @@ export default function HeroSection() {
           <h4 className="hero-subtitle">{profile.name}</h4>
           <h1 className="hero-title">I build web apps that turn learning, coding, and workflows into usable products.</h1>
           <p className="hero-description">
-            I&apos;m a full-stack focused developer building SunilCraft, coding-journal, and
-            product-style tools with React, Node.js, GitHub workflows, and real project systems.
+            MCA student at Bangalore University building developer tools, portfolio systems, coding workflows, and product-focused web applications with React and Node.js.
           </p>
-          <div className="hero-actions">
-            <Link to="/projects" className="hero-button">Explore Work</Link>
-            <Link to="/dashboard" className="hero-button secondary">Open Dashboard</Link>
-            <a href={profile.github} className="hero-button secondary" target="_blank" rel="noreferrer">GitHub</a>
+
+          <div className="hero-trust">
+            <Badge tone="accent">GitHub synced</Badge>
+            <Badge tone="success">Verified solutions</Badge>
+            <Badge>Live coding journal</Badge>
           </div>
 
           <div className="hero-stats" aria-label="Portfolio stats">
-            <span><strong>{summary.repositories || "--"}</strong> Live Repos</span>
-            <span><strong>{summary.problems || "--"}</strong> Problems</span>
-            <span><strong>{summary.verified || "--"}</strong> Verified</span>
+            <article className="hero-stat-card">
+              <strong>{metricDisplay.repositories || 0}</strong>
+              <span>Repositories</span>
+            </article>
+            <article className="hero-stat-card">
+              <strong>{metricDisplay.problems || 0}</strong>
+              <span>Problems Solved</span>
+            </article>
+            <article className="hero-stat-card">
+              <strong>{metricDisplay.verified || 0}</strong>
+              <span>Verified Solutions</span>
+            </article>
           </div>
         </motion.div>
 
         <div className="hero-image">
-          <img src={HeroPic} alt="Sunil Kumar K V profile" loading="eager" />
+          <div className="hero-image-card">
+            <img src={HeroPic} alt="Sunil Kumar K V profile" loading="eager" />
+          </div>
+        </div>
+
+        <div className="hero-actions hero-actions-stage" aria-label="Primary actions">
+          <Link to="/projects" className="hero-button">Explore Work</Link>
+          <Link to="/dashboard" className="hero-button secondary">Open Dashboard</Link>
+          <a href={profile.github} className="hero-button secondary" target="_blank" rel="noreferrer">GitHub</a>
         </div>
       </section>
 

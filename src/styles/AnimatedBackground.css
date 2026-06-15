@@ -10,12 +10,12 @@
 .bg-dark-glow {
   position: absolute;
   border-radius: 999px;
-  filter: blur(40px);
-  opacity: 0.32;
+  filter: blur(46px);
+  opacity: 0.24;
 }
 
 .bg-light-blob {
-  background: radial-gradient(circle, rgba(0, 123, 255, 0.18), rgba(0, 123, 255, 0));
+  background: radial-gradient(circle, rgba(0, 123, 255, 0.13), rgba(0, 123, 255, 0));
 }
 
 .bg-light-blob-a {
@@ -40,7 +40,7 @@
 }
 
 .bg-dark-glow {
-  background: radial-gradient(circle, rgba(0, 191, 255, 0.18), rgba(0, 191, 255, 0));
+  background: radial-gradient(circle, rgba(0, 191, 255, 0.12), rgba(0, 191, 255, 0));
 }
 
 .bg-dark-glow-a {
@@ -64,16 +64,16 @@
 
 .bg-particle {
   position: absolute;
-  width: 0.45rem;
-  height: 0.45rem;
+  width: 0.38rem;
+  height: 0.38rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 0 14px rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.06);
 }
 
 .bg-particles.light .bg-particle {
-  background: rgba(0, 123, 255, 0.12);
-  box-shadow: 0 0 12px rgba(0, 123, 255, 0.08);
+  background: rgba(0, 123, 255, 0.08);
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.06);
 }
 
 .bg-code-rain {
@@ -84,9 +84,9 @@
 .bg-code-symbol {
   position: absolute;
   top: -10%;
-  color: rgba(162, 220, 255, 0.08);
-  font-size: 0.9rem;
-  font-weight: 700;
+  color: rgba(162, 220, 255, 0.06);
+  font-size: 0.78rem;
+  font-weight: 600;
   letter-spacing: 0.08em;
   white-space: nowrap;
 }
@@ -132,11 +132,11 @@
   0%,
   100% {
     transform: translate3d(0, 0, 0);
-    opacity: 0.32;
+    opacity: 0.24;
   }
   50% {
     transform: translate3d(0, 18px, 0);
-    opacity: 0.34;
+    opacity: 0.26;
   }
 }
 
@@ -144,11 +144,11 @@
   0%,
   100% {
     transform: translate3d(0, 0, 0) scale(0.9);
-    opacity: 0.25;
+    opacity: 0.18;
   }
   50% {
     transform: translate3d(0, -14px, 0) scale(1.12);
-    opacity: 0.38;
+    opacity: 0.28;
   }
 }
 
@@ -158,10 +158,10 @@
     opacity: 0;
   }
   12% {
-    opacity: 0.12;
+    opacity: 0.08;
   }
   88% {
-    opacity: 0.08;
+    opacity: 0.05;
   }
   100% {
     transform: translate3d(0, 110vh, 0);
