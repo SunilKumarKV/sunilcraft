@@ -3,6 +3,7 @@ import { ThemeContext } from "../context/theme";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaSun, FaMoon } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
+import LogoMark from "./branding/LogoMark";
 import "../styles/Navbar.css";
 
 export default function Navbar() {
@@ -23,15 +24,14 @@ export default function Navbar() {
     if (id === "Work") return location.pathname.startsWith("/projects");
     if (id === "Problems") return location.pathname.startsWith("/problems");
     if (id === "Codebase") return location.pathname.startsWith("/codebase");
-    if (id === "Dashboard") {
+    if (id === "About") {
       return (
+        location.pathname.startsWith("/about") ||
+        location.pathname.startsWith("/rewards") ||
         location.pathname.startsWith("/dashboard") ||
         location.pathname.startsWith("/journey") ||
         location.pathname.startsWith("/achievements")
       );
-    }
-    if (id === "About") {
-      return location.pathname.startsWith("/about") || location.pathname.startsWith("/rewards");
     }
     if (id === "Contact") return location.pathname.startsWith("/contact");
     return false;
@@ -48,8 +48,6 @@ export default function Navbar() {
       navigate("/problems");
     } else if (id === "Codebase") {
       navigate("/codebase");
-    } else if (id === "Dashboard") {
-      navigate("/dashboard");
     } else if (id === "About") {
       navigate("/about");
     } else if (id === "Contact") {
@@ -64,8 +62,8 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="container">
           {/* Logo */}
-          <button className="logo" type="button" onClick={() => handleNavClick("Home")} aria-label="Go to home">
-            <div className="logo-icon">S</div>
+          <button className="logo" type="button" onClick={() => handleNavClick("Home")} aria-label="SunilCraft home">
+            <LogoMark />
             <div className="logo-text">SunilCraft</div>
           </button>
 
@@ -100,7 +98,6 @@ export default function Navbar() {
                 "Work",
                 "Problems",
                 "Codebase",
-                "Dashboard",
                 "About",
                 "Contact",
               ].map((id) => (

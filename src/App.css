@@ -73,6 +73,10 @@ body {
   z-index: 1;
 }
 
+.route-scene {
+  min-height: 50vh;
+}
+
 a {
   text-decoration: none;
   color: var(--accent-color);
@@ -121,7 +125,7 @@ a:hover {
 }
 
 .footer {
-  background: var(--footer-bg) !important;
+  background: transparent !important;
 }
 
 /* Cards and inputs */
@@ -234,6 +238,11 @@ a:hover {
   margin-bottom: 36px;
 }
 
+.page-header {
+  display: grid;
+  gap: 0;
+}
+
 .page-header.page-header-left {
   text-align: left;
 }
@@ -243,6 +252,9 @@ a:hover {
   color: var(--text-color);
   font-size: clamp(2rem, 5vw, 3.5rem);
   margin-bottom: 14px;
+  line-height: 1.04;
+  letter-spacing: -0.05em;
+  max-width: 14ch;
 }
 
 .page-header p,
@@ -258,11 +270,68 @@ a:hover {
   margin-left: 0;
 }
 
+.page-header-showcase h1,
+.page-header-library h1,
+.page-header-dashboard h1,
+.page-header-journey h1,
+.page-header-achievements h1,
+.page-header-about h1,
+.page-header-contact h1 {
+  max-width: 15ch;
+}
+
 .page-header-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
   margin-top: 22px;
+}
+
+.page-meta-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: -6px 0 26px;
+}
+
+.page-meta-strip.compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.meta-strip-card {
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--card-bg) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--input-border) 88%, transparent);
+  box-shadow: var(--shadow-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: grid;
+  gap: 6px;
+}
+
+.meta-strip-card span {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.meta-strip-card strong {
+  color: var(--text-color);
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.widget-card,
+.showcase-panel .problem-card {
+  min-height: 100%;
 }
 
 .problem-grid {
@@ -293,8 +362,13 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: var(--card-bg);
-  border: 1px solid color-mix(in srgb, var(--input-border) 88%, transparent);
+  align-content: start;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--card-bg) 92%, transparent),
+    color-mix(in srgb, var(--card-bg) 84%, var(--accent-color) 4%)
+  );
+  border: 1px solid color-mix(in srgb, var(--accent-color) 10%, var(--input-border));
   border-radius: 22px;
   padding: 24px;
   box-shadow: var(--shadow-light);
@@ -304,6 +378,9 @@ a:hover {
   min-width: 0;
   height: 100%;
   overflow: hidden;
+  position: relative;
+  isolation: isolate;
+  transform: translateY(var(--lift, 0px)) perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
 
 .card-row {
@@ -316,7 +393,7 @@ a:hover {
 
 .problem-card:hover,
 .problem-card:focus-visible {
-  transform: translateY(-6px);
+  --lift: -4px;
   box-shadow: var(--shadow-medium);
   border-color: color-mix(in srgb, var(--accent-color) 28%, var(--input-border));
   outline: none;
@@ -377,6 +454,10 @@ a:hover {
   background: color-mix(in srgb, var(--card-bg) 88%, transparent);
   box-shadow: var(--shadow-light);
   transition: transform 0.18s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transform: translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0);
 }
 
 .problem-card strong,
@@ -410,6 +491,27 @@ a:hover {
 
 .filter-bar {
   align-items: stretch;
+}
+
+.filter-shell {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.filter-shell-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.filter-shell-copy h3 {
+  color: var(--text-color);
+  font-size: 1.02rem;
+}
+
+.filter-shell-copy p {
+  color: var(--text-secondary);
+  line-height: 1.7;
 }
 
 .filter-bar > * {
@@ -487,6 +589,11 @@ a:hover {
   gap: 22px;
 }
 
+.timeline-panel .dashboard-grid,
+.explorer-panel .dashboard-grid {
+  margin-top: 0;
+}
+
 .problem-detail-card {
   background: var(--card-bg);
   border: 1px solid color-mix(in srgb, var(--input-border) 88%, transparent);
@@ -538,11 +645,17 @@ a:hover {
   overflow-wrap: anywhere;
 }
 
+.problem-detail-card code {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .problem-actions-row {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
+  min-width: 0;
 }
 
 .empty-state.small {
@@ -568,6 +681,10 @@ a:hover {
     justify-content: center;
   }
 
+  .filter-bar {
+    gap: 12px;
+  }
+
   .page-header.page-header-left {
     text-align: center;
   }
@@ -583,25 +700,76 @@ a:hover {
   .section-panel {
     width: min(1180px, calc(100% - 20px));
     margin: 56px auto;
-    padding: 40px 16px;
+    padding: 0;
+  }
+
+  .section-gloss-divider {
+    width: min(560px, 86%);
+    margin-bottom: 28px;
   }
 }
 
 .section-panel {
   width: min(1180px, calc(100% - 32px));
-  margin: 72px auto;
-  padding: 56px 24px;
-  border-radius: 32px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--card-bg) 94%, transparent),
-    color-mix(in srgb, var(--card-bg) 88%, var(--accent-color) 2%)
-  );
-  box-shadow: var(--shadow-light);
-  border: 1px solid color-mix(in srgb, var(--input-border) 84%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  margin: 80px auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   animation: pageFadeUp 0.55s ease both;
+  position: relative;
+  overflow: visible;
+  isolation: isolate;
+  transform: translateY(var(--lift, 0px)) perspective(1400px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+}
+
+.showcase-panel,
+.explorer-panel,
+.timeline-panel,
+.contact-cta-panel {
+  position: relative;
+}
+
+.section-heading {
+  display: grid;
+  gap: 0;
+  margin-bottom: 30px;
+}
+
+.section-gloss-divider {
+  width: min(720px, 72%);
+  height: 1px;
+  margin: 0 auto 34px;
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--accent-color) 18%, white 10%) 18%,
+    color-mix(in srgb, white 52%, var(--accent-color) 16%) 50%,
+    color-mix(in srgb, var(--accent-color) 18%, white 10%) 82%,
+    transparent 100%
+  );
+  opacity: 0.9;
+}
+
+.section-gloss-divider::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 1px;
+  height: 10px;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--accent-color) 12%, white 22%),
+    transparent 72%
+  );
+  filter: blur(6px);
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 .section-panel h2 {
@@ -639,24 +807,133 @@ a:hover {
 .education-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 18px;
+  gap: 20px;
 }
 
 .glass-card {
   padding: 22px;
   border-radius: 22px;
-  background: color-mix(in srgb, var(--card-bg) 86%, var(--accent-color) 6%);
-  border: 1px solid color-mix(in srgb, var(--accent-color) 14%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--card-bg) 88%, transparent),
+    color-mix(in srgb, var(--card-bg) 80%, var(--accent-color) 5%)
+  );
+  border: 1px solid color-mix(in srgb, var(--accent-color) 12%, transparent);
   color: var(--text-color);
   box-shadow: var(--shadow-light);
   min-width: 0;
   overflow: hidden;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  isolation: isolate;
+  transform: translateY(var(--lift, 0px)) perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
 
 .glass-card h3 { margin-bottom: 10px; line-height: 1.25; }
 .glass-card p, .timeline-item p { color: var(--text-secondary); line-height: 1.7; }
+
+.problem-card::before,
+.glass-card::before,
+.problem-detail-card::before,
+.hero-image-card::before,
+.hero-stat-card::before,
+.contact-method::before,
+.project-link::before,
+.page-button::before,
+.copy-button::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.46), transparent);
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.problem-card::after,
+.glass-card::after,
+.problem-detail-card::after,
+.hero-image-card::after,
+.hero-stat-card::after,
+.contact-method::after,
+.project-link::after,
+.page-button::after,
+.copy-button::after {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  left: calc(var(--cursor-x, 50%) - 110px);
+  top: calc(var(--cursor-y, 50%) - 110px);
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-color) 16%, white 20%), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.cursor-active.problem-card::after,
+.cursor-active.glass-card::after,
+.cursor-active.problem-detail-card::after,
+.cursor-active.hero-image-card::after,
+.cursor-active.hero-stat-card::after,
+.cursor-active.contact-method::after,
+.cursor-active.project-link::after,
+.cursor-active.page-button::after,
+.cursor-active.copy-button::after {
+  opacity: 0.68;
+}
+
+[data-route-root="projects"] .problem-card {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--card-bg) 94%, transparent),
+    color-mix(in srgb, var(--card-bg) 78%, var(--accent-color) 7%)
+  );
+}
+
+[data-route-root="projects"] .problem-card h2 {
+  font-size: clamp(1.22rem, 2vw, 1.5rem);
+}
+
+[data-route-root="problems"] .problem-card {
+  gap: 10px;
+  padding: 20px;
+}
+
+[data-route-root="codebase"] .problem-card {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--card-bg) 92%, transparent), color-mix(in srgb, var(--card-bg) 82%, var(--accent-color) 5%));
+}
+
+[data-route-root="codebase"] .problem-card .card-row::before {
+  content: "</>";
+  font-family: "SFMono-Regular", "Menlo", monospace;
+  font-size: 0.76rem;
+  color: var(--accent-color);
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 14%, transparent);
+}
+
+[data-route-root="dashboard"] .problem-card,
+[data-route-root="dashboard"] .glass-card {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--card-bg) 90%, transparent), color-mix(in srgb, var(--card-bg) 78%, var(--accent-color) 4%));
+}
+
+[data-route-root="dashboard"] .problem-card h2 {
+  font-size: clamp(1.15rem, 1.7vw, 1.35rem);
+}
+
+[data-route-root="achievements"] .achievement-card {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--card-bg) 88%, transparent), color-mix(in srgb, var(--card-bg) 74%, #f6c453 7%));
+}
 
 .glass-card h3,
 .timeline-item h3,
@@ -708,6 +985,13 @@ a:hover {
   padding-top: 8px;
 }
 
+.home-section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
 .compact-grid,
 .preview-list {
   margin-top: 24px;
@@ -721,6 +1005,14 @@ a:hover {
   flex-wrap: wrap;
 }
 
+.contact-cta-panel .cta-panel > div:first-child {
+  max-width: 560px;
+}
+
+.home-contact-cta .hero-actions {
+  margin-bottom: 0;
+}
+
 .copy-button {
   border: 1px solid color-mix(in srgb, var(--input-border) 88%, transparent);
   background: color-mix(in srgb, var(--card-bg) 88%, transparent);
@@ -730,6 +1022,10 @@ a:hover {
   cursor: pointer;
   box-shadow: var(--shadow-light);
   transition: transform 0.18s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transform: translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0);
 }
 
 .copy-button.copied {
@@ -776,6 +1072,16 @@ textarea:focus-visible {
 .project-link:hover,
 .hero-button:hover {
   text-decoration: none;
+}
+
+.problem-card:hover,
+.glass-card:hover,
+.hero-image-card:hover,
+.hero-stat-card:hover,
+.contact-method:hover {
+  --lift: -3px;
+  box-shadow: var(--shadow-medium);
+  border-color: color-mix(in srgb, var(--accent-color) 24%, var(--input-border));
 }
 
 .project-link,
@@ -826,11 +1132,16 @@ textarea:focus-visible {
   }
 
   .problem-card,
+  .glass-card,
+  .hero-image-card,
+  .hero-stat-card,
   .page-button,
   .copy-button,
   .hero-button,
-  .project-link {
+  .project-link,
+  .contact-method {
     transition: none !important;
+    transform: none !important;
   }
 }
 
@@ -896,6 +1207,10 @@ textarea:focus-visible {
 }
 .timeline-item span { color: var(--accent-color); font-weight: 800; }
 
+.widget-card p + p {
+  margin-top: 6px;
+}
+
 .state-page,
 .project-detail-page {
   width: min(1180px, calc(100% - 32px));
@@ -924,6 +1239,79 @@ textarea:focus-visible {
   .timeline-item,
   .project-detail-hero { grid-template-columns: 1fr; }
   .section-panel { padding: 42px 18px; }
+}
+
+@media (max-width: 720px) {
+  .page-meta-strip,
+  .page-meta-strip.compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .problem-detail-header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-meta-strip,
+  .page-meta-strip.compact {
+    grid-template-columns: 1fr;
+  }
+
+  .problem-card,
+  .glass-card,
+  .problem-detail-card {
+    padding: 20px 16px;
+  }
+
+  .problem-actions-row,
+  .card-row,
+  .page-header-actions {
+    gap: 10px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .page-shell {
+    width: min(1400px, calc(100% - 72px));
+  }
+
+  .section-panel {
+    width: min(1440px, calc(100% - 80px));
+    margin: 92px auto;
+  }
+
+  .problem-grid {
+    gap: 28px;
+  }
+
+  .feature-grid,
+  .education-grid,
+  .dashboard-grid {
+    gap: 24px;
+  }
+}
+
+@media (min-width: 2200px) {
+  .page-shell {
+    width: min(1560px, calc(100% - 120px));
+  }
+
+  .section-panel {
+    width: min(1600px, calc(100% - 120px));
+    margin: 104px auto;
+  }
+
+  .problem-grid {
+    gap: 32px;
+  }
+
+  .feature-grid,
+  .education-grid,
+  .dashboard-grid {
+    gap: 28px;
+  }
 }
 
 @keyframes pageFadeUp {

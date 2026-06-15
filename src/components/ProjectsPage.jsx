@@ -16,6 +16,17 @@ import EmptyState from "./ui/EmptyState";
 import Badge from "./ui/Badge";
 
 function sortProjects(a, b) {
+  const preferredOrder = ["rainbowcode", "chessplay", "sunilcraft", "coding-journal"];
+  const normalizedA = String(a.name || "").toLowerCase();
+  const normalizedB = String(b.name || "").toLowerCase();
+  const preferredIndexA = preferredOrder.findIndex((item) => normalizedA.includes(item));
+  const preferredIndexB = preferredOrder.findIndex((item) => normalizedB.includes(item));
+  if (preferredIndexA !== preferredIndexB) {
+    if (preferredIndexA === -1) return 1;
+    if (preferredIndexB === -1) return -1;
+    return preferredIndexA - preferredIndexB;
+  }
+
   const featuredRank = Number(Boolean(b.featured)) - Number(Boolean(a.featured));
   if (featuredRank !== 0) return featuredRank;
 
@@ -107,17 +118,17 @@ export default function ProjectsPage() {
     <main className="page-shell">
       <PageHeader
         eyebrow="Work"
-        title="Projects, featured builds, and repo explorer"
-        description="Projects I’m actively building or maintaining, synced from my GitHub repositories."
+        title="Projects, featured builds, and real GitHub work"
+        description="This is the strongest proof page in the portfolio: live repositories, featured builds, and the work I’m actively shaping for product, frontend, and full-stack roles."
         align="left"
       />
 
-      <DeveloperMetrics title="Developer Metrics" />
+      <DeveloperMetrics title="Proof at a glance" />
 
       <SectionPanel
         eyebrow="Highlights"
         title="Featured Projects"
-        description="Featured work rises to the top first, then the full repository feed stays available below."
+        description="Featured work comes first so recruiters and clients can quickly review the projects that best represent my frontend and full-stack direction."
       >
         {loading ? (
           <LoadingState title="Loading featured projects" message="Fetching priority projects from coding-journal." />
@@ -132,10 +143,11 @@ export default function ProjectsPage() {
                 <div className="card-row">
                   <Badge tone="accent">Featured</Badge>
                   <Badge>{project.language || "Unknown"}</Badge>
+                  <Badge>{project.homepage ? "Live" : "Source"}</Badge>
                 </div>
                 <h2>{project.name}</h2>
                 <p>{project.description || "No repository description provided."}</p>
-                <p>Priority: {project.priority ?? "Unranked"} • Stars: {project.stars || 0}</p>
+                <p>Priority: {project.priority ?? "Unranked"} • Stars: {project.stars || 0} • Forks: {project.forks || 0}</p>
                 {(project.topics || []).length ? (
                   <div className="card-row">
                     {project.topics.slice(0, 4).map((topicName) => (
@@ -165,7 +177,7 @@ export default function ProjectsPage() {
       <SectionPanel
         eyebrow="Explorer"
         title="GitHub Repo Explorer"
-        description="Search the synced GitHub feed by language, topic, or featured status."
+        description="Search the synced GitHub feed by language, topic, or featured status. This section stays honest and source-backed."
       >
         <FilterBar>
           <input
@@ -214,6 +226,7 @@ export default function ProjectsPage() {
                 <div className="card-row">
                   {project.featured ? <Badge tone="accent">Featured</Badge> : null}
                   <Badge>{project.language || "Unknown"}</Badge>
+                  <Badge>{project.homepage ? "Live" : "GitHub synced"}</Badge>
                 </div>
                 <h2>{project.name}</h2>
                 <p>{project.description || "No repository description provided."}</p>

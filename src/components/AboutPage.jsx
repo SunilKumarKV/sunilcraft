@@ -10,16 +10,16 @@ export default function AboutPage() {
   return (
     <main className="page-shell">
       <PageHeader
-        eyebrow="About SunilCraft"
-        title="Builder profile, craft, and credibility"
-        description={`A premium overview of ${profile.name}: product thinking, frontend craft, full-stack execution, and the rewards that reflect that growth.`}
+        eyebrow="About"
+        title="Background, skills, and the kind of work I’m looking for"
+        description={`${profile.name} is an MCA student at Bangalore University building practical web apps, verified coding systems, and recruiter-trustworthy portfolio work.`}
         align="left"
       />
 
       <SectionPanel
         eyebrow="Profile"
         title="About"
-        description="Frontend polish, full-stack execution, and consistent learning in public."
+        description="A concise view of my transition into software development, the kind of work I enjoy, and the strengths I’m actively building."
         className="embedded-section-panel"
       >
         <AboutSection />
@@ -28,7 +28,7 @@ export default function AboutPage() {
       <SectionPanel
         eyebrow="Capability"
         title="Skills"
-        description="Core frontend, backend, and tooling strengths that support the portfolio and coding-journal workflow."
+        description="Frontend, backend, and workflow skills that support product-style builds, coding-journal sync, and practical implementation work."
         className="embedded-section-panel"
       >
         <SkillsSection />
@@ -37,7 +37,7 @@ export default function AboutPage() {
       <SectionPanel
         eyebrow="Recognition"
         title="Rewards & Certificates"
-        description="A compact archive of professional recognition and performance highlights."
+        description="Certificates and rewards that support the learning journey behind the portfolio."
         className="embedded-section-panel"
       >
         <CertificateGallery />

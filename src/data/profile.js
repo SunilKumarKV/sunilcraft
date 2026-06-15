@@ -1,21 +1,21 @@
 export const profile = {
   name: "Sunil Kumar K V",
   brand: "SunilCraft",
-  role: "Full Stack Web Developer | React Specialist | Problem Solver",
+  role: "React Developer | Frontend-Focused Full Stack Builder",
   location: "Bengaluru, India",
-  email: "sunilkumarkv44@gmail.com",
+  email: "sunilkumarkv9535@gmail.com",
   resumeUrl: "/Sunil-Kumar-KV-Resume.pdf",
   github: "https://github.com/SunilKumarKV",
   linkedin: "https://www.linkedin.com/in/sunilkumarkv44/",
   portfolio: "https://sunilcraft.vercel.app/",
-  status: "Available for freelance, internships, and frontend/full-stack roles",
+  status: "Available for remote internships, part-time roles, and freelance work",
 };
 
 export const services = [
-  { title: "Frontend Development", description: "Responsive React, Vite, Tailwind, animations, dashboards, and landing pages." },
-  { title: "Portfolio Websites", description: "Personal brand websites with SEO, projects, contact forms, and fast deployment." },
-  { title: "Bug Fixing & UI Polish", description: "Fix React errors, routing issues, mobile layout bugs, and production build problems." },
-  { title: "Full-stack Features", description: "Node/Express APIs, auth flows, database integration, and production-ready structure." },
+  { title: "Frontend Development", description: "Responsive React interfaces, polished UI systems, dashboards, landing pages, and mobile-friendly layouts." },
+  { title: "Portfolio Websites", description: "Personal and professional portfolio sites with stronger storytelling, clean routing, and production-ready deployment." },
+  { title: "UI Cleanup & Bug Fixing", description: "Routing issues, layout bugs, component cleanup, responsive fixes, and build-safe polish for React apps." },
+  { title: "Full-Stack Features", description: "Node.js APIs, GitHub-backed workflows, coding systems, and practical product features that connect frontend to data." },
 ];
 
 export const experiences = [

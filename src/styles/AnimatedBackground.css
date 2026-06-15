@@ -4,169 +4,532 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(134, 187, 255, 0.14), transparent 34%),
+    radial-gradient(circle at 84% 12%, rgba(121, 91, 255, 0.1), transparent 28%),
+    linear-gradient(180deg, rgba(7, 11, 23, 0.1), transparent 38%);
 }
 
+.bg-light-spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    420px circle at var(--bg-spotlight-x, 50%) var(--bg-spotlight-y, 20%),
+    rgba(214, 238, 255, 0.34),
+    rgba(186, 224, 255, 0.18) 28%,
+    transparent 68%
+  );
+  opacity: 1;
+  transition: opacity 0.28s ease;
+  will-change: transform, opacity;
+}
+
+.bg-galaxy,
+.bg-dark-haze,
+.bg-sunlight,
 .bg-light-blob,
-.bg-dark-glow {
+.bg-reflection,
+.bg-light-mesh {
   position: absolute;
   border-radius: 999px;
-  filter: blur(52px);
-  opacity: 0.2;
+  filter: blur(76px);
+  will-change: transform, opacity;
 }
 
-.bg-light-blob {
-  background: radial-gradient(circle, rgba(0, 123, 255, 0.16), rgba(0, 123, 255, 0));
+.bg-galaxy {
+  background: radial-gradient(circle, rgba(82, 163, 255, 0.26), rgba(82, 163, 255, 0));
+  opacity: 0.34;
 }
 
-.bg-light-blob-a {
-  width: 32rem;
-  height: 32rem;
-  top: 4%;
-  left: -6%;
+.bg-galaxy-a {
+  width: 44rem;
+  height: 44rem;
+  top: -14%;
+  right: -10%;
 }
 
-.bg-light-blob-b {
-  width: 28rem;
-  height: 28rem;
-  top: 36%;
-  right: -8%;
+.bg-galaxy-b {
+  width: 36rem;
+  height: 36rem;
+  bottom: -4%;
+  left: -10%;
 }
 
-.bg-light-blob-c {
+.bg-galaxy-c {
+  width: 30rem;
+  height: 30rem;
+  top: 34%;
+  left: 28%;
+}
+
+.bg-dark-haze {
+  background: radial-gradient(circle, rgba(137, 98, 255, 0.14), rgba(137, 98, 255, 0));
+  opacity: 0.24;
+}
+
+.bg-dark-haze-a {
+  width: 26rem;
+  height: 26rem;
+  top: 8%;
+  left: 10%;
+}
+
+.bg-dark-haze-b {
   width: 22rem;
   height: 22rem;
-  bottom: 8%;
-  left: 34%;
+  bottom: 16%;
+  right: 14%;
 }
 
-.bg-dark-glow {
-  background: radial-gradient(circle, rgba(76, 182, 255, 0.18), rgba(76, 182, 255, 0));
-}
-
-.bg-dark-glow-a {
-  width: 28rem;
-  height: 28rem;
-  top: 6%;
-  left: -4%;
-}
-
-.bg-dark-glow-b {
-  width: 24rem;
-  height: 24rem;
-  bottom: 8%;
-  right: -6%;
-}
-
-.bg-particles {
+.bg-stars,
+.bg-twinkles,
+.bg-falling-particles,
+.bg-code-field,
+.bg-light-particles,
+.bg-light-sparkles,
+.bg-shooting-stars {
   position: absolute;
   inset: 0;
 }
 
-.bg-particle {
+.bg-star,
+.bg-twinkle,
+.bg-falling-particle,
+.bg-light-particle,
+.bg-light-sparkle,
+.bg-shooting-star {
   position: absolute;
-  width: 0.34rem;
-  height: 0.34rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 0 14px rgba(255, 255, 255, 0.08);
 }
 
-.bg-particles.light .bg-particle {
-  background: rgba(0, 123, 255, 0.11);
-  box-shadow: 0 0 12px rgba(0, 123, 255, 0.08);
+.bg-star {
+  background: rgba(235, 245, 255, 0.78);
+  box-shadow: 0 0 14px rgba(166, 215, 255, 0.34);
+  opacity: 0.6;
 }
 
-.bg-code-rain {
-  position: absolute;
-  inset: 0;
+.bg-twinkle {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 0 18px rgba(184, 228, 255, 0.4);
+  opacity: 0.42;
+}
+
+.bg-falling-particle {
+  top: -14%;
+  width: 2px;
+  height: 6rem;
+  background: linear-gradient(180deg, rgba(166, 220, 255, 0.34), rgba(166, 220, 255, 0));
+  opacity: 0.34;
+}
+
+.bg-shooting-star {
+  top: 14%;
+  left: -14%;
+  width: 10rem;
+  height: 1.5px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(214, 237, 255, 0.95), rgba(255, 255, 255, 0));
+  box-shadow: 0 0 16px rgba(189, 227, 255, 0.22);
+  opacity: 0;
+  transform: rotate(-18deg);
 }
 
 .bg-code-symbol {
   position: absolute;
-  color: rgba(162, 220, 255, 0.12);
-  font-size: 0.8rem;
+  color: rgba(176, 224, 255, 0.22);
+  font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.08em;
+  text-shadow: 0 0 22px rgba(90, 180, 255, 0.12);
   white-space: nowrap;
-  text-shadow: 0 0 18px rgba(76, 182, 255, 0.05);
+}
+
+.bg-sunlight {
+  width: 56rem;
+  height: 56rem;
+  top: -28%;
+  right: -12%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 246, 226, 0.82), rgba(255, 246, 226, 0.46) 26%, rgba(255, 246, 226, 0.1) 48%, rgba(255, 246, 226, 0) 68%),
+    radial-gradient(circle, rgba(177, 217, 255, 0.28), rgba(177, 217, 255, 0));
+  opacity: 0.98;
+}
+
+.bg-light-mesh {
+  background:
+    radial-gradient(circle at 30% 35%, rgba(169, 219, 255, 0.34), rgba(169, 219, 255, 0.08) 38%, rgba(169, 219, 255, 0) 60%),
+    radial-gradient(circle at 70% 65%, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.06) 34%, rgba(255, 255, 255, 0) 56%);
+  opacity: 0.58;
+}
+
+.bg-light-mesh-a {
+  width: 50rem;
+  height: 50rem;
+  top: -10%;
+  left: -12%;
+}
+
+.bg-light-mesh-b {
+  width: 40rem;
+  height: 40rem;
+  top: 14%;
+  right: -10%;
+}
+
+.bg-light-blob {
+  background: radial-gradient(circle, rgba(94, 171, 255, 0.34), rgba(94, 171, 255, 0.08) 40%, rgba(94, 171, 255, 0) 72%);
+  opacity: 0.62;
+}
+
+.bg-light-blob-a {
+  width: 42rem;
+  height: 42rem;
+  top: 2%;
+  left: -8%;
+}
+
+.bg-light-blob-b {
+  width: 34rem;
+  height: 34rem;
+  top: 34%;
+  right: -6%;
+}
+
+.bg-light-blob-c {
+  width: 28rem;
+  height: 28rem;
+  bottom: 4%;
+  left: 26%;
+}
+
+.bg-light-blob-d {
+  width: 26rem;
+  height: 26rem;
+  top: 12%;
+  right: 18%;
+  opacity: 0.42;
+}
+
+.bg-light-blob-e {
+  width: 22rem;
+  height: 22rem;
+  bottom: 12%;
+  right: 22%;
+  opacity: 0.38;
+}
+
+.bg-reflection {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+  opacity: 0.42;
+}
+
+.bg-reflection-a {
+  width: 20rem;
+  height: 20rem;
+  top: 8%;
+  right: 12%;
+}
+
+.bg-reflection-b {
+  width: 18rem;
+  height: 18rem;
+  bottom: 16%;
+  left: 10%;
+}
+
+.bg-reflection-c {
+  width: 14rem;
+  height: 14rem;
+  top: 48%;
+  left: 44%;
+}
+
+.bg-light-particle {
+  background: rgba(251, 191, 36, 0.34);
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.26);
+  opacity: 0.72;
+}
+
+.bg-light-sparkle {
+  top: -10%;
+  background: rgba(255, 250, 240, 0.96);
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.3);
+  opacity: 0.88;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .bg-light-blob {
-    animation: blobFloat 18s ease-in-out infinite;
+  .bg-galaxy {
+    animation: galaxyDrift 24s ease-in-out infinite alternate;
   }
 
-  .bg-dark-glow {
-    animation: glowFloat 20s ease-in-out infinite;
+  .bg-dark-haze {
+    animation: hazeDrift 18s ease-in-out infinite alternate;
   }
 
-  .bg-particle {
-    animation: sparkleFloat 10s ease-in-out infinite;
+  .bg-star {
+    animation: starPulse ease-in-out infinite;
+  }
+
+  .bg-twinkle {
+    animation: twinkleFlash ease-in-out infinite;
+  }
+
+  .bg-falling-particle {
+    animation: fallingParticle linear infinite;
+  }
+
+  .bg-shooting-star {
+    animation: shootingStar 11s linear infinite;
   }
 
   .bg-code-symbol {
-    animation: codeDrift ease-in-out infinite alternate;
+    animation: codeFloat ease-in-out infinite alternate;
+  }
+
+  .bg-light-mesh,
+  .bg-light-blob {
+    animation: lightBlobFloat 14s ease-in-out infinite alternate;
+  }
+
+  .bg-sunlight {
+    animation: sunlightDrift 16s ease-in-out infinite alternate;
+  }
+
+  .bg-reflection {
+    animation: reflectionDrift 12s ease-in-out infinite alternate;
+  }
+
+  .bg-light-particle {
+    animation: lightParticleFloat 9s ease-in-out infinite;
+  }
+
+  .bg-light-sparkle {
+    animation: lightSparkleFall 12s linear infinite;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .bg-light-spotlight,
+  .bg-galaxy,
+  .bg-dark-haze,
+  .bg-star,
+  .bg-twinkle,
+  .bg-falling-particle,
+  .bg-shooting-star,
+  .bg-code-symbol,
+  .bg-sunlight,
+  .bg-light-mesh,
   .bg-light-blob,
-  .bg-dark-glow,
-  .bg-particle,
-  .bg-code-symbol {
+  .bg-reflection,
+  .bg-light-particle,
+  .bg-light-sparkle {
     animation: none !important;
   }
 }
 
-@keyframes blobFloat {
-  0%,
-  100% {
+@keyframes galaxyDrift {
+  0% {
     transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.25;
   }
-  50% {
-    transform: translate3d(0, 22px, 0) scale(1.06);
+  100% {
+    transform: translate3d(0, 34px, 0) scale(1.08);
+    opacity: 0.38;
   }
 }
 
-@keyframes glowFloat {
-  0%,
-  100% {
+@keyframes hazeDrift {
+  0% {
     transform: translate3d(0, 0, 0);
-    opacity: 0.18;
+  }
+  100% {
+    transform: translate3d(0, -20px, 0);
+  }
+}
+
+@keyframes starPulse {
+  0%, 100% {
+    opacity: 0.26;
+    transform: scale(0.85);
   }
   50% {
-    transform: translate3d(0, 18px, 0);
+    opacity: 0.82;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes twinkleFlash {
+  0%, 100% {
+    opacity: 0.18;
+    transform: scale(0.8);
+  }
+  45% {
+    opacity: 0.94;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes fallingParticle {
+  0% {
+    transform: translate3d(0, -12vh, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.28;
+  }
+  90% {
     opacity: 0.22;
   }
-}
-
-@keyframes sparkleFloat {
-  0%,
   100% {
-    transform: translate3d(0, 0, 0) scale(0.9);
-    opacity: 0.18;
-  }
-  50% {
-    transform: translate3d(0, -14px, 0) scale(1.12);
-    opacity: 0.32;
+    transform: translate3d(0, 118vh, 0);
+    opacity: 0;
   }
 }
 
-@keyframes codeDrift {
+@keyframes shootingStar {
+  0%, 76% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(-18deg);
+  }
+  78% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(122vw, 20vh, 0) rotate(-18deg);
+  }
+}
+
+@keyframes codeFloat {
   0% {
     transform: translate3d(0, 0, 0);
     opacity: 0.08;
   }
   35% {
-    transform: translate3d(8px, 16px, 0);
-    opacity: 0.14;
-  }
-  70% {
-    transform: translate3d(-10px, 28px, 0);
-    opacity: 0.1;
+    transform: translate3d(10px, 16px, 0);
+    opacity: 0.18;
   }
   100% {
-    transform: translate3d(4px, 40px, 0);
-    opacity: 0.07;
+    transform: translate3d(-8px, 38px, 0);
+    opacity: 0.1;
+  }
+}
+
+@keyframes lightBlobFloat {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(24px, 28px, 0) scale(1.1);
+  }
+}
+
+@keyframes sunlightDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(-4%, 4%, 0) scale(1.12);
+    opacity: 1;
+  }
+}
+
+@keyframes reflectionDrift {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate3d(22px, 18px, 0);
+    opacity: 0.48;
+  }
+}
+
+@keyframes lightParticleFloat {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 0.34;
+  }
+  50% {
+    transform: translate3d(0, -22px, 0) scale(1.2);
+    opacity: 0.74;
+  }
+}
+
+@keyframes lightSparkleFall {
+  0% {
+    transform: translate3d(0, -10vh, 0) scale(0.85);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(0, 112vh, 0) scale(1.15);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .bg-light-spotlight {
+    background: radial-gradient(
+      300px circle at var(--bg-spotlight-x, 50%) var(--bg-spotlight-y, 20%),
+      rgba(176, 220, 255, 0.24),
+      transparent 68%
+    );
+  }
+
+  .bg-galaxy-a,
+  .bg-galaxy-b,
+  .bg-sunlight,
+  .bg-light-mesh-a,
+  .bg-light-blob-a,
+  .bg-light-blob-b {
+    width: 28rem;
+    height: 28rem;
+  }
+
+  .bg-code-symbol {
+    font-size: 0.72rem;
+  }
+}
+
+@media (min-width: 1800px) {
+  .bg-sunlight {
+    width: 64rem;
+    height: 64rem;
+  }
+
+  .bg-light-mesh-a {
+    width: 58rem;
+    height: 58rem;
+  }
+
+  .bg-light-mesh-b {
+    width: 46rem;
+    height: 46rem;
+  }
+
+  .bg-light-blob-a,
+  .bg-light-blob-b {
+    width: 46rem;
+    height: 46rem;
+  }
+}
+
+@media (min-width: 2200px) {
+  .bg-sunlight {
+    width: 72rem;
+    height: 72rem;
+  }
+
+  .bg-light-mesh-a {
+    width: 64rem;
+    height: 64rem;
+  }
+
+  .bg-light-mesh-b {
+    width: 52rem;
+    height: 52rem;
   }
 }

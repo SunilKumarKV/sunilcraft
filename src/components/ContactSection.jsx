@@ -80,27 +80,27 @@ const ContactSection = () => {
     <main className="page-shell">
       <PageHeader
         eyebrow="Contact"
-        title="Let’s build something useful and well-crafted"
-        description="For frontend polish, dashboard architecture, portfolio systems, and production-ready React work, this page is designed to make the next step easy."
+        title="Open to remote internships, part-time roles, and freelance work"
+        description="If you need React, frontend, or full-stack help for a real product, portfolio, or workflow, this page is meant to make reaching out straightforward."
         align="left"
       />
 
       <SectionPanel
         eyebrow="Collaboration"
         title="Start a conversation"
-        description="Reach out with a feature idea, UI cleanup request, portfolio upgrade, or product concept. I’m most helpful when the work needs both technical structure and visual refinement."
+        description="Reach out for frontend builds, UI cleanup, portfolio work, coding workflow ideas, or product-style web app features. I’m especially useful when the work needs both implementation and polish."
       >
         <div className="contact-layout">
           <div className="contact-column contact-summary">
             <div className="card-row">
-              <Badge tone="accent">Frontend Systems</Badge>
-              <Badge>React + Vite</Badge>
-              <Badge tone="success">Available</Badge>
+              <Badge tone="success">Available for freelance</Badge>
+              <Badge tone="accent">Remote / part-time ready</Badge>
+              <Badge>React + Node.js</Badge>
             </div>
 
             <div className="contact-intro">
               <h3>Best fit engagements</h3>
-              <p>Developer portfolios, engineering dashboards, routing cleanup, mobile-first UI refinement, and production-ready frontend/full-stack features.</p>
+              <p>Frontend development, React product work, UI cleanup, mobile-first refinement, portfolio builds, and practical full-stack features for web apps.</p>
             </div>
 
             <div className="contact-methods">
@@ -115,7 +115,7 @@ const ContactSection = () => {
                 <FaGithub />
                 <div>
                   <strong>GitHub</strong>
-                  <span>See active builds and coding-journal sync</span>
+                  <span>See synced projects, code history, and active builds</span>
                 </div>
               </a>
               <a href={profile.linkedin} target="_blank" rel="noreferrer" className="contact-method">
@@ -136,16 +136,16 @@ const ContactSection = () => {
 
             <div className="contact-trust-grid">
               <article className="glass-card">
-                <h3>UI/UX Cleanup</h3>
-                <p>Turning cluttered flows into clearer, more premium product surfaces.</p>
+                <h3>Frontend & React Work</h3>
+                <p>Landing pages, product UI, responsive interfaces, and practical component systems.</p>
               </article>
               <article className="glass-card">
-                <h3>Developer Platforms</h3>
-                <p>Problems, codebase, analytics, and synced engineering views built around live data.</p>
+                <h3>Portfolio & Product Builds</h3>
+                <p>Personal websites, recruiter-focused portfolios, and product-style web apps with stronger structure.</p>
               </article>
               <article className="glass-card">
-                <h3>Production Mindset</h3>
-                <p>Routing, responsive layouts, build safety, and implementation detail all treated seriously.</p>
+                <h3>Implementation + Cleanup</h3>
+                <p>Routing fixes, mobile layout cleanup, build-safe delivery, and thoughtful iteration before launch.</p>
               </article>
             </div>
           </div>
@@ -172,7 +172,7 @@ const ContactSection = () => {
                   ) : (
                     <textarea
                       name="message"
-                      placeholder="Tell me what you’re building, where it feels stuck, and what kind of help you need."
+                      placeholder="Tell me about the role, project, or freelance work you have in mind."
                       value={formData.message}
                       onChange={handleChange}
                       rows="7"

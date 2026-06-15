@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import HeroPic from "/assets/images/pic.png";
-import { profile } from "../data/profile";
-import DeveloperMetrics from "./DeveloperMetrics";
+import HeroPic from "/assets/images/SunilKumar.png";
+import { profile, services } from "../data/profile";
 import {
   getJournalProblems,
   getJournalProjects,
@@ -18,6 +17,18 @@ import Badge from "./ui/Badge";
 import "../styles/HeroSection.css";
 
 function sortProjects(a, b) {
+  const preferredOrder = ["rainbowcode", "chessplay", "sunilcraft", "coding-journal"];
+  const normalizedA = String(a.name || "").toLowerCase();
+  const normalizedB = String(b.name || "").toLowerCase();
+  const preferredIndexA = preferredOrder.findIndex((item) => normalizedA.includes(item));
+  const preferredIndexB = preferredOrder.findIndex((item) => normalizedB.includes(item));
+
+  if (preferredIndexA !== preferredIndexB) {
+    if (preferredIndexA === -1) return 1;
+    if (preferredIndexB === -1) return -1;
+    return preferredIndexA - preferredIndexB;
+  }
+
   const featuredRank = Number(Boolean(b.featured)) - Number(Boolean(a.featured));
   if (featuredRank !== 0) return featuredRank;
 
@@ -65,11 +76,14 @@ export default function HeroSection() {
   const summary = useMemo(() => {
     const verified = problems.filter((problem) => problem.verified).length;
     const platforms = new Set(problems.map((problem) => problem.platform).filter(Boolean)).size;
+    const languages = new Set(problems.map((problem) => problem.language).filter(Boolean)).size;
+
     return {
       repositories: projects.length,
       problems: problems.length,
       verified,
       platforms,
+      languages,
     };
   }, [problems, projects]);
 
@@ -119,6 +133,12 @@ export default function HeroSection() {
   }, [prefersReducedMotion, summary.problems, summary.repositories, summary.verified]);
 
   const heroNumber = (value) => (loading ? "--" : value || 0);
+  const handleScrollToNext = () => {
+    const nextSection = document.querySelector(".home-page-shell .section-panel");
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <main className="home-shell">
@@ -131,20 +151,22 @@ export default function HeroSection() {
         >
           <span className="availability-badge">● {profile.status}</span>
           <h4 className="hero-subtitle">{profile.name}</h4>
-          <h1 className="hero-title">I build web apps that turn learning, coding, and workflows into usable products.</h1>
+          <h1 className="hero-title">I build React and full-stack web apps for real products, portfolios, and workflows.</h1>
           <p className="hero-description">
-            MCA student at Bangalore University building developer tools, portfolio systems, coding workflows, and product-focused web applications with React and Node.js.
+            MCA student at Bangalore University, open to remote internships, part-time roles, and freelance frontend/full-stack work. I build with React, Node.js, GitHub workflows, and verified project systems.
           </p>
 
           <div className="hero-actions" aria-label="Primary actions">
-            <Link to="/projects" className="hero-button">Explore Work</Link>
-            <Link to="/dashboard" className="hero-button secondary">Open Dashboard</Link>
-            <a href={profile.github} className="hero-button secondary" target="_blank" rel="noreferrer">GitHub</a>
+            <Link to="/contact" className="hero-button">Hire Me</Link>
+            <Link to="/projects" className="hero-button secondary">View Work</Link>
+            <Link to="/codebase" className="hero-button secondary">Explore Codebase</Link>
           </div>
 
           <div className="hero-trust">
             <Badge tone="accent">GitHub synced</Badge>
-            <Badge tone="success">Verified solutions</Badge>
+            <Badge tone="success">Available for freelance</Badge>
+            <Badge>Verified solutions</Badge>
+            <Badge>Remote / part-time ready</Badge>
             <Badge>Live coding journal</Badge>
           </div>
 
@@ -166,19 +188,82 @@ export default function HeroSection() {
 
         <div className="hero-image">
           <div className="hero-image-card">
+            <div className="hero-image-orbit hero-image-orbit-a" />
+            <div className="hero-image-orbit hero-image-orbit-b" />
             <img src={HeroPic} alt="Sunil Kumar K V profile" loading="eager" />
-            <p className="hero-image-caption">Building in public through real projects</p>
+            <div className="hero-image-copy">
+              <span className="hero-image-name">Sunil Kumar K V</span>
+              <strong>{profile.role}</strong>
+              <div className="hero-image-meta">
+                <div className="hero-image-meta-item">
+                  <span className="hero-image-meta-label">Location</span>
+                  <span className="hero-image-meta-value">Bangalore, India</span>
+                </div>
+                <div className="hero-image-meta-item">
+                  <span className="hero-image-meta-label">Status</span>
+                  <span className="hero-image-meta-value">Available for internships & freelance</span>
+                </div>
+              </div>
+              <p className="hero-image-caption">Building in public through real projects.</p>
+            </div>
           </div>
         </div>
       </section>
 
+      <div className="hero-scroll-wrap">
+        <button type="button" className="hero-scroll-indicator" onClick={handleScrollToNext} aria-label="Scroll to the next section">
+          <span className="hero-scroll-arrow">↓</span>
+        </button>
+      </div>
+
       <div className="page-shell home-page-shell">
-        <DeveloperMetrics />
+        <SectionPanel
+          eyebrow="Role Fit"
+          title="Where I can contribute right now"
+          description="The portfolio is built to make fit clear quickly: frontend polish, React product work, full-stack implementation, and freelance delivery for practical web apps."
+          className="showcase-panel"
+        >
+          <div className="feature-grid role-fit-grid">
+            <article className="glass-card role-fit-card">
+              <div className="card-row">
+                <Badge tone="accent">Frontend Developer</Badge>
+                <Badge>React</Badge>
+              </div>
+              <h3>{services[0]?.title || "Frontend Development"}</h3>
+              <p>UI systems, responsive implementation, layout cleanup, and modern app surfaces that feel more production-ready on desktop and mobile.</p>
+            </article>
+            <article className="glass-card role-fit-card">
+              <div className="card-row">
+                <Badge tone="accent">React Developer</Badge>
+                <Badge>Vite</Badge>
+              </div>
+              <h3>Clean component structure and routing</h3>
+              <p>Reusable page systems, filtered data views, lazy-loaded routes, and the kind of implementation detail that keeps growth manageable.</p>
+            </article>
+            <article className="glass-card role-fit-card">
+              <div className="card-row">
+                <Badge tone="accent">Full Stack Developer</Badge>
+                <Badge>Node.js</Badge>
+              </div>
+              <h3>{services[3]?.title || "Full-Stack Features"}</h3>
+              <p>Workflow APIs, live JSON sync, source-backed content, and product features that connect frontend polish to practical data handling.</p>
+            </article>
+            <article className="glass-card role-fit-card">
+              <div className="card-row">
+                <Badge tone="success">Freelance Web Apps</Badge>
+                <Badge>Remote Ready</Badge>
+              </div>
+              <h3>Useful support for projects that feel stuck</h3>
+              <p>Portfolio upgrades, route fixes, UI cleanup, bug fixing, and build-safe frontend work for teams or founders who need momentum.</p>
+            </article>
+          </div>
+        </SectionPanel>
 
         <SectionPanel
-          eyebrow="Selected Work"
-          title="Featured Projects"
-          description="Projects I’m actively building or maintaining, synced from my GitHub repositories."
+          eyebrow="Featured Work"
+          title="Projects that best represent how I build"
+          description="Real GitHub-synced work that shows product thinking, frontend polish, and practical full-stack implementation."
+          className="showcase-panel"
         >
           {loading ? (
             <LoadingState title="Loading featured projects" message="Fetching the latest work preview from coding-journal." />
@@ -194,10 +279,11 @@ export default function HeroSection() {
                     <div className="card-row">
                       <Badge tone="accent">Featured</Badge>
                       <Badge>{project.language || "Unknown"}</Badge>
+                      <Badge>{project.homepage ? "Live" : "GitHub"}</Badge>
                     </div>
                     <h2>{project.name}</h2>
                     <p>{project.description || "No repository description provided."}</p>
-                    <p>Stars: {project.stars || 0} • Forks: {project.forks || 0}</p>
+                    <p>Stars: {project.stars || 0} • Forks: {project.forks || 0} • {project.homepage ? "Homepage available" : "Source-first build"}</p>
                     {(project.topics || []).length ? (
                       <div className="card-row">
                         {project.topics.slice(0, 4).map((topic) => (
@@ -209,6 +295,11 @@ export default function HeroSection() {
                       <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">
                         GitHub
                       </a>
+                      {project.homepage ? (
+                        <a href={project.homepage} className="project-link" target="_blank" rel="noreferrer">
+                          Live
+                        </a>
+                      ) : null}
                       <Link to={`/projects/${toProjectSlug(project.name)}`} className="project-link">
                         Details
                       </Link>
@@ -222,59 +313,58 @@ export default function HeroSection() {
         </SectionPanel>
 
         <SectionPanel
-          eyebrow="Problem Solving"
-          title="Problem Solving Preview"
-          description="A verified record of coding problems I’ve solved, tested, and documented."
+          eyebrow="Proof of Work"
+          title="The proof is live, synced, and easy to inspect"
+          description="Projects come from GitHub, problem and codebase entries come from coding-journal, and the portfolio updates from real work instead of manual claims."
+          className="explorer-panel"
         >
           {loading ? (
-            <LoadingState title="Loading problem preview" message="Preparing a live problem snapshot from coding-journal." />
+            <LoadingState title="Loading proof of work" message="Pulling live repositories and verified coding entries from coding-journal." />
           ) : error ? (
-            <ErrorState title="Unable to load problem preview" message={error} />
-          ) : !problems.length ? (
-            <EmptyState title="No problems in the feed" message="coding-journal returned an empty problems feed." />
+            <ErrorState title="Unable to load proof of work" message={error} />
           ) : (
-            <>
-              <div className="feature-grid compact-grid">
-                <article className="glass-card">
-                  <h3>Total Solved</h3>
-                  <p>{summary.problems}</p>
-                </article>
-                <article className="glass-card">
-                  <h3>Verified</h3>
-                  <p>{summary.verified}</p>
-                </article>
-                <article className="glass-card">
-                  <h3>Platforms</h3>
-                  <p>{summary.platforms}</p>
-                </article>
-              </div>
-              <div className="problem-list preview-list">
-                {verifiedProblems.map((problem) => (
-                  <Link
-                    key={`${problem.platform}-${problem.slug}`}
-                    className="problem-card"
-                    to={`/problems/${toPlatformSegment(problem.platform)}/${problem.slug}`}
-                  >
-                    <div className="card-row">
-                      <Badge tone="accent">{problem.platform}</Badge>
-                      <Badge tone="success">Verified</Badge>
-                      <Badge>{problem.difficulty || "Unknown"}</Badge>
-                      <Badge>{problem.language || "Unknown"}</Badge>
-                    </div>
-                    <h2>{problem.title}</h2>
-                    <p>{(problem.tags || []).slice(0, 4).join(", ") || "No tags added yet."}</p>
-                  </Link>
-                ))}
-              </div>
-              <Link to="/problems" className="page-button">Open Problem Explorer</Link>
-            </>
+            <div className="feature-grid proof-grid">
+              <article className="glass-card">
+                <div className="card-row">
+                  <Badge tone="accent">GitHub synced</Badge>
+                  <Badge>{heroNumber(summary.repositories)} repos</Badge>
+                </div>
+                <h3>Projects backed by real repositories</h3>
+                <p>Each project card is populated from the live GitHub and coding-journal feed instead of static portfolio text.</p>
+              </article>
+              <article className="glass-card">
+                <div className="card-row">
+                  <Badge tone="success">Verified codebase</Badge>
+                  <Badge>{heroNumber(summary.verified)} verified</Badge>
+                </div>
+                <h3>Solutions with code, notes, and complexity</h3>
+                <p>The codebase section shows how I solve problems, explain the approach, and keep the work easy to review.</p>
+              </article>
+              <article className="glass-card">
+                <div className="card-row">
+                  <Badge tone="accent">Problem solving</Badge>
+                  <Badge>{heroNumber(summary.platforms)} platforms</Badge>
+                </div>
+                <h3>Consistency beyond just project demos</h3>
+                <p>Problem records help show regular coding practice, verification, and the habit of documenting solutions instead of only storing code.</p>
+              </article>
+              <article className="glass-card">
+                <div className="card-row">
+                  <Badge>Workflow</Badge>
+                  <Badge>{heroNumber(summary.languages)} solution languages</Badge>
+                </div>
+                <h3>A repeatable system, not a static portfolio</h3>
+                <p>Solve, verify, publish, and reflect the work automatically. That keeps the portfolio grounded in what I am actually building.</p>
+              </article>
+            </div>
           )}
         </SectionPanel>
 
         <SectionPanel
-          eyebrow="Verified Solutions"
-          title="Codebase Preview"
-          description="My personal solution library with source code, tests, explanations, and complexity notes."
+          eyebrow="Codebase / Problem Solving"
+          title="Verified solutions that are worth opening"
+          description="This section stays technical on purpose: source code, explanation, complexity notes, and platform context from live coding-journal data."
+          className="explorer-panel"
         >
           {loading ? (
             <LoadingState title="Loading codebase preview" message="Fetching verified solution entries from coding-journal." />
@@ -298,28 +388,33 @@ export default function HeroSection() {
                       <Badge>{problem.language || "Unknown"}</Badge>
                     </div>
                     <h2>{problem.title}</h2>
-                    <p>Open the full entry for solution code, explanation, and complexity notes.</p>
+                    <p>{(problem.tags || []).slice(0, 4).join(", ") || "Open the full entry for source code, explanation, and complexity notes."}</p>
                   </Link>
                 ))}
               </div>
-              <Link to="/codebase" className="page-button">Browse Verified Solutions</Link>
+              <div className="home-section-actions">
+                <Link to="/codebase" className="page-button">Open Codebase Library</Link>
+                <Link to="/problems" className="page-button compact">Browse Problems</Link>
+              </div>
             </>
           )}
         </SectionPanel>
 
         <SectionPanel
-          eyebrow="Next Step"
-          title="Move from portfolio view to engineering dashboard"
-          description="Use SunilCraft to review flagship work, inspect verified problem solving, and track progress across the coding-journal pipeline."
+          eyebrow="Contact"
+          title="Open to internships, part-time roles, and freelance web app work"
+          description="If you need a React developer for UI polish, frontend implementation, portfolio upgrades, or product-focused web features, this is the best next step."
+          className="contact-cta-panel"
         >
-          <div className="cta-panel">
+          <div className="cta-panel home-contact-cta">
             <div>
-              <h3>Everything stays connected</h3>
-              <p>Projects, problems, journey milestones, and achievements stay synced from coding-journal without adding clutter back into the main navigation.</p>
+              <h3>Let’s talk about the role or the project</h3>
+              <p>I’m currently looking for remote internships, part-time frontend or full-stack roles, and freelance opportunities where clean implementation and practical product thinking matter.</p>
             </div>
-            <div className="hero-actions">
-              <Link to="/dashboard" className="hero-button">View Dashboard</Link>
-              <Link to="/contact" className="hero-button secondary">Contact</Link>
+            <div className="hero-actions hero-actions-inline">
+              <Link to="/contact" className="hero-button">Contact Me</Link>
+              <a href={profile.linkedin} className="hero-button secondary" target="_blank" rel="noreferrer">LinkedIn</a>
+              <a href={profile.github} className="hero-button secondary" target="_blank" rel="noreferrer">GitHub</a>
             </div>
           </div>
         </SectionPanel>
