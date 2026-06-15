@@ -73,11 +73,6 @@ export default function HeroSection() {
     };
   }, [problems, projects]);
 
-  const latestProject = useMemo(() => {
-    if (!projects.length) return null;
-    return [...projects].sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0))[0];
-  }, [projects]);
-
   const prefersReducedMotion =
     typeof window !== "undefined" &&
     typeof window.matchMedia === "function" &&
@@ -178,11 +173,12 @@ export default function HeroSection() {
       </section>
 
       <div className="page-shell home-page-shell">
+        <DeveloperMetrics />
+
         <SectionPanel
           eyebrow="Selected Work"
           title="Featured Projects"
           description="Projects I’m actively building or maintaining, synced from my GitHub repositories."
-          className="showcase-panel"
         >
           {loading ? (
             <LoadingState title="Loading featured projects" message="Fetching the latest work preview from coding-journal." />
@@ -225,13 +221,10 @@ export default function HeroSection() {
           )}
         </SectionPanel>
 
-        <DeveloperMetrics title="Developer Activity" />
-
         <SectionPanel
           eyebrow="Problem Solving"
-          title="Latest Verified Problems"
+          title="Problem Solving Preview"
           description="A verified record of coding problems I’ve solved, tested, and documented."
-          className="explorer-panel"
         >
           {loading ? (
             <LoadingState title="Loading problem preview" message="Preparing a live problem snapshot from coding-journal." />
@@ -282,7 +275,6 @@ export default function HeroSection() {
           eyebrow="Verified Solutions"
           title="Codebase Preview"
           description="My personal solution library with source code, tests, explanations, and complexity notes."
-          className="explorer-panel"
         >
           {loading ? (
             <LoadingState title="Loading codebase preview" message="Fetching verified solution entries from coding-journal." />
@@ -316,36 +308,9 @@ export default function HeroSection() {
         </SectionPanel>
 
         <SectionPanel
-          eyebrow="Journey"
-          title="Journey Preview"
-          description="A quick read on what is shipping, what is being verified, and where the portfolio is growing next."
-          className="timeline-panel"
-        >
-          <div className="dashboard-grid">
-            <article className="glass-card widget-card">
-              <h3>Latest repository movement</h3>
-              <p>{latestProject ? `${latestProject.name} is the most recently updated synced project.` : "Project updates appear here as soon as coding-journal data loads."}</p>
-            </article>
-            <article className="glass-card widget-card">
-              <h3>Verified momentum</h3>
-              <p>{summary.verified} verified solutions are currently tracked in the live journal feed.</p>
-            </article>
-            <article className="glass-card widget-card">
-              <h3>Next views</h3>
-              <p>Open the full journey timeline for dated activity, or jump into the dashboard for broader developer metrics.</p>
-            </article>
-          </div>
-          <div className="hero-actions" style={{ marginTop: "24px" }}>
-            <Link to="/journey" className="hero-button secondary">View Journey</Link>
-            <Link to="/dashboard" className="hero-button">Open Dashboard</Link>
-          </div>
-        </SectionPanel>
-
-        <SectionPanel
           eyebrow="Next Step"
-          title="Ready to talk through the work?"
-          description="Use SunilCraft to review flagship work, inspect verified problem solving, and then move into a direct conversation if the fit feels strong."
-          className="contact-cta-panel"
+          title="Move from portfolio view to engineering dashboard"
+          description="Use SunilCraft to review flagship work, inspect verified problem solving, and track progress across the coding-journal pipeline."
         >
           <div className="cta-panel">
             <div>

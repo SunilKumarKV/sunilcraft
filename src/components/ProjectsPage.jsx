@@ -77,15 +77,6 @@ export default function ProjectsPage() {
     [projects]
   );
 
-  const projectSummary = useMemo(
-    () => ({
-      featured: projects.filter((project) => project.featured).length,
-      languages: Math.max(0, languages.length - 1),
-      topics: Math.max(0, topics.length - 1),
-    }),
-    [languages.length, projects, topics.length]
-  );
-
   const filteredProjects = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
@@ -119,29 +110,14 @@ export default function ProjectsPage() {
         title="Projects, featured builds, and repo explorer"
         description="Projects I’m actively building or maintaining, synced from my GitHub repositories."
         align="left"
-        className="page-header-showcase"
       />
 
-      <section className="page-meta-strip">
-        <article className="meta-strip-card">
-          <span>Featured</span>
-          <strong>{projectSummary.featured}</strong>
-        </article>
-        <article className="meta-strip-card">
-          <span>Languages</span>
-          <strong>{projectSummary.languages}</strong>
-        </article>
-        <article className="meta-strip-card">
-          <span>Topics</span>
-          <strong>{projectSummary.topics}</strong>
-        </article>
-      </section>
+      <DeveloperMetrics title="Developer Metrics" />
 
       <SectionPanel
         eyebrow="Highlights"
         title="Featured Projects"
         description="Featured work rises to the top first, then the full repository feed stays available below."
-        className="showcase-panel"
       >
         {loading ? (
           <LoadingState title="Loading featured projects" message="Fetching priority projects from coding-journal." />
@@ -190,12 +166,8 @@ export default function ProjectsPage() {
         eyebrow="Explorer"
         title="GitHub Repo Explorer"
         description="Search the synced GitHub feed by language, topic, or featured status."
-        className="explorer-panel"
       >
-        <FilterBar
-          title="Filter the repository feed"
-          description="Browse the full project set by language, topic, or featured priority."
-        >
+        <FilterBar>
           <input
             type="search"
             placeholder="Search repositories..."
@@ -274,8 +246,6 @@ export default function ProjectsPage() {
           </div>
         )}
       </SectionPanel>
-
-      <DeveloperMetrics title="Developer Activity" />
     </main>
   );
 }
