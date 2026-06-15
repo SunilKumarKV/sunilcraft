@@ -134,6 +134,19 @@ export default function AnimatedBackground() {
             ))}
           </div>
 
+          <div className="bg-shooting-stars">
+            {createItems(3, (index) => (
+              <span
+                key={`shooting-${index}`}
+                className="bg-shooting-star"
+                style={{
+                  top: `${14 + index * 16}%`,
+                  animationDelay: `${index * 3.6}s`,
+                }}
+              />
+            ))}
+          </div>
+
           <div className="bg-code-field">
             {symbols.map((item) => (
               <span
@@ -153,6 +166,8 @@ export default function AnimatedBackground() {
         </>
       ) : (
         <>
+          <div className="bg-light-mesh bg-light-mesh-a" />
+          <div className="bg-light-mesh bg-light-mesh-b" />
           <div className="bg-light-blob bg-light-blob-a" />
           <div className="bg-light-blob bg-light-blob-b" />
           <div className="bg-light-blob bg-light-blob-c" />
@@ -171,6 +186,21 @@ export default function AnimatedBackground() {
                   height: particle.size,
                   animationDelay: particle.delay,
                   animationDuration: particle.duration,
+                }}
+              />
+            ))}
+          </div>
+          <div className="bg-falling-particles">
+            {particles.slice(0, 8).map((particle) => (
+              <span
+                key={`light-fall-${particle.id}`}
+                className="bg-falling-particle"
+                style={{
+                  left: particle.left,
+                  animationDelay: particle.delay,
+                  animationDuration: `${18 + Number.parseFloat(particle.duration)}s`,
+                  transform: `scale(${particle.scale * 0.8})`,
+                  opacity: 0.14,
                 }}
               />
             ))}

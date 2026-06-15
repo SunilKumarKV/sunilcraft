@@ -50,6 +50,7 @@ function AppRoutes() {
         exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.996 }}
         transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
         className="route-scene"
+        data-route-root={location.pathname.split("/")[1] || "home"}
       >
         <Routes location={location}>
           <Route path="/" element={<Hero />} />

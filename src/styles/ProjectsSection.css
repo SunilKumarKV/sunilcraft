@@ -153,6 +153,7 @@
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  transform: translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0);
 }
 
 .project-link.primary,

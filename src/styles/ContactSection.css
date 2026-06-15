@@ -48,13 +48,13 @@
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform: translateY(var(--lift, 0px)) perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
 
 .contact-method:hover {
   text-decoration: none;
   border-color: color-mix(in srgb, var(--accent-color) 30%, transparent);
-  transform: translateY(-2px);
+  --lift: -2px;
 }
 
 .contact-method.static {

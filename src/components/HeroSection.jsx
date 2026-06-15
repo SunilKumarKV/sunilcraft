@@ -163,15 +163,10 @@ export default function HeroSection() {
           </div>
 
           <div className="hero-trust">
-            <Badge tone="success">Available for freelance</Badge>
-            <Badge tone="accent">Remote / part-time ready</Badge>
-            <Badge>Verified codebase</Badge>
-            <Badge>GitHub synced work</Badge>
-          </div>
-
-          <div className="hero-trust">
             <Badge tone="accent">GitHub synced</Badge>
-            <Badge tone="success">Verified solutions</Badge>
+            <Badge tone="success">Available for freelance</Badge>
+            <Badge>Verified solutions</Badge>
+            <Badge>Remote / part-time ready</Badge>
             <Badge>Live coding journal</Badge>
           </div>
 
@@ -197,6 +192,7 @@ export default function HeroSection() {
             <div className="hero-image-orbit hero-image-orbit-b" />
             <img src={HeroPic} alt="Sunil Kumar K V profile" loading="eager" />
             <div className="hero-image-copy">
+              <span className="hero-image-name">Sunil Kumar K V</span>
               <strong>{profile.role}</strong>
               <div className="hero-image-tags">
                 <Badge tone="accent">Frontend Developer</Badge>
@@ -211,7 +207,6 @@ export default function HeroSection() {
 
       <div className="hero-scroll-wrap">
         <button type="button" className="hero-scroll-indicator" onClick={handleScrollToNext} aria-label="Scroll to the next section">
-          <span className="hero-scroll-text">scroll</span>
           <span className="hero-scroll-arrow">↓</span>
         </button>
       </div>

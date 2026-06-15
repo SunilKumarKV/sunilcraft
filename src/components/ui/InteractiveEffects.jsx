@@ -11,7 +11,6 @@ const SELECTOR = [
   ".project-link",
   ".page-button",
   ".copy-button",
-  ".footer-panel",
 ].join(", ");
 
 export default function InteractiveEffects() {
@@ -21,10 +20,18 @@ export default function InteractiveEffects() {
     if (typeof window === "undefined") return undefined;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) return undefined;
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    if (reducedMotion || coarsePointer) return undefined;
 
     const interactiveNodes = Array.from(document.querySelectorAll(SELECTOR));
     const cleanups = [];
+
+    const updateSpotlight = (event) => {
+      document.documentElement.style.setProperty("--bg-spotlight-x", `${event.clientX}px`);
+      document.documentElement.style.setProperty("--bg-spotlight-y", `${event.clientY}px`);
+    };
+
+    window.addEventListener("pointermove", updateSpotlight, { passive: true });
 
     interactiveNodes.forEach((node) => {
       let frame = 0;
@@ -35,8 +42,10 @@ export default function InteractiveEffects() {
         const y = event.clientY - rect.top;
         const px = x / rect.width;
         const py = y / rect.height;
-        const rotateY = (px - 0.5) * 6;
-        const rotateX = (0.5 - py) * 5;
+        const rotateY = (px - 0.5) * 4;
+        const rotateX = (0.5 - py) * 3.5;
+        const shiftX = (px - 0.5) * 4;
+        const shiftY = (py - 0.5) * 4;
 
         cancelAnimationFrame(frame);
         frame = window.requestAnimationFrame(() => {
@@ -44,6 +53,8 @@ export default function InteractiveEffects() {
           node.style.setProperty("--cursor-y", `${y}px`);
           node.style.setProperty("--tilt-x", `${rotateX.toFixed(2)}deg`);
           node.style.setProperty("--tilt-y", `${rotateY.toFixed(2)}deg`);
+          node.style.setProperty("--mag-x", `${shiftX.toFixed(2)}px`);
+          node.style.setProperty("--mag-y", `${shiftY.toFixed(2)}px`);
           node.classList.add("cursor-active");
         });
       };
@@ -52,6 +63,8 @@ export default function InteractiveEffects() {
         cancelAnimationFrame(frame);
         node.style.setProperty("--tilt-x", "0deg");
         node.style.setProperty("--tilt-y", "0deg");
+        node.style.setProperty("--mag-x", "0px");
+        node.style.setProperty("--mag-y", "0px");
         node.classList.remove("cursor-active");
       };
 
@@ -68,6 +81,7 @@ export default function InteractiveEffects() {
     });
 
     return () => {
+      window.removeEventListener("pointermove", updateSpotlight);
       cleanups.forEach((cleanup) => cleanup());
     };
   }, [location.pathname]);
