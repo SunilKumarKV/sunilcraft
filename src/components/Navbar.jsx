@@ -3,6 +3,7 @@ import { ThemeContext } from "../context/theme";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaSun, FaMoon } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
+import LogoMark from "./branding/LogoMark";
 import "../styles/Navbar.css";
 
 export default function Navbar() {
@@ -64,8 +65,8 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="container">
           {/* Logo */}
-          <button className="logo" type="button" onClick={() => handleNavClick("Home")} aria-label="Go to home">
-            <div className="logo-icon">S</div>
+          <button className="logo" type="button" onClick={() => handleNavClick("Home")} aria-label="SunilCraft home">
+            <LogoMark />
             <div className="logo-text">SunilCraft</div>
           </button>
 

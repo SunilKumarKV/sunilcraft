@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import HeroPic from "/assets/images/pic.png";
+import HeroPic from "/assets/images/SunilKumar.JPG";
 import { profile } from "../data/profile";
 import DeveloperMetrics from "./DeveloperMetrics";
 import {
@@ -18,6 +18,17 @@ import Badge from "./ui/Badge";
 import "../styles/HeroSection.css";
 
 function sortProjects(a, b) {
+  const preferredOrder = ["rainbowcode", "chessplay", "sunilcraft", "coding-journal"];
+  const normalizedA = String(a.name || "").toLowerCase();
+  const normalizedB = String(b.name || "").toLowerCase();
+  const preferredIndexA = preferredOrder.findIndex((item) => normalizedA.includes(item));
+  const preferredIndexB = preferredOrder.findIndex((item) => normalizedB.includes(item));
+  if (preferredIndexA !== preferredIndexB) {
+    if (preferredIndexA === -1) return 1;
+    if (preferredIndexB === -1) return -1;
+    return preferredIndexA - preferredIndexB;
+  }
+
   const featuredRank = Number(Boolean(b.featured)) - Number(Boolean(a.featured));
   if (featuredRank !== 0) return featuredRank;
 
@@ -62,6 +73,10 @@ export default function HeroSection() {
 
   const featuredProjects = useMemo(() => [...projects].sort(sortProjects).slice(0, 3), [projects]);
   const verifiedProblems = useMemo(() => problems.filter((problem) => problem.verified).slice(0, 3), [problems]);
+  const latestProject = useMemo(
+    () => [...projects].sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0))[0] || null,
+    [projects]
+  );
   const summary = useMemo(() => {
     const verified = problems.filter((problem) => problem.verified).length;
     const platforms = new Set(problems.map((problem) => problem.platform).filter(Boolean)).size;
@@ -173,12 +188,11 @@ export default function HeroSection() {
       </section>
 
       <div className="page-shell home-page-shell">
-        <DeveloperMetrics />
-
         <SectionPanel
           eyebrow="Selected Work"
           title="Featured Projects"
           description="Projects I’m actively building or maintaining, synced from my GitHub repositories."
+          className="showcase-panel"
         >
           {loading ? (
             <LoadingState title="Loading featured projects" message="Fetching the latest work preview from coding-journal." />
@@ -221,10 +235,13 @@ export default function HeroSection() {
           )}
         </SectionPanel>
 
+        <DeveloperMetrics title="Developer Activity" />
+
         <SectionPanel
           eyebrow="Problem Solving"
-          title="Problem Solving Preview"
+          title="Verified Problem Solving"
           description="A verified record of coding problems I’ve solved, tested, and documented."
+          className="explorer-panel"
         >
           {loading ? (
             <LoadingState title="Loading problem preview" message="Preparing a live problem snapshot from coding-journal." />
@@ -275,6 +292,7 @@ export default function HeroSection() {
           eyebrow="Verified Solutions"
           title="Codebase Preview"
           description="My personal solution library with source code, tests, explanations, and complexity notes."
+          className="explorer-panel"
         >
           {loading ? (
             <LoadingState title="Loading codebase preview" message="Fetching verified solution entries from coding-journal." />
@@ -308,18 +326,45 @@ export default function HeroSection() {
         </SectionPanel>
 
         <SectionPanel
-          eyebrow="Next Step"
-          title="Move from portfolio view to engineering dashboard"
-          description="Use SunilCraft to review flagship work, inspect verified problem solving, and track progress across the coding-journal pipeline."
+          eyebrow="Building Journey"
+          title="What is actively taking shape"
+          description="Projects, verified solutions, and coding-journal activity keep moving together, so the portfolio reflects real work instead of static snapshots."
+          className="timeline-panel"
+        >
+          <div className="dashboard-grid">
+            <article className="glass-card widget-card">
+              <h3>Latest project motion</h3>
+              <p>{latestProject ? `${latestProject.name} is the most recently updated synced project in the portfolio feed.` : "Project updates appear here as soon as coding-journal data loads."}</p>
+            </article>
+            <article className="glass-card widget-card">
+              <h3>Verified momentum</h3>
+              <p>{summary.verified} verified solutions are already tracked in the live coding journal.</p>
+            </article>
+            <article className="glass-card widget-card">
+              <h3>Where to go next</h3>
+              <p>Open Journey for the narrative timeline, or jump into Dashboard for a broader view of developer activity.</p>
+            </article>
+          </div>
+          <div className="hero-actions hero-actions-inline">
+            <Link to="/journey" className="hero-button secondary">View Journey</Link>
+            <Link to="/dashboard" className="hero-button">Open Dashboard</Link>
+          </div>
+        </SectionPanel>
+
+        <SectionPanel
+          eyebrow="Contact"
+          title="Let’s talk through the work"
+          description="If the mix of product polish, verified coding work, and real GitHub activity looks like a fit, the next step is a simple conversation."
+          className="contact-cta-panel"
         >
           <div className="cta-panel">
             <div>
-              <h3>Everything stays connected</h3>
-              <p>Projects, problems, journey milestones, and achievements stay synced from coding-journal without adding clutter back into the main navigation.</p>
+              <h3>Built in public, explained clearly</h3>
+              <p>SunilCraft is meant to show how I think, build, document, and improve products over time, not just list tools or numbers.</p>
             </div>
             <div className="hero-actions">
-              <Link to="/dashboard" className="hero-button">View Dashboard</Link>
-              <Link to="/contact" className="hero-button secondary">Contact</Link>
+              <Link to="/contact" className="hero-button">Contact</Link>
+              <a href={profile.github} className="hero-button secondary" target="_blank" rel="noreferrer">GitHub</a>
             </div>
           </div>
         </SectionPanel>

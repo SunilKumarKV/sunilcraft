@@ -16,6 +16,17 @@ import EmptyState from "./ui/EmptyState";
 import Badge from "./ui/Badge";
 
 function sortProjects(a, b) {
+  const preferredOrder = ["rainbowcode", "chessplay", "sunilcraft", "coding-journal"];
+  const normalizedA = String(a.name || "").toLowerCase();
+  const normalizedB = String(b.name || "").toLowerCase();
+  const preferredIndexA = preferredOrder.findIndex((item) => normalizedA.includes(item));
+  const preferredIndexB = preferredOrder.findIndex((item) => normalizedB.includes(item));
+  if (preferredIndexA !== preferredIndexB) {
+    if (preferredIndexA === -1) return 1;
+    if (preferredIndexB === -1) return -1;
+    return preferredIndexA - preferredIndexB;
+  }
+
   const featuredRank = Number(Boolean(b.featured)) - Number(Boolean(a.featured));
   if (featuredRank !== 0) return featuredRank;
 

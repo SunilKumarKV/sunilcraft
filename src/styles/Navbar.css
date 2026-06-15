@@ -43,25 +43,44 @@ header {
   user-select: none;
 }
 
-.logo-icon {
-  background: linear-gradient(135deg, var(--accent-color), #00bfff);
-  color: #fff;
-  font-size: 20px;
-  font-weight: bold;
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
+.logo-mark {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 12px 24px rgba(0, 123, 255, 0.18);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: default;
+  width: 42px;
+  height: 42px;
+  color: var(--accent-color);
+  filter: drop-shadow(0 10px 22px rgba(76, 182, 255, 0.18));
 }
 
-.logo-icon:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 28px rgba(0, 123, 255, 0.22);
+.logo-mark svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.logo-mark-frame {
+  fill: color-mix(in srgb, var(--card-bg) 82%, transparent);
+  stroke: color-mix(in srgb, var(--accent-color) 24%, transparent);
+  stroke-width: 1.4;
+}
+
+.logo-mark-stroke {
+  fill: none;
+  stroke: url(#skGradient);
+  stroke-width: 4.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logo-mark-stroke.accent {
+  stroke-width: 4.8;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .logo-mark {
+    animation: logoPulse 8s ease-in-out infinite;
+  }
 }
 
 .logo-text {
@@ -248,10 +267,20 @@ html {
     font-size: 1rem;
   }
 
-  .logo-icon {
+  .logo-mark {
     width: 38px;
     height: 38px;
-    font-size: 18px;
-    border-radius: 12px;
+  }
+}
+
+@keyframes logoPulse {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    filter: drop-shadow(0 10px 22px rgba(76, 182, 255, 0.16));
+  }
+  50% {
+    transform: translate3d(0, -1px, 0);
+    filter: drop-shadow(0 14px 28px rgba(76, 182, 255, 0.22));
   }
 }

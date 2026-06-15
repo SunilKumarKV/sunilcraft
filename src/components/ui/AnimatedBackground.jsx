@@ -36,6 +36,8 @@ export default function AnimatedBackground() {
     <div className={`animated-background ${theme}`} aria-hidden="true">
       {theme === "dark" ? (
         <>
+          <div className="bg-aurora bg-aurora-a" />
+          <div className="bg-aurora bg-aurora-b" />
           <div className="bg-dark-glow bg-dark-glow-a" />
           <div className="bg-dark-glow bg-dark-glow-b" />
           <div className="bg-particles">
@@ -71,6 +73,8 @@ export default function AnimatedBackground() {
         </>
       ) : (
         <>
+          <div className="bg-reflection bg-reflection-a" />
+          <div className="bg-reflection bg-reflection-b" />
           <div className="bg-light-blob bg-light-blob-a" />
           <div className="bg-light-blob bg-light-blob-b" />
           <div className="bg-light-blob bg-light-blob-c" />

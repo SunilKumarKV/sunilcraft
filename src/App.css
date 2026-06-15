@@ -234,6 +234,11 @@ a:hover {
   margin-bottom: 36px;
 }
 
+.page-header {
+  display: grid;
+  gap: 0;
+}
+
 .page-header.page-header-left {
   text-align: left;
 }
@@ -243,6 +248,9 @@ a:hover {
   color: var(--text-color);
   font-size: clamp(2rem, 5vw, 3.5rem);
   margin-bottom: 14px;
+  line-height: 1.04;
+  letter-spacing: -0.05em;
+  max-width: 14ch;
 }
 
 .page-header p,
@@ -258,11 +266,68 @@ a:hover {
   margin-left: 0;
 }
 
+.page-header-showcase h1,
+.page-header-library h1,
+.page-header-dashboard h1,
+.page-header-journey h1,
+.page-header-achievements h1,
+.page-header-about h1,
+.page-header-contact h1 {
+  max-width: 15ch;
+}
+
 .page-header-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
   margin-top: 22px;
+}
+
+.page-meta-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: -6px 0 26px;
+}
+
+.page-meta-strip.compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.meta-strip-card {
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--card-bg) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--input-border) 88%, transparent);
+  box-shadow: var(--shadow-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: grid;
+  gap: 6px;
+}
+
+.meta-strip-card span {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.meta-strip-card strong {
+  color: var(--text-color);
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.widget-card,
+.showcase-panel .problem-card {
+  min-height: 100%;
 }
 
 .problem-grid {
@@ -412,6 +477,27 @@ a:hover {
   align-items: stretch;
 }
 
+.filter-shell {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.filter-shell-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.filter-shell-copy h3 {
+  color: var(--text-color);
+  font-size: 1.02rem;
+}
+
+.filter-shell-copy p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
 .filter-bar > * {
   flex: 1 1 180px;
   min-width: 0;
@@ -485,6 +571,11 @@ a:hover {
 .problem-list {
   display: grid;
   gap: 22px;
+}
+
+.timeline-panel .dashboard-grid,
+.explorer-panel .dashboard-grid {
+  margin-top: 0;
 }
 
 .problem-detail-card {
@@ -604,6 +695,13 @@ a:hover {
   animation: pageFadeUp 0.55s ease both;
 }
 
+.showcase-panel,
+.explorer-panel,
+.timeline-panel,
+.contact-cta-panel {
+  position: relative;
+}
+
 .section-panel h2 {
   font-size: clamp(1.9rem, 4vw, 3rem);
   color: var(--text-color);
@@ -719,6 +817,10 @@ a:hover {
   gap: 24px;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.contact-cta-panel .cta-panel > div:first-child {
+  max-width: 560px;
 }
 
 .copy-button {
@@ -896,6 +998,10 @@ textarea:focus-visible {
 }
 .timeline-item span { color: var(--accent-color); font-weight: 800; }
 
+.widget-card p + p {
+  margin-top: 6px;
+}
+
 .state-page,
 .project-detail-page {
   width: min(1180px, calc(100% - 32px));
@@ -924,6 +1030,20 @@ textarea:focus-visible {
   .timeline-item,
   .project-detail-hero { grid-template-columns: 1fr; }
   .section-panel { padding: 42px 18px; }
+}
+
+@media (max-width: 720px) {
+  .page-meta-strip,
+  .page-meta-strip.compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .page-meta-strip,
+  .page-meta-strip.compact {
+    grid-template-columns: 1fr;
+  }
 }
 
 @keyframes pageFadeUp {
