@@ -33,6 +33,12 @@ const openToItems = [
   "Freelance Projects",
 ];
 
+const contactLinks = [
+  { label: "Email", href: "mailto:sunilkumarkv44@gmail.com", icon: <FaEnvelope /> },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/sunilkumarkv44/", icon: <FaLinkedinIn /> },
+  { label: "GitHub", href: "https://github.com/SunilKumarKV", icon: <FaGithub /> },
+];
+
 function Footer() {
   return (
     <footer className="footer">
@@ -83,16 +89,17 @@ function Footer() {
                 <li key={item}>{item}</li>
               ))}
             </ul>
-            <div className="footer-open-to">
-              <span className="footer-open-to-label">Open to:</span>
-              <ul className="footer-link-list">
-                {openToItems.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
+          </section>
+
+          <section className="footer-column">
+            <h3>Open To</h3>
+            <ul className="footer-link-list footer-open-list">
+              {openToItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
             <ul className="footer-link-list footer-connect-list">
-              {socialLinks.map((item) => (
+              {contactLinks.map((item) => (
                 <li key={item.label}>
                   <a
                     href={item.href}

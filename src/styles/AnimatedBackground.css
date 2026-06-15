@@ -244,16 +244,16 @@
 }
 
 .bg-light-particle {
-  background: rgba(93, 169, 255, 0.3);
-  box-shadow: 0 0 24px rgba(93, 169, 255, 0.24);
-  opacity: 0.62;
+  background: rgba(251, 191, 36, 0.34);
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.26);
+  opacity: 0.72;
 }
 
 .bg-light-sparkle {
   top: -10%;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 0 18px rgba(167, 211, 255, 0.42);
-  opacity: 0.84;
+  background: rgba(255, 250, 240, 0.96);
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.3);
+  opacity: 0.88;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -491,5 +491,45 @@
 
   .bg-code-symbol {
     font-size: 0.72rem;
+  }
+}
+
+@media (min-width: 1800px) {
+  .bg-sunlight {
+    width: 64rem;
+    height: 64rem;
+  }
+
+  .bg-light-mesh-a {
+    width: 58rem;
+    height: 58rem;
+  }
+
+  .bg-light-mesh-b {
+    width: 46rem;
+    height: 46rem;
+  }
+
+  .bg-light-blob-a,
+  .bg-light-blob-b {
+    width: 46rem;
+    height: 46rem;
+  }
+}
+
+@media (min-width: 2200px) {
+  .bg-sunlight {
+    width: 72rem;
+    height: 72rem;
+  }
+
+  .bg-light-mesh-a {
+    width: 64rem;
+    height: 64rem;
+  }
+
+  .bg-light-mesh-b {
+    width: 52rem;
+    height: 52rem;
   }
 }

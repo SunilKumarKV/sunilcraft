@@ -702,6 +702,11 @@ a:hover {
     margin: 56px auto;
     padding: 0;
   }
+
+  .section-gloss-divider {
+    width: min(560px, 86%);
+    margin-bottom: 28px;
+  }
 }
 
 .section-panel {
@@ -732,6 +737,39 @@ a:hover {
   display: grid;
   gap: 0;
   margin-bottom: 30px;
+}
+
+.section-gloss-divider {
+  width: min(720px, 72%);
+  height: 1px;
+  margin: 0 auto 34px;
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--accent-color) 18%, white 10%) 18%,
+    color-mix(in srgb, white 52%, var(--accent-color) 16%) 50%,
+    color-mix(in srgb, var(--accent-color) 18%, white 10%) 82%,
+    transparent 100%
+  );
+  opacity: 0.9;
+}
+
+.section-gloss-divider::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 1px;
+  height: 10px;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--accent-color) 12%, white 22%),
+    transparent 72%
+  );
+  filter: blur(6px);
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 .section-panel h2 {
@@ -769,7 +807,7 @@ a:hover {
 .education-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 18px;
+  gap: 20px;
 }
 
 .glass-card {
@@ -1231,6 +1269,48 @@ textarea:focus-visible {
   .card-row,
   .page-header-actions {
     gap: 10px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .page-shell {
+    width: min(1400px, calc(100% - 72px));
+  }
+
+  .section-panel {
+    width: min(1440px, calc(100% - 80px));
+    margin: 92px auto;
+  }
+
+  .problem-grid {
+    gap: 28px;
+  }
+
+  .feature-grid,
+  .education-grid,
+  .dashboard-grid {
+    gap: 24px;
+  }
+}
+
+@media (min-width: 2200px) {
+  .page-shell {
+    width: min(1560px, calc(100% - 120px));
+  }
+
+  .section-panel {
+    width: min(1600px, calc(100% - 120px));
+    margin: 104px auto;
+  }
+
+  .problem-grid {
+    gap: 32px;
+  }
+
+  .feature-grid,
+  .education-grid,
+  .dashboard-grid {
+    gap: 28px;
   }
 }
 

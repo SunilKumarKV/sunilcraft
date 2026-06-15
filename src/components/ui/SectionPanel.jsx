@@ -3,6 +3,7 @@ import React from "react";
 export default function SectionPanel({ eyebrow, title, description, children, className = "" }) {
   return (
     <section className={`section-panel ${className}`.trim()}>
+      <div className="section-gloss-divider" aria-hidden="true" />
       {(eyebrow || title || description) ? (
         <div className="section-heading">
           {eyebrow ? <span className="section-eyebrow">{eyebrow}</span> : null}

@@ -257,6 +257,45 @@ section + section {
   }
 }
 
+@media (min-width: 1800px) {
+  section {
+    max-width: 1540px;
+  }
+
+  .hero {
+    min-height: calc(82vh - 90px);
+    padding-inline: 52px;
+    gap: 2.4rem 4.8rem;
+  }
+
+  .hero-content {
+    width: min(1320px, 100%);
+  }
+
+  .hero-image {
+    max-width: 372px;
+  }
+}
+
+@media (min-width: 2200px) {
+  section {
+    max-width: 1680px;
+  }
+
+  .hero {
+    padding-inline: 72px;
+    gap: 2.8rem 5.4rem;
+  }
+
+  .hero-content {
+    width: min(1440px, 100%);
+  }
+
+  .hero-image {
+    max-width: 396px;
+  }
+}
+
 @media (min-width: 768px) {
   .hero {
     grid-template-columns: minmax(0, 1.2fr) minmax(290px, 0.62fr);
