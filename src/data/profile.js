@@ -3,7 +3,7 @@ export const profile = {
   brand: "SunilCraft",
   role: "React Developer | Frontend-Focused Full Stack Builder",
   location: "Bengaluru, India",
-  email: "sunilkumarkv44@gmail.com",
+  email: "sunilkumarkv9535@gmail.com",
   resumeUrl: "/Sunil-Kumar-KV-Resume.pdf",
   github: "https://github.com/SunilKumarKV",
   linkedin: "https://www.linkedin.com/in/sunilkumarkv44/",
