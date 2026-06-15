@@ -1,52 +1,71 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Hero from "./components/HeroSection";
-import About from "./components/AboutSection";
-import Projects from "./components/ProjectsSection";
-import Skills from "./components/SkillsSection";
-import RewardsPage from "./components/CertificateGallery";
-import Contact from "./components/ContactSection";
-import NotFound from "./components/NotFound";
-import ProjectDetail from "./components/ProjectDetail";
 import Seo from "./components/Seo";
 import ScrollToTop from "./components/ScrollToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
-
-import ProblemsHome from "./problems/ProblemsHome";
-import JavaScriptProblems from "./problems/javascript/JavaScriptProblems";
-import ProblemLayout from "./problems/javascript/30Days/ProblemLayout";
-import TenDaysCode from "./problems/javascript/10DaysCode";
-import JavaProblems from "./problems/java/JavaProblems";
-import ReactProblems from "./problems/reactjs/ReactProblems";
+import AnimatedBackground from "./components/ui/AnimatedBackground";
 import "./App.css";
+
+const Hero = lazy(() => import("./components/HeroSection"));
+const About = lazy(() => import("./components/AboutPage"));
+const ProjectsPage = lazy(() => import("./components/ProjectsPage"));
+const RewardsPage = lazy(() => import("./components/CertificateGallery"));
+const Contact = lazy(() => import("./components/ContactSection"));
+const NotFound = lazy(() => import("./components/NotFound"));
+const ProjectDetail = lazy(() => import("./components/ProjectDetail"));
+const ProblemsHome = lazy(() => import("./problems/ProblemsHome"));
+const ProblemDetailPage = lazy(() => import("./problems/ProblemDetailPage"));
+const CodebasePage = lazy(() => import("./codebase/CodebasePage"));
+const CodebaseDetailPage = lazy(() => import("./codebase/CodebaseDetailPage"));
+const DashboardPage = lazy(() => import("./dashboard/DashboardPage"));
+const JourneyPage = lazy(() => import("./journey/JourneyPage"));
+const AchievementsPage = lazy(() => import("./achievements/AchievementsPage"));
+
+function RouteFallback() {
+  return (
+    <main className="page-shell">
+      <div className="page-header">
+        <span className="section-eyebrow">Loading</span>
+        <h1>Loading Page</h1>
+        <p>Preparing the next SunilCraft view.</p>
+      </div>
+    </main>
+  );
+}
 
 function App() {
   return (
     <BrowserRouter>
       <ErrorBoundary>
-        <Seo />
-        <ScrollToTop />
-        <Navbar />
-        <Routes>
-        <Route path="/" element={<Hero />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:slug" element={<ProjectDetail />} />
-        <Route path="/skills" element={<Skills />} />
-        <Route path="/rewards" element={<RewardsPage />} />
-        <Route path="/contact" element={<Contact />} />
-
-        <Route path="/problems" element={<ProblemsHome />} />
-        <Route path="/problems/javascript" element={<JavaScriptProblems />} />
-        <Route path="/problems/javascript/30days" element={<ProblemLayout />} />
-        <Route path="/problems/javascript/10days" element={<TenDaysCode />} />
-        <Route path="/problems/java" element={<JavaProblems />} />
-        <Route path="/problems/reactjs" element={<ReactProblems />} />
-        <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Footer />
+        <div className="app-frame">
+          <Seo />
+          <ScrollToTop />
+          <AnimatedBackground />
+          <div className="app-layer">
+            <Navbar />
+            <Suspense fallback={<RouteFallback />}>
+              <Routes>
+                <Route path="/" element={<Hero />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/projects/:slug" element={<ProjectDetail />} />
+                <Route path="/journey" element={<JourneyPage />} />
+                <Route path="/rewards" element={<RewardsPage />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/problems" element={<ProblemsHome />} />
+                <Route path="/problems/:platform/:slug" element={<ProblemDetailPage />} />
+                <Route path="/codebase" element={<CodebasePage />} />
+                <Route path="/codebase/:platform/:slug" element={<CodebaseDetailPage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/achievements" element={<AchievementsPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+            <Footer />
+          </div>
+        </div>
       </ErrorBoundary>
     </BrowserRouter>
   );

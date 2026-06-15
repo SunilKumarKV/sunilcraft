@@ -1,7 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { profile, services } from "../data/profile";
+import Badge from "./ui/Badge";
 import "../styles/AboutSection.css";
-import profilePic from "/assets/images/profile.png";
+import profilePic from "/assets/images/SunilKumar.JPG";
 
 const AboutSection = () => {
   return (
@@ -13,34 +15,41 @@ const AboutSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.7, ease: "easeOut" }}
       >
-        <h2 className="about-title">About Me</h2>
+        <div className="card-row about-badges">
+          <Badge tone="accent">{profile.location}</Badge>
+          <Badge>MCA at Bangalore University</Badge>
+          <Badge tone="success">Open to remote work</Badge>
+        </div>
+        <h2 className="about-title">I build practical web apps while growing into stronger frontend and full-stack work</h2>
 
         <p className="about-description">
-          Hello! I’m <strong>Sunil Kumar K V</strong>, a full-stack and front-end
-          developer from India. I build clean, responsive, and user-friendly
-          applications using React, JavaScript, Node.js, Express, and modern UI
-          tools.
-          <br />
-          I am currently studying MCA and improving production-level project
-          skills through real deployments like SunilCraft, ChessPlay, and
-          DevWithSunil. My strengths are component-based architecture, UI/UX
-          improvement, API integration, debugging, and learning in public.
-          <br />
-          <strong>Skills:</strong> React, JavaScript, HTML5, CSS3, Tailwind CSS,
-          Node.js, Express, MongoDB, Git, Vite, Framer Motion.
+          I&apos;m <strong>{profile.name}</strong>, an MCA student at Bangalore University who moved from a non-software work background into web development through steady project building, coding practice, and learning in public. SunilCraft is where that work is documented in a way recruiters and clients can actually inspect.
         </p>
+        <p className="about-description">
+          I enjoy frontend implementation, UI cleanup, responsive layout work, React architecture, API integration, debugging, and the kind of product thinking that turns a rough idea into something usable. I&apos;m currently looking for remote internships, part-time roles, and freelance web app work where I can keep shipping and improving.
+        </p>
+
+        <div className="about-pillars">
+          {services.slice(0, 4).map((service) => (
+            <article className="about-pillar" key={service.title}>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+            </article>
+          ))}
+        </div>
+
         <div className="about-details">
           <div className="about-card">
-            <h3>10+</h3>
-            <p>Projects Built</p>
+            <h3>React</h3>
+            <p>Frontend systems, dashboards, and portfolio interfaces</p>
           </div>
           <div className="about-card">
-            <h3>3+</h3>
-            <p>Live Deployments</p>
+            <h3>Node.js</h3>
+            <p>Workflow APIs, data sync, and practical full-stack support</p>
           </div>
           <div className="about-card">
-            <h3>2+</h3>
-            <p>Years Experience</p>
+            <h3>GitHub + coding-journal</h3>
+            <p>Real projects, verified solutions, and source-backed proof</p>
           </div>
         </div>
       </motion.div>
@@ -52,7 +61,13 @@ const AboutSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
       >
-        <img src={profilePic} alt="About Me" />
+        <div className="about-image-frame">
+          <img src={profilePic} alt="Sunil Kumar K V" />
+          <div className="about-image-note">
+            <strong>{profile.role}</strong>
+            <span>Clean UI, reliable implementation, and real portfolio proof backed by synced project data.</span>
+          </div>
+        </div>
       </motion.div>
     </section>
   );

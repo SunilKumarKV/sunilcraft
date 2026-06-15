@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ThemeContext } from "../context/theme";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaSun, FaMoon } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
+import LogoMark from "./branding/LogoMark";
 import "../styles/Navbar.css";
 
 export default function Navbar() {
@@ -11,27 +12,48 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
   const handleShowNavbar = () => setIsOpen(!isOpen);
   const handleCloseNavbar = () => setIsOpen(false);
+
+  const isNavActive = (id) => {
+    if (id === "Home") return location.pathname === "/";
+    if (id === "Work") return location.pathname.startsWith("/projects");
+    if (id === "Problems") return location.pathname.startsWith("/problems");
+    if (id === "Codebase") return location.pathname.startsWith("/codebase");
+    if (id === "About") {
+      return (
+        location.pathname.startsWith("/about") ||
+        location.pathname.startsWith("/rewards") ||
+        location.pathname.startsWith("/dashboard") ||
+        location.pathname.startsWith("/journey") ||
+        location.pathname.startsWith("/achievements")
+      );
+    }
+    if (id === "Contact") return location.pathname.startsWith("/contact");
+    return false;
+  };
 
   const handleNavClick = (id) => {
     handleCloseNavbar();
 
-    if (id === "Rewards") {
-      navigate("/rewards");
+    if (id === "Home") {
+      navigate("/");
+    } else if (id === "Work") {
+      navigate("/projects");
     } else if (id === "Problems") {
       navigate("/problems");
+    } else if (id === "Codebase") {
+      navigate("/codebase");
+    } else if (id === "About") {
+      navigate("/about");
+    } else if (id === "Contact") {
+      navigate("/contact");
     } else {
-      if (location.pathname !== "/") {
-        navigate("/");
-        setTimeout(() => {
-          const el = document.getElementById(id);
-          if (el) el.scrollIntoView({ behavior: "smooth" });
-        }, 100); // wait for homepage to load
-      } else {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }
+      navigate("/");
     }
   };
 
@@ -40,8 +62,8 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="container">
           {/* Logo */}
-          <button className="logo" type="button" onClick={() => handleNavClick("home")} aria-label="Go to home">
-            <div className="logo-icon">S</div>
+          <button className="logo" type="button" onClick={() => handleNavClick("Home")} aria-label="SunilCraft home">
+            <LogoMark />
             <div className="logo-text">SunilCraft</div>
           </button>
 
@@ -55,39 +77,35 @@ export default function Navbar() {
               {theme === "dark" ? <FaSun /> : <FaMoon />}
             </button>
 
-            <div
+            <button
+              type="button"
               className={`menu-icon ${isOpen ? "open" : ""}`}
               onClick={handleShowNavbar}
               aria-label="Toggle menu"
-              role="button"
-              tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") handleShowNavbar();
               }}
             >
               <GiHamburgerMenu />
-            </div>
+            </button>
           </div>
 
           {/* Navigation Menu */}
           <div className={`menu-list ${isOpen ? "active" : ""}`}>
             <ul>
               {[
-                "home",
-                "about",
-                "projects",
-                "skills",
-                "services",
-                "journey",
-                "Rewards",
+                "Home",
+                "Work",
                 "Problems",
-                "contact",
+                "Codebase",
+                "About",
+                "Contact",
               ].map((id) => (
                 <li key={id}>
                   <button
                     onClick={() => handleNavClick(id)}
-                    className={`menu-item ${location.pathname === `/${id.toLowerCase()}` || (location.pathname === "/" && id === "home") ? "active" : ""}`}
-                    aria-current={location.pathname === `/${id.toLowerCase()}` ? "page" : undefined}
+                    className={`menu-item ${isNavActive(id) ? "active" : ""}`}
+                    aria-current={isNavActive(id) ? "page" : undefined}
                     style={{
                       background: "none",
                       border: "none",
@@ -96,7 +114,7 @@ export default function Navbar() {
                       font: "inherit",
                     }}
                   >
-                    {id.charAt(0).toUpperCase() + id.slice(1)}
+                    {id}
                   </button>
                 </li>
               ))}

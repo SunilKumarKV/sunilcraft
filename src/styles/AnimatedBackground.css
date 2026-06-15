@@ -1,0 +1,235 @@
+.animated-background {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-light-blob,
+.bg-dark-glow,
+.bg-aurora,
+.bg-reflection {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(60px);
+}
+
+.bg-aurora {
+  background: radial-gradient(circle, rgba(76, 182, 255, 0.22), rgba(76, 182, 255, 0));
+  opacity: 0.28;
+}
+
+.bg-aurora-a {
+  width: 34rem;
+  height: 34rem;
+  top: -2%;
+  right: -8%;
+}
+
+.bg-aurora-b {
+  width: 30rem;
+  height: 30rem;
+  bottom: 4%;
+  left: -8%;
+}
+
+.bg-light-blob {
+  background: radial-gradient(circle, rgba(0, 123, 255, 0.18), rgba(0, 123, 255, 0));
+  opacity: 0.26;
+}
+
+.bg-light-blob-a {
+  width: 32rem;
+  height: 32rem;
+  top: 4%;
+  left: -6%;
+}
+
+.bg-light-blob-b {
+  width: 28rem;
+  height: 28rem;
+  top: 36%;
+  right: -8%;
+}
+
+.bg-light-blob-c {
+  width: 22rem;
+  height: 22rem;
+  bottom: 8%;
+  left: 34%;
+}
+
+.bg-reflection {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  opacity: 0.22;
+}
+
+.bg-reflection-a {
+  width: 24rem;
+  height: 24rem;
+  top: 8%;
+  right: 12%;
+}
+
+.bg-reflection-b {
+  width: 20rem;
+  height: 20rem;
+  bottom: 18%;
+  left: 10%;
+}
+
+.bg-dark-glow {
+  background: radial-gradient(circle, rgba(76, 182, 255, 0.22), rgba(76, 182, 255, 0));
+  opacity: 0.22;
+}
+
+.bg-dark-glow-a {
+  width: 28rem;
+  height: 28rem;
+  top: 6%;
+  left: -4%;
+}
+
+.bg-dark-glow-b {
+  width: 24rem;
+  height: 24rem;
+  bottom: 8%;
+  right: -6%;
+}
+
+.bg-particles {
+  position: absolute;
+  inset: 0;
+}
+
+.bg-particle {
+  position: absolute;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.1);
+}
+
+.bg-particles.light .bg-particle {
+  background: rgba(0, 123, 255, 0.13);
+  box-shadow: 0 0 14px rgba(0, 123, 255, 0.09);
+}
+
+.bg-code-rain {
+  position: absolute;
+  inset: 0;
+}
+
+.bg-code-symbol {
+  position: absolute;
+  color: rgba(162, 220, 255, 0.2);
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  text-shadow: 0 0 22px rgba(76, 182, 255, 0.08);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bg-light-blob {
+    animation: blobFloat 18s ease-in-out infinite;
+  }
+
+  .bg-reflection {
+    animation: blobFloat 22s ease-in-out infinite;
+  }
+
+  .bg-dark-glow {
+    animation: glowFloat 20s ease-in-out infinite;
+  }
+
+  .bg-aurora {
+    animation: auroraFloat 26s ease-in-out infinite;
+  }
+
+  .bg-particle {
+    animation: sparkleFloat 10s ease-in-out infinite;
+  }
+
+  .bg-code-symbol {
+    animation: codeDrift ease-in-out infinite alternate;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-light-blob,
+  .bg-reflection,
+  .bg-dark-glow,
+  .bg-aurora,
+  .bg-particle,
+  .bg-code-symbol {
+    animation: none !important;
+  }
+}
+
+@keyframes blobFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, 22px, 0) scale(1.06);
+  }
+}
+
+@keyframes glowFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.16;
+  }
+  50% {
+    transform: translate3d(0, 24px, 0);
+    opacity: 0.24;
+  }
+}
+
+@keyframes auroraFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate3d(0, 18px, 0) scale(1.08);
+    opacity: 0.26;
+  }
+}
+
+@keyframes sparkleFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 0.18;
+  }
+  50% {
+    transform: translate3d(0, -14px, 0) scale(1.12);
+    opacity: 0.32;
+  }
+}
+
+@keyframes codeDrift {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.08;
+  }
+  35% {
+    transform: translate3d(8px, 16px, 0);
+    opacity: 0.18;
+  }
+  70% {
+    transform: translate3d(-10px, 28px, 0);
+    opacity: 0.14;
+  }
+  100% {
+    transform: translate3d(4px, 40px, 0);
+    opacity: 0.1;
+  }
+}
