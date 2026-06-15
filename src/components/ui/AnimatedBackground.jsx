@@ -75,6 +75,18 @@ export default function AnimatedBackground() {
     []
   );
 
+  const sparkles = useMemo(
+    () =>
+      createItems(12, (index) => ({
+        id: `sparkle-${index}`,
+        left: `${8 + (index * 7.4) % 84}%`,
+        delay: `${(index % 6) * 1.2}s`,
+        duration: `${14 + (index % 5) * 2.8}s`,
+        size: `${2 + (index % 3) * 1.4}px`,
+      })),
+    []
+  );
+
   return (
     <div className={`animated-background ${theme}`} aria-hidden="true">
       {theme === "dark" ? (
@@ -166,6 +178,8 @@ export default function AnimatedBackground() {
         </>
       ) : (
         <>
+          <div className="bg-light-spotlight" />
+          <div className="bg-sunlight" />
           <div className="bg-light-mesh bg-light-mesh-a" />
           <div className="bg-light-mesh bg-light-mesh-b" />
           <div className="bg-light-blob bg-light-blob-a" />
@@ -186,6 +200,21 @@ export default function AnimatedBackground() {
                   height: particle.size,
                   animationDelay: particle.delay,
                   animationDuration: particle.duration,
+                }}
+              />
+            ))}
+          </div>
+          <div className="bg-light-sparkles">
+            {sparkles.map((sparkle) => (
+              <span
+                key={sparkle.id}
+                className="bg-light-sparkle"
+                style={{
+                  left: sparkle.left,
+                  width: sparkle.size,
+                  height: sparkle.size,
+                  animationDelay: sparkle.delay,
+                  animationDuration: sparkle.duration,
                 }}
               />
             ))}

@@ -10,21 +10,22 @@
     linear-gradient(180deg, rgba(7, 11, 23, 0.08), transparent 38%);
 }
 
-.animated-background::after {
-  content: "";
+.bg-light-spotlight {
   position: absolute;
   inset: 0;
   background: radial-gradient(
     360px circle at var(--bg-spotlight-x, 50%) var(--bg-spotlight-y, 20%),
-    rgba(162, 208, 255, 0.14),
+    rgba(176, 220, 255, 0.22),
     transparent 65%
   );
-  opacity: 0.7;
+  opacity: 0.92;
   transition: opacity 0.28s ease;
+  will-change: transform, opacity;
 }
 
 .bg-galaxy,
 .bg-dark-haze,
+.bg-sunlight,
 .bg-light-blob,
 .bg-reflection,
 .bg-light-mesh {
@@ -84,6 +85,7 @@
 .bg-falling-particles,
 .bg-code-field,
 .bg-light-particles,
+.bg-light-sparkles,
 .bg-shooting-stars {
   position: absolute;
   inset: 0;
@@ -93,6 +95,7 @@
 .bg-twinkle,
 .bg-falling-particle,
 .bg-light-particle,
+.bg-light-sparkle,
 .bg-shooting-star {
   position: absolute;
   border-radius: 999px;
@@ -139,9 +142,22 @@
   white-space: nowrap;
 }
 
+.bg-sunlight {
+  width: 48rem;
+  height: 48rem;
+  top: -24%;
+  right: -10%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 244, 224, 0.74), rgba(255, 244, 224, 0.34) 26%, rgba(255, 244, 224, 0) 62%),
+    radial-gradient(circle, rgba(177, 217, 255, 0.22), rgba(177, 217, 255, 0));
+  opacity: 0.9;
+}
+
 .bg-light-mesh {
-  background: radial-gradient(circle, rgba(123, 188, 255, 0.18), rgba(123, 188, 255, 0));
-  opacity: 0.34;
+  background:
+    radial-gradient(circle at 30% 35%, rgba(169, 219, 255, 0.28), rgba(169, 219, 255, 0) 56%),
+    radial-gradient(circle at 70% 65%, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 54%);
+  opacity: 0.46;
 }
 
 .bg-light-mesh-a {
@@ -159,8 +175,8 @@
 }
 
 .bg-light-blob {
-  background: radial-gradient(circle, rgba(94, 171, 255, 0.24), rgba(94, 171, 255, 0));
-  opacity: 0.44;
+  background: radial-gradient(circle, rgba(94, 171, 255, 0.28), rgba(94, 171, 255, 0));
+  opacity: 0.5;
 }
 
 .bg-light-blob-a {
@@ -216,6 +232,13 @@
   opacity: 0.48;
 }
 
+.bg-light-sparkle {
+  top: -10%;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 0 16px rgba(167, 211, 255, 0.34);
+  opacity: 0.62;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .bg-galaxy {
     animation: galaxyDrift 24s ease-in-out infinite alternate;
@@ -250,6 +273,10 @@
     animation: lightBlobFloat 18s ease-in-out infinite alternate;
   }
 
+  .bg-sunlight {
+    animation: sunlightDrift 24s ease-in-out infinite alternate;
+  }
+
   .bg-reflection {
     animation: reflectionDrift 16s ease-in-out infinite alternate;
   }
@@ -257,10 +284,14 @@
   .bg-light-particle {
     animation: lightParticleFloat ease-in-out infinite;
   }
+
+  .bg-light-sparkle {
+    animation: lightSparkleFall linear infinite;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animated-background::after,
+  .bg-light-spotlight,
   .bg-galaxy,
   .bg-dark-haze,
   .bg-star,
@@ -268,10 +299,12 @@
   .bg-falling-particle,
   .bg-shooting-star,
   .bg-code-symbol,
+  .bg-sunlight,
   .bg-light-mesh,
   .bg-light-blob,
   .bg-reflection,
-  .bg-light-particle {
+  .bg-light-particle,
+  .bg-light-sparkle {
     animation: none !important;
   }
 }
@@ -373,6 +406,17 @@
   }
 }
 
+@keyframes sunlightDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.82;
+  }
+  100% {
+    transform: translate3d(-3%, 3%, 0) scale(1.06);
+    opacity: 1;
+  }
+}
+
 @keyframes reflectionDrift {
   0% {
     transform: translate3d(0, 0, 0);
@@ -395,17 +439,32 @@
   }
 }
 
+@keyframes lightSparkleFall {
+  0% {
+    transform: translate3d(0, -8vh, 0) scale(0.8);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.72;
+  }
+  100% {
+    transform: translate3d(0, 112vh, 0) scale(1.1);
+    opacity: 0;
+  }
+}
+
 @media (max-width: 640px) {
-  .animated-background::after {
+  .bg-light-spotlight {
     background: radial-gradient(
-      220px circle at 50% 18%,
-      rgba(162, 208, 255, 0.12),
-      transparent 70%
+      250px circle at var(--bg-spotlight-x, 50%) var(--bg-spotlight-y, 20%),
+      rgba(176, 220, 255, 0.18),
+      transparent 65%
     );
   }
 
   .bg-galaxy-a,
   .bg-galaxy-b,
+  .bg-sunlight,
   .bg-light-mesh-a,
   .bg-light-blob-a,
   .bg-light-blob-b {

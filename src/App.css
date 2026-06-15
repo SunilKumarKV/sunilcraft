@@ -362,6 +362,7 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  align-content: start;
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--card-bg) 92%, transparent),
@@ -644,11 +645,17 @@ a:hover {
   overflow-wrap: anywhere;
 }
 
+.problem-detail-card code {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .problem-actions-row {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
+  min-width: 0;
 }
 
 .empty-state.small {
@@ -672,6 +679,10 @@ a:hover {
 
   .page-button.compact {
     justify-content: center;
+  }
+
+  .filter-bar {
+    gap: 12px;
   }
 
   .page-header.page-header-left {
@@ -1200,12 +1211,29 @@ textarea:focus-visible {
   .page-meta-strip.compact {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .problem-detail-header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 480px) {
   .page-meta-strip,
   .page-meta-strip.compact {
     grid-template-columns: 1fr;
+  }
+
+  .problem-card,
+  .glass-card,
+  .problem-detail-card {
+    padding: 20px 16px;
+  }
+
+  .problem-actions-row,
+  .card-row,
+  .page-header-actions {
+    gap: 10px;
   }
 }
 
