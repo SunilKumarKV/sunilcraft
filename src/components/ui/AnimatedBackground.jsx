@@ -189,6 +189,8 @@ export default function AnimatedBackground() {
           <div className="bg-light-blob bg-light-blob-a" />
           <div className="bg-light-blob bg-light-blob-b" />
           <div className="bg-light-blob bg-light-blob-c" />
+          <div className="bg-light-blob bg-light-blob-d" />
+          <div className="bg-light-blob bg-light-blob-e" />
           <div className="bg-reflection bg-reflection-a" />
           <div className="bg-reflection bg-reflection-b" />
           <div className="bg-reflection bg-reflection-c" />

@@ -1,17 +1,36 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FaEnvelope, FaGithub, FaLinkedinIn } from "react-icons/fa";
 import "../styles/Footer.css";
 
-const openToItems = [
-  "Remote internships",
-  "Part-time roles",
-  "Freelance frontend/full-stack work",
-];
-
-const connectLinks = [
+const socialLinks = [
   { label: "GitHub", href: "https://github.com/SunilKumarKV", icon: <FaGithub /> },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/sunilkumarkv44/", icon: <FaLinkedinIn /> },
   { label: "Email", href: "mailto:sunilkumarkv44@gmail.com", icon: <FaEnvelope /> },
+];
+
+const quickLinks = [
+  { label: "Work", to: "/projects" },
+  { label: "Projects", to: "/projects" },
+  { label: "Problems", to: "/problems" },
+  { label: "Codebase", to: "/codebase" },
+  { label: "Dashboard", to: "/dashboard" },
+  { label: "About", to: "/about" },
+  { label: "Contact", to: "/contact" },
+];
+
+const focusItems = [
+  "MCA @ Bangalore University",
+  "React",
+  "Node.js",
+  "TypeScript",
+  "Frontend Engineering",
+];
+
+const openToItems = [
+  "Remote Internships",
+  "Part-Time Roles",
+  "Freelance Projects",
 ];
 
 function Footer() {
@@ -21,25 +40,65 @@ function Footer() {
         <div className="footer-grid">
           <section className="footer-column footer-brand-column">
             <span className="footer-kicker">SunilCraft</span>
-            <h2>Sunil Kumar K V</h2>
-            <p>Building products and improving every day.</p>
+            <h2>SunilCraft</h2>
+            <div className="footer-role-list" aria-label="Role focus">
+              <span>Frontend Developer</span>
+              <span>React Developer</span>
+              <span>Full Stack Developer</span>
+            </div>
+            <p>Building products, solving problems, and sharing my journey publicly.</p>
+            <div className="footer-social-row">
+              {socialLinks.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target={item.href.startsWith("mailto:") ? undefined : "_blank"}
+                  rel={item.href.startsWith("mailto:") ? undefined : "noreferrer"}
+                  className="footer-social-chip"
+                >
+                  <span className="footer-link-icon">{item.icon}</span>
+                  <span>{item.label}</span>
+                </a>
+              ))}
+            </div>
           </section>
 
           <section className="footer-column">
-            <h3>Open To</h3>
+            <h3>Quick Links</h3>
             <ul className="footer-link-list">
-              {openToItems.map((item) => (
-                <li key={item}>{item}</li>
+              {quickLinks.map((item) => (
+                <li key={item.label}>
+                  <Link to={item.to} className="footer-nav-link">
+                    {item.label}
+                  </Link>
+                </li>
               ))}
             </ul>
           </section>
 
           <section className="footer-column">
-            <h3>Connect</h3>
+            <h3>Current Focus</h3>
+            <ul className="footer-link-list footer-focus-list">
+              {focusItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <div className="footer-open-to">
+              <span className="footer-open-to-label">Open to:</span>
+              <ul className="footer-link-list">
+                {openToItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
             <ul className="footer-link-list footer-connect-list">
-              {connectLinks.map((item) => (
+              {socialLinks.map((item) => (
                 <li key={item.label}>
-                  <a href={item.href} target={item.href.startsWith("mailto:") ? undefined : "_blank"} rel={item.href.startsWith("mailto:") ? undefined : "noreferrer"}>
+                  <a
+                    href={item.href}
+                    target={item.href.startsWith("mailto:") ? undefined : "_blank"}
+                    rel={item.href.startsWith("mailto:") ? undefined : "noreferrer"}
+                  >
                     <span className="footer-link-icon">{item.icon}</span>
                     <span>{item.label}</span>
                   </a>

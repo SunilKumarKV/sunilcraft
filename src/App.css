@@ -700,27 +700,23 @@ a:hover {
   .section-panel {
     width: min(1180px, calc(100% - 20px));
     margin: 56px auto;
-    padding: 40px 16px;
+    padding: 0;
   }
 }
 
 .section-panel {
   width: min(1180px, calc(100% - 32px));
-  margin: 72px auto;
-  padding: 56px 24px;
-  border-radius: 32px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--card-bg) 28%, transparent),
-    color-mix(in srgb, var(--card-bg) 16%, var(--accent-color) 2%)
-  );
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  border: 1px solid color-mix(in srgb, var(--accent-color) 4%, transparent);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  margin: 80px auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   animation: pageFadeUp 0.55s ease both;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   isolation: isolate;
   transform: translateY(var(--lift, 0px)) perspective(1400px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
@@ -730,6 +726,12 @@ a:hover {
 .timeline-panel,
 .contact-cta-panel {
   position: relative;
+}
+
+.section-heading {
+  display: grid;
+  gap: 0;
+  margin-bottom: 30px;
 }
 
 .section-panel h2 {
@@ -1036,7 +1038,6 @@ textarea:focus-visible {
 
 .problem-card:hover,
 .glass-card:hover,
-.section-panel:hover,
 .hero-image-card:hover,
 .hero-stat-card:hover,
 .contact-method:hover {
@@ -1094,7 +1095,6 @@ textarea:focus-visible {
 
   .problem-card,
   .glass-card,
-  .section-panel,
   .hero-image-card,
   .hero-stat-card,
   .page-button,

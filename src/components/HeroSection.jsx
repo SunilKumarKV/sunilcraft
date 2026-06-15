@@ -194,10 +194,15 @@ export default function HeroSection() {
             <div className="hero-image-copy">
               <span className="hero-image-name">Sunil Kumar K V</span>
               <strong>{profile.role}</strong>
-              <div className="hero-image-tags">
-                <Badge tone="accent">Frontend Developer</Badge>
-                <Badge>React Developer</Badge>
-                <Badge tone="success">Open to Freelance</Badge>
+              <div className="hero-image-meta">
+                <div className="hero-image-meta-item">
+                  <span className="hero-image-meta-label">Location</span>
+                  <span className="hero-image-meta-value">Bangalore, India</span>
+                </div>
+                <div className="hero-image-meta-item">
+                  <span className="hero-image-meta-label">Status</span>
+                  <span className="hero-image-meta-value">Available for internships & freelance</span>
+                </div>
               </div>
               <p className="hero-image-caption">Building in public through real projects.</p>
             </div>

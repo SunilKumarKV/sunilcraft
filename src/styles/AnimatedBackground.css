@@ -201,6 +201,22 @@
   left: 26%;
 }
 
+.bg-light-blob-d {
+  width: 26rem;
+  height: 26rem;
+  top: 12%;
+  right: 18%;
+  opacity: 0.42;
+}
+
+.bg-light-blob-e {
+  width: 22rem;
+  height: 22rem;
+  bottom: 12%;
+  right: 22%;
+  opacity: 0.38;
+}
+
 .bg-reflection {
   background: radial-gradient(circle, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
   opacity: 0.42;
