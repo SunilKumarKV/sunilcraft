@@ -118,6 +118,8 @@ export default function HeroSection() {
     return () => window.cancelAnimationFrame(frameId);
   }, [prefersReducedMotion, summary.problems, summary.repositories, summary.verified]);
 
+  const heroNumber = (value) => (loading ? "--" : value || 0);
+
   return (
     <main className="home-shell">
       <section className="hero" id="home">
@@ -134,6 +136,12 @@ export default function HeroSection() {
             MCA student at Bangalore University building developer tools, portfolio systems, coding workflows, and product-focused web applications with React and Node.js.
           </p>
 
+          <div className="hero-actions" aria-label="Primary actions">
+            <Link to="/projects" className="hero-button">Explore Work</Link>
+            <Link to="/dashboard" className="hero-button secondary">Open Dashboard</Link>
+            <a href={profile.github} className="hero-button secondary" target="_blank" rel="noreferrer">GitHub</a>
+          </div>
+
           <div className="hero-trust">
             <Badge tone="accent">GitHub synced</Badge>
             <Badge tone="success">Verified solutions</Badge>
@@ -142,15 +150,15 @@ export default function HeroSection() {
 
           <div className="hero-stats" aria-label="Portfolio stats">
             <article className="hero-stat-card">
-              <strong>{metricDisplay.repositories || 0}</strong>
+              <strong>{heroNumber(metricDisplay.repositories)}</strong>
               <span>Repositories</span>
             </article>
             <article className="hero-stat-card">
-              <strong>{metricDisplay.problems || 0}</strong>
+              <strong>{heroNumber(metricDisplay.problems)}</strong>
               <span>Problems Solved</span>
             </article>
             <article className="hero-stat-card">
-              <strong>{metricDisplay.verified || 0}</strong>
+              <strong>{heroNumber(metricDisplay.verified)}</strong>
               <span>Verified Solutions</span>
             </article>
           </div>
@@ -159,13 +167,8 @@ export default function HeroSection() {
         <div className="hero-image">
           <div className="hero-image-card">
             <img src={HeroPic} alt="Sunil Kumar K V profile" loading="eager" />
+            <p className="hero-image-caption">Building in public through real projects</p>
           </div>
-        </div>
-
-        <div className="hero-actions hero-actions-stage" aria-label="Primary actions">
-          <Link to="/projects" className="hero-button">Explore Work</Link>
-          <Link to="/dashboard" className="hero-button secondary">Open Dashboard</Link>
-          <a href={profile.github} className="hero-button secondary" target="_blank" rel="noreferrer">GitHub</a>
         </div>
       </section>
 
