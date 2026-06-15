@@ -6,7 +6,7 @@ import "../styles/Footer.css";
 const socialLinks = [
   { label: "GitHub", href: "https://github.com/SunilKumarKV", icon: <FaGithub /> },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/sunilkumarkv44/", icon: <FaLinkedinIn /> },
-  { label: "Email", href: "mailto:sunilkumarkv44@gmail.com", icon: <FaEnvelope /> },
+  { label: "Email", href: "mailto:sunilkumarkv9535@gmail.com", icon: <FaEnvelope /> },
 ];
 
 const quickLinks = [
@@ -34,7 +34,7 @@ const openToItems = [
 ];
 
 const contactLinks = [
-  { label: "Email", href: "mailto:sunilkumarkv44@gmail.com", icon: <FaEnvelope /> },
+  { label: "Email", href: "mailto:sunilkumarkv9535@gmail.com", icon: <FaEnvelope /> },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/sunilkumarkv44/", icon: <FaLinkedinIn /> },
   { label: "GitHub", href: "https://github.com/SunilKumarKV", icon: <FaGithub /> },
 ];
