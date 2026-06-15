@@ -265,6 +265,7 @@ export default function JourneyPage() {
         title="Journey"
         description="A timeline of the projects, problems, and milestones I’m building over time."
         align="left"
+        className="page-header-journey"
       />
 
       {loading ? (
@@ -281,16 +282,32 @@ export default function JourneyPage() {
         </SectionPanel>
       ) : (
         <>
-          <section className="section-panel">
-            <span className="section-eyebrow">Timeline</span>
-            <h2>Month by Month</h2>
+          <section className="page-meta-strip compact">
+            <article className="meta-strip-card">
+              <span>Timeline groups</span>
+              <strong>{journey.groupedTimeline.length}</strong>
+            </article>
+            <article className="meta-strip-card">
+              <span>Projects</span>
+              <strong>{journey.projectCount}</strong>
+            </article>
+            <article className="meta-strip-card">
+              <span>Problems</span>
+              <strong>{journey.problemCount}</strong>
+            </article>
+          </section>
+
+          <SectionPanel eyebrow="Timeline" title="Month by Month" className="timeline-panel">
 
             {journey.groupedTimeline.length ? (
-              <div className="timeline-list">
+              <div className="timeline-month-list">
                 {journey.groupedTimeline.map((group) => (
-                  <article className="timeline-item" key={group.month}>
-                    <span>{group.month}</span>
-                    <div>
+                  <article className="timeline-month-card" key={group.month}>
+                    <div className="timeline-month-head">
+                      <span>{group.month}</span>
+                      <strong>{group.events.length} events</strong>
+                    </div>
+                    <div className="timeline-event-stack">
                       {group.events.map((event) => (
                         <div key={`${event.type}-${event.title}-${event.date}`} className="journey-event">
                           <h3>{event.title}</h3>
@@ -308,26 +325,22 @@ export default function JourneyPage() {
                 <p>The current coding-journal feeds do not yet expose enough dated entries to build a month-grouped timeline.</p>
               </article>
             )}
-          </section>
+          </SectionPanel>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Achievements</span>
-            <h2>Milestones</h2>
-            <div className="feature-grid">
+          <SectionPanel eyebrow="Achievements" title="Milestones" className="timeline-panel">
+            <div className="dashboard-grid">
               {journey.achievements.map((achievement) => (
-                <article className="glass-card" key={achievement.title}>
+                <article className="glass-card widget-card" key={achievement.title}>
                   <h3>{achievement.title}</h3>
                   <p>{achievement.achieved ? "Unlocked" : "In Progress"}</p>
                   <p>{achievement.detail}</p>
                 </article>
               ))}
             </div>
-          </section>
+          </SectionPanel>
 
           {!journey.hasProblemDates ? (
-            <section className="section-panel">
-              <span className="section-eyebrow">Feed Coverage</span>
-              <h2>Problem History Notes</h2>
+            <SectionPanel eyebrow="Feed Coverage" title="Problem History Notes" className="timeline-panel">
               <article className="glass-card">
                 <h3>Problem events will expand automatically</h3>
                 <p>
@@ -338,7 +351,7 @@ export default function JourneyPage() {
                   events without code changes.
                 </p>
               </article>
-            </section>
+            </SectionPanel>
           ) : null}
         </>
       )}

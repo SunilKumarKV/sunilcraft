@@ -90,6 +90,16 @@ export default function ProblemsHome() {
     });
   }, [difficulty, platform, problems, query, tag, verified]);
 
+  const problemSummary = useMemo(() => {
+    const verifiedCount = problems.filter((problem) => problem.verified).length;
+    return {
+      total: problems.length,
+      verified: verifiedCount,
+      platforms: Math.max(0, platforms.length - 1),
+      tags: Math.max(0, tags.length - 1),
+    };
+  }, [platforms.length, problems, tags.length]);
+
   return (
     <main className="page-shell problems-home">
       <PageHeader
@@ -97,13 +107,38 @@ export default function ProblemsHome() {
         title="Problems"
         description="A verified record of coding problems I’ve solved, tested, and documented."
         align="left"
+        className="page-header-journal"
       />
 
-      <DeveloperMetrics />
+      <section className="page-meta-strip compact">
+        <article className="meta-strip-card">
+          <span>Total</span>
+          <strong>{problemSummary.total}</strong>
+        </article>
+        <article className="meta-strip-card">
+          <span>Verified</span>
+          <strong>{problemSummary.verified}</strong>
+        </article>
+        <article className="meta-strip-card">
+          <span>Platforms</span>
+          <strong>{problemSummary.platforms}</strong>
+        </article>
+        <article className="meta-strip-card">
+          <span>Tags</span>
+          <strong>{problemSummary.tags}</strong>
+        </article>
+      </section>
 
-      <SectionPanel eyebrow="Problem Explorer" title="Browse Problems">
-
-        <FilterBar>
+      <SectionPanel
+        eyebrow="Problem Explorer"
+        title="Browse Problems"
+        description="Search the journal feed, then move directly into platform-specific detail pages."
+        className="explorer-panel"
+      >
+        <FilterBar
+          title="Coding-journal explorer"
+          description="Filter by platform, difficulty, verification status, and tags without leaving the page."
+        >
           <input
             type="search"
             value={query}
@@ -148,32 +183,46 @@ export default function ProblemsHome() {
         ) : !filteredProblems.length ? (
           <EmptyState title="No matching problems" message="Try clearing one or more filters to see more results." />
         ) : (
-          <div className="problem-grid">
-            {filteredProblems.map((problem) => (
-              <Link
-                to={`/problems/${toPlatformSegment(problem.platform)}/${problem.slug}`}
-                className="problem-card"
-                key={`${problem.platform}-${problem.slug}`}
-              >
-                <div className="card-row">
-                  <Badge tone="accent">{problem.platform}</Badge>
-                  <Badge>{problem.difficulty || "Unknown"}</Badge>
-                  <Badge>{problem.language || "Unknown"}</Badge>
-                  {problem.verified ? <Badge tone="success">Verified</Badge> : null}
-                </div>
-                <h2>{problem.title}</h2>
-                {(problem.tags || []).length ? (
+          <div className="page-two-column explorer-two-column">
+            <aside className="glass-card sidebar-panel">
+              <h3>Explorer Notes</h3>
+              <p>Everything here is pulled from coding-journal. Verified entries are the fastest way to inspect tested and documented work.</p>
+              <div className="sidebar-stat-list">
+                <div><span>Visible results</span><strong>{filteredProblems.length}</strong></div>
+                <div><span>Verified in feed</span><strong>{problemSummary.verified}</strong></div>
+                <div><span>Platforms tracked</span><strong>{problemSummary.platforms}</strong></div>
+              </div>
+            </aside>
+
+            <div className="problem-grid">
+              {filteredProblems.map((problem) => (
+                <Link
+                  to={`/problems/${toPlatformSegment(problem.platform)}/${problem.slug}`}
+                  className="problem-card"
+                  key={`${problem.platform}-${problem.slug}`}
+                >
                   <div className="card-row">
-                    {problem.tags.slice(0, 4).map((tagName) => (
-                      <Badge key={tagName}>{tagName}</Badge>
-                    ))}
+                    <Badge tone="accent">{problem.platform}</Badge>
+                    <Badge>{problem.difficulty || "Unknown"}</Badge>
+                    <Badge>{problem.language || "Unknown"}</Badge>
+                    {problem.verified ? <Badge tone="success">Verified</Badge> : null}
                   </div>
-                ) : null}
-              </Link>
-            ))}
+                  <h2>{problem.title}</h2>
+                  {(problem.tags || []).length ? (
+                    <div className="card-row">
+                      {problem.tags.slice(0, 4).map((tagName) => (
+                        <Badge key={tagName}>{tagName}</Badge>
+                      ))}
+                    </div>
+                  ) : null}
+                </Link>
+              ))}
+            </div>
           </div>
         )}
       </SectionPanel>
+
+      <DeveloperMetrics title="Developer Activity" />
     </main>
   );
 }
