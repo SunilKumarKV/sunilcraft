@@ -134,16 +134,6 @@ export default function CodebasePage() {
     "Multi-platform ready",
   ];
 
-  const librarySummary = useMemo(
-    () => ({
-      entries: problems.length,
-      verifiedCount: problems.filter((problem) => problem.verified).length,
-      languages: Math.max(0, languages.length - 1),
-      platforms: Math.max(0, platforms.length - 1),
-    }),
-    [languages.length, platforms.length, problems]
-  );
-
   return (
     <main className="page-shell">
       <PageHeader
@@ -151,29 +141,11 @@ export default function CodebasePage() {
         title="Codebase"
         description="My personal solution library with source code, tests, explanations, and complexity notes."
         align="left"
-        className="page-header-library"
       />
 
-      <section className="page-meta-strip compact">
-        <article className="meta-strip-card">
-          <span>Entries</span>
-          <strong>{librarySummary.entries}</strong>
-        </article>
-        <article className="meta-strip-card">
-          <span>Verified</span>
-          <strong>{librarySummary.verifiedCount}</strong>
-        </article>
-        <article className="meta-strip-card">
-          <span>Languages</span>
-          <strong>{librarySummary.languages}</strong>
-        </article>
-        <article className="meta-strip-card">
-          <span>Platforms</span>
-          <strong>{librarySummary.platforms}</strong>
-        </article>
-      </section>
-
-      <SectionPanel eyebrow="Workflow Guide" title="How this Codebase updates" className="workflow-panel">
+      <section className="section-panel">
+        <span className="section-eyebrow">Workflow Guide</span>
+        <h2>How this Codebase updates</h2>
         <div className="feature-grid">
           {workflowSteps.map((step, index) => (
             <article className="glass-card" key={step}>
@@ -185,15 +157,18 @@ export default function CodebasePage() {
 
         <div className="problem-grid" style={{ marginTop: "24px" }}>
           {syncBadges.map((badge) => (
-            <article className="problem-card compact-card" key={badge}>
+            <article className="problem-card" key={badge}>
               <span className="problem-stat">Codebase</span>
               <h2>{badge}</h2>
             </article>
           ))}
         </div>
-      </SectionPanel>
+      </section>
 
-      <SectionPanel eyebrow="Code Groups" title="By Language, Platform, and Tag" className="library-groups-panel">
+      <section className="section-panel">
+        <span className="section-eyebrow">Code Groups</span>
+        <h2>By Language, Platform, and Tag</h2>
+
         {loading ? (
           <LoadingState title="Loading code groups" message="Fetching grouped codebase data from coding-journal." />
         ) : error ? (
@@ -204,42 +179,25 @@ export default function CodebasePage() {
           <div className="feature-grid">
             <article className="glass-card">
               <h3>Languages</h3>
-              <div className="card-row">
-                {groupedMetrics.languages.map(([name, count]) => (
-                  <Badge key={name}>{name} ({count})</Badge>
-                ))}
-              </div>
+              <p>{groupedMetrics.languages.map(([name, count]) => `${name} (${count})`).join(", ")}</p>
             </article>
             <article className="glass-card">
               <h3>Platforms</h3>
-              <div className="card-row">
-                {groupedMetrics.platforms.map(([name, count]) => (
-                  <Badge key={name} tone="accent">{name} ({count})</Badge>
-                ))}
-              </div>
+              <p>{groupedMetrics.platforms.map(([name, count]) => `${name} (${count})`).join(", ")}</p>
             </article>
             <article className="glass-card">
               <h3>Tags</h3>
-              <div className="card-row">
-                {groupedMetrics.tags.slice(0, 10).map(([name, count]) => (
-                  <Badge key={name}>{name} ({count})</Badge>
-                ))}
-              </div>
+              <p>{groupedMetrics.tags.map(([name, count]) => `${name} (${count})`).join(", ")}</p>
             </article>
           </div>
         )}
-      </SectionPanel>
+      </section>
 
-      <SectionPanel
-        eyebrow="Explorer"
-        title="Browse Solved Code"
-        description="Move from grouped insights into full source-backed entries with explanation and complexity notes."
-        className="explorer-panel"
-      >
-        <FilterBar
-          title="Solution library"
-          description="Search by title, language, platform, verification state, or tags."
-        >
+      <section className="section-panel">
+        <span className="section-eyebrow">Explorer</span>
+        <h2>Browse Solved Code</h2>
+
+        <FilterBar>
           <input
             type="search"
             value={query}
@@ -282,46 +240,34 @@ export default function CodebasePage() {
         ) : !filteredProblems.length ? (
           <EmptyState title="No matching code entries" message="Try clearing one or more filters to see more solved code." />
         ) : (
-          <div className="page-two-column explorer-two-column">
-            <aside className="glass-card sidebar-panel code-focus-panel">
-              <h3>What makes this different</h3>
-              <p>This page is for source-backed entries with explanation notes, reusable implementation detail, and verification signals.</p>
-              <div className="sidebar-stat-list">
-                <div><span>Visible results</span><strong>{filteredProblems.length}</strong></div>
-                <div><span>Verified entries</span><strong>{librarySummary.verifiedCount}</strong></div>
-                <div><span>Languages used</span><strong>{librarySummary.languages}</strong></div>
-              </div>
-            </aside>
-
-            <div className="problem-grid">
-              {filteredProblems.map((problem) => (
-                <Link
-                  key={`${problem.platform}-${problem.slug}`}
-                  className="problem-card"
-                  to={`/codebase/${toPlatformSegment(problem.platform)}/${problem.slug}`}
-                >
+          <div className="problem-grid">
+            {filteredProblems.map((problem) => (
+              <Link
+                key={`${problem.platform}-${problem.slug}`}
+                className="problem-card"
+                to={`/codebase/${toPlatformSegment(problem.platform)}/${problem.slug}`}
+              >
+                <div className="card-row">
+                  <Badge tone="accent">{problem.platform}</Badge>
+                  <Badge>{problem.difficulty || "Unknown"}</Badge>
+                  <Badge>{problem.language || "Unknown"}</Badge>
+                  {problem.verified ? <Badge tone="success">Verified</Badge> : null}
+                </div>
+                <h2>{problem.title}</h2>
+                {(problem.tags || []).length ? (
                   <div className="card-row">
-                    <Badge tone="accent">{problem.platform}</Badge>
-                    <Badge>{problem.difficulty || "Unknown"}</Badge>
-                    <Badge>{problem.language || "Unknown"}</Badge>
-                    {problem.verified ? <Badge tone="success">Verified</Badge> : null}
+                    {problem.tags.slice(0, 4).map((tagName) => (
+                      <Badge key={tagName}>{tagName}</Badge>
+                    ))}
                   </div>
-                  <h2>{problem.title}</h2>
-                  {(problem.tags || []).length ? (
-                    <div className="card-row">
-                      {problem.tags.slice(0, 4).map((tagName) => (
-                        <Badge key={tagName}>{tagName}</Badge>
-                      ))}
-                    </div>
-                  ) : (
-                    <p>Open the entry for source code, notes, and verification details.</p>
-                  )}
-                </Link>
-              ))}
-            </div>
+                ) : (
+                  <p>Open the entry for source code, notes, and verification details.</p>
+                )}
+              </Link>
+            ))}
           </div>
         )}
-      </SectionPanel>
+      </section>
     </main>
   );
 }
