@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import HeroPic from "/assets/images/SunilKumar.PNG";
+import HeroPic from "/assets/images/SunilKumar.png";
 import { profile, services } from "../data/profile";
 import {
   getJournalProblems,
