@@ -1,29 +1,45 @@
 .footer {
   position: relative;
-  padding: 28px 18px 34px;
+  padding: 36px 18px 34px;
   background:
-    linear-gradient(180deg, transparent, color-mix(in srgb, var(--card-bg) 30%, transparent));
+    linear-gradient(180deg, color-mix(in srgb, var(--card-bg) 20%, transparent), color-mix(in srgb, var(--card-bg) 58%, transparent)),
+    radial-gradient(circle at top center, color-mix(in srgb, var(--accent-color) 16%, white 8%), transparent 60%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .footer::before {
   content: "";
   position: absolute;
   inset: 0 0 auto;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-color) 32%, var(--input-border)), transparent);
-  opacity: 0.7;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--accent-color) 46%, white 8%) 18%, color-mix(in srgb, var(--accent-color) 72%, white 12%) 50%, color-mix(in srgb, var(--accent-color) 46%, white 8%) 82%, transparent 100%);
+  opacity: 0.95;
+}
+
+.footer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 26%),
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent-color) 12%, white 10%), transparent 56%);
+  opacity: 0.8;
+  pointer-events: none;
 }
 
 .footer-shell {
   width: min(1160px, calc(100% - 8px));
   margin: 0 auto;
-  padding-top: 20px;
+  padding-top: 22px;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
-  gap: 28px;
+  gap: 30px;
   align-items: start;
 }
 
@@ -104,13 +120,14 @@
 
 .footer-bottom {
   margin-top: 26px;
-  padding-top: 16px;
-  border-top: 1px solid color-mix(in srgb, var(--accent-color) 12%, var(--input-border));
+  padding-top: 20px;
+  border-top: 1px solid color-mix(in srgb, var(--accent-color) 18%, var(--input-border));
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
   align-items: center;
   flex-wrap: wrap;
+  text-align: center;
 }
 
 .footer-text {
@@ -158,11 +175,12 @@
 
   .footer-column {
     gap: 10px;
+    text-align: left;
   }
 
   .footer-bottom {
     margin-top: 22px;
-    justify-content: flex-start;
+    justify-content: center;
   }
 
   .footer-connect-list a {

@@ -5,20 +5,21 @@
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(circle at 18% 16%, rgba(134, 187, 255, 0.08), transparent 32%),
-    radial-gradient(circle at 84% 12%, rgba(121, 91, 255, 0.06), transparent 26%),
-    linear-gradient(180deg, rgba(7, 11, 23, 0.08), transparent 38%);
+    radial-gradient(circle at 18% 16%, rgba(134, 187, 255, 0.14), transparent 34%),
+    radial-gradient(circle at 84% 12%, rgba(121, 91, 255, 0.1), transparent 28%),
+    linear-gradient(180deg, rgba(7, 11, 23, 0.1), transparent 38%);
 }
 
 .bg-light-spotlight {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    360px circle at var(--bg-spotlight-x, 50%) var(--bg-spotlight-y, 20%),
-    rgba(176, 220, 255, 0.22),
-    transparent 65%
+    420px circle at var(--bg-spotlight-x, 50%) var(--bg-spotlight-y, 20%),
+    rgba(214, 238, 255, 0.34),
+    rgba(186, 224, 255, 0.18) 28%,
+    transparent 68%
   );
-  opacity: 0.92;
+  opacity: 1;
   transition: opacity 0.28s ease;
   will-change: transform, opacity;
 }
@@ -143,66 +144,66 @@
 }
 
 .bg-sunlight {
-  width: 48rem;
-  height: 48rem;
-  top: -24%;
-  right: -10%;
+  width: 56rem;
+  height: 56rem;
+  top: -28%;
+  right: -12%;
   background:
-    radial-gradient(circle at 30% 30%, rgba(255, 244, 224, 0.74), rgba(255, 244, 224, 0.34) 26%, rgba(255, 244, 224, 0) 62%),
-    radial-gradient(circle, rgba(177, 217, 255, 0.22), rgba(177, 217, 255, 0));
-  opacity: 0.9;
+    radial-gradient(circle at 30% 30%, rgba(255, 246, 226, 0.82), rgba(255, 246, 226, 0.46) 26%, rgba(255, 246, 226, 0.1) 48%, rgba(255, 246, 226, 0) 68%),
+    radial-gradient(circle, rgba(177, 217, 255, 0.28), rgba(177, 217, 255, 0));
+  opacity: 0.98;
 }
 
 .bg-light-mesh {
   background:
-    radial-gradient(circle at 30% 35%, rgba(169, 219, 255, 0.28), rgba(169, 219, 255, 0) 56%),
-    radial-gradient(circle at 70% 65%, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 54%);
-  opacity: 0.46;
+    radial-gradient(circle at 30% 35%, rgba(169, 219, 255, 0.34), rgba(169, 219, 255, 0.08) 38%, rgba(169, 219, 255, 0) 60%),
+    radial-gradient(circle at 70% 65%, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.06) 34%, rgba(255, 255, 255, 0) 56%);
+  opacity: 0.58;
 }
 
 .bg-light-mesh-a {
-  width: 42rem;
-  height: 42rem;
-  top: -8%;
-  left: -10%;
+  width: 50rem;
+  height: 50rem;
+  top: -10%;
+  left: -12%;
 }
 
 .bg-light-mesh-b {
-  width: 32rem;
-  height: 32rem;
-  top: 18%;
-  right: -8%;
-}
-
-.bg-light-blob {
-  background: radial-gradient(circle, rgba(94, 171, 255, 0.28), rgba(94, 171, 255, 0));
-  opacity: 0.5;
-}
-
-.bg-light-blob-a {
-  width: 36rem;
-  height: 36rem;
-  top: -4%;
-  left: -10%;
-}
-
-.bg-light-blob-b {
-  width: 30rem;
-  height: 30rem;
-  top: 28%;
+  width: 40rem;
+  height: 40rem;
+  top: 14%;
   right: -10%;
 }
 
+.bg-light-blob {
+  background: radial-gradient(circle, rgba(94, 171, 255, 0.34), rgba(94, 171, 255, 0.08) 40%, rgba(94, 171, 255, 0) 72%);
+  opacity: 0.62;
+}
+
+.bg-light-blob-a {
+  width: 42rem;
+  height: 42rem;
+  top: 2%;
+  left: -8%;
+}
+
+.bg-light-blob-b {
+  width: 34rem;
+  height: 34rem;
+  top: 34%;
+  right: -6%;
+}
+
 .bg-light-blob-c {
-  width: 24rem;
-  height: 24rem;
+  width: 28rem;
+  height: 28rem;
   bottom: 4%;
-  left: 32%;
+  left: 26%;
 }
 
 .bg-reflection {
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0));
-  opacity: 0.32;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+  opacity: 0.42;
 }
 
 .bg-reflection-a {
@@ -227,16 +228,16 @@
 }
 
 .bg-light-particle {
-  background: rgba(93, 169, 255, 0.22);
-  box-shadow: 0 0 20px rgba(93, 169, 255, 0.18);
-  opacity: 0.48;
+  background: rgba(93, 169, 255, 0.3);
+  box-shadow: 0 0 24px rgba(93, 169, 255, 0.24);
+  opacity: 0.62;
 }
 
 .bg-light-sparkle {
   top: -10%;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 0 16px rgba(167, 211, 255, 0.34);
-  opacity: 0.62;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 0 18px rgba(167, 211, 255, 0.42);
+  opacity: 0.84;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -270,23 +271,23 @@
 
   .bg-light-mesh,
   .bg-light-blob {
-    animation: lightBlobFloat 18s ease-in-out infinite alternate;
+    animation: lightBlobFloat 14s ease-in-out infinite alternate;
   }
 
   .bg-sunlight {
-    animation: sunlightDrift 24s ease-in-out infinite alternate;
+    animation: sunlightDrift 16s ease-in-out infinite alternate;
   }
 
   .bg-reflection {
-    animation: reflectionDrift 16s ease-in-out infinite alternate;
+    animation: reflectionDrift 12s ease-in-out infinite alternate;
   }
 
   .bg-light-particle {
-    animation: lightParticleFloat ease-in-out infinite;
+    animation: lightParticleFloat 9s ease-in-out infinite;
   }
 
   .bg-light-sparkle {
-    animation: lightSparkleFall linear infinite;
+    animation: lightSparkleFall 12s linear infinite;
   }
 }
 
@@ -402,17 +403,17 @@
     transform: translate3d(0, 0, 0) scale(1);
   }
   100% {
-    transform: translate3d(0, 22px, 0) scale(1.06);
+    transform: translate3d(24px, 28px, 0) scale(1.1);
   }
 }
 
 @keyframes sunlightDrift {
   0% {
     transform: translate3d(0, 0, 0) scale(1);
-    opacity: 0.82;
+    opacity: 0.9;
   }
   100% {
-    transform: translate3d(-3%, 3%, 0) scale(1.06);
+    transform: translate3d(-4%, 4%, 0) scale(1.12);
     opacity: 1;
   }
 }
@@ -420,35 +421,35 @@
 @keyframes reflectionDrift {
   0% {
     transform: translate3d(0, 0, 0);
-    opacity: 0.22;
+    opacity: 0.3;
   }
   100% {
-    transform: translate3d(12px, 16px, 0);
-    opacity: 0.34;
+    transform: translate3d(22px, 18px, 0);
+    opacity: 0.48;
   }
 }
 
 @keyframes lightParticleFloat {
   0%, 100% {
     transform: translate3d(0, 0, 0) scale(0.9);
-    opacity: 0.24;
+    opacity: 0.34;
   }
   50% {
-    transform: translate3d(0, -14px, 0) scale(1.14);
-    opacity: 0.56;
+    transform: translate3d(0, -22px, 0) scale(1.2);
+    opacity: 0.74;
   }
 }
 
 @keyframes lightSparkleFall {
   0% {
-    transform: translate3d(0, -8vh, 0) scale(0.8);
+    transform: translate3d(0, -10vh, 0) scale(0.85);
     opacity: 0;
   }
   18% {
-    opacity: 0.72;
+    opacity: 0.9;
   }
   100% {
-    transform: translate3d(0, 112vh, 0) scale(1.1);
+    transform: translate3d(0, 112vh, 0) scale(1.15);
     opacity: 0;
   }
 }
@@ -456,9 +457,9 @@
 @media (max-width: 640px) {
   .bg-light-spotlight {
     background: radial-gradient(
-      250px circle at var(--bg-spotlight-x, 50%) var(--bg-spotlight-y, 20%),
-      rgba(176, 220, 255, 0.18),
-      transparent 65%
+      300px circle at var(--bg-spotlight-x, 50%) var(--bg-spotlight-y, 20%),
+      rgba(176, 220, 255, 0.24),
+      transparent 68%
     );
   }
 

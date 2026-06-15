@@ -88,7 +88,11 @@ export default function AnimatedBackground() {
   );
 
   return (
-    <div className={`animated-background ${theme}`} aria-hidden="true">
+    <div
+      className={`animated-background ${theme}`}
+      data-visual-layer={import.meta.env.DEV && theme === "light" ? "light-animation-active" : undefined}
+      aria-hidden="true"
+    >
       {theme === "dark" ? (
         <>
           <div className="bg-galaxy bg-galaxy-a" />

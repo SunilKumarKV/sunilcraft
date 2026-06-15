@@ -711,13 +711,13 @@ a:hover {
   border-radius: 32px;
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--card-bg) 54%, transparent),
-    color-mix(in srgb, var(--card-bg) 42%, var(--accent-color) 2%)
+    color-mix(in srgb, var(--card-bg) 28%, transparent),
+    color-mix(in srgb, var(--card-bg) 16%, var(--accent-color) 2%)
   );
-  box-shadow: none;
-  border: 1px solid color-mix(in srgb, var(--accent-color) 8%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 4%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   animation: pageFadeUp 0.55s ease both;
   position: relative;
   overflow: hidden;
@@ -795,7 +795,6 @@ a:hover {
 
 .problem-card::before,
 .glass-card::before,
-.section-panel::before,
 .problem-detail-card::before,
 .hero-image-card::before,
 .hero-stat-card::before,
@@ -815,7 +814,6 @@ a:hover {
 
 .problem-card::after,
 .glass-card::after,
-.section-panel::after,
 .problem-detail-card::after,
 .hero-image-card::after,
 .hero-stat-card::after,
@@ -839,7 +837,6 @@ a:hover {
 
 .cursor-active.problem-card::after,
 .cursor-active.glass-card::after,
-.cursor-active.section-panel::after,
 .cursor-active.problem-detail-card::after,
 .cursor-active.hero-image-card::after,
 .cursor-active.hero-stat-card::after,
