@@ -81,14 +81,16 @@ const ContactSection = () => {
       <PageHeader
         eyebrow="Contact"
         title="Let’s build something useful and well-crafted"
-        description="For frontend polish, dashboard architecture, portfolio systems, and production-ready React work, this page is designed to make the next step easy."
+        description="For frontend polish, portfolio systems, routing cleanup, or product-focused React work, this page is meant to make the next step simple."
         align="left"
+        className="page-header-contact"
       />
 
       <SectionPanel
         eyebrow="Collaboration"
         title="Start a conversation"
         description="Reach out with a feature idea, UI cleanup request, portfolio upgrade, or product concept. I’m most helpful when the work needs both technical structure and visual refinement."
+        className="contact-panel"
       >
         <div className="contact-layout">
           <div className="contact-column contact-summary">

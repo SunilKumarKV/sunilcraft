@@ -232,6 +232,7 @@ export default function DashboardPage() {
         title="Dashboard"
         description="A live snapshot of my developer activity across projects, problem solving, and verified code."
         align="left"
+        className="page-header-dashboard"
       />
 
       {loading ? (
@@ -248,8 +249,9 @@ export default function DashboardPage() {
             eyebrow="Navigation"
             title="Developer Platform"
             description="Use the dashboard as the top-level hub, then branch into deeper views only when you need them."
+            className="dashboard-panel"
           >
-            <div className="problem-grid">
+            <div className="dashboard-grid">
               <Link className="problem-card" to="/journey">
                 <span className="problem-stat">Journey</span>
                 <h2>Timeline</h2>
@@ -288,79 +290,67 @@ export default function DashboardPage() {
             </div>
           </SectionPanel>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Overview</span>
-            <h2>Overview</h2>
-            <div className="problem-grid">
+          <SectionPanel eyebrow="Overview" title="Overview" className="dashboard-panel">
+            <div className="dashboard-grid">
               {analytics.overview.map((metric) => (
-                <article className="problem-card" key={metric.label}>
+                <article className="problem-card stat-card accent" key={metric.label}>
                   <span className="problem-stat">{metric.label}</span>
                   <h2>{metric.value}</h2>
                 </article>
               ))}
             </div>
-          </section>
+          </SectionPanel>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Platforms</span>
-            <h2>Platforms</h2>
-            <div className="feature-grid">
+          <SectionPanel eyebrow="Platforms" title="Platforms" className="dashboard-panel">
+            <div className="dashboard-grid">
               {analytics.platformCards.map((item) => (
-                <article className="glass-card" key={item.name}>
+                <article className="glass-card widget-card" key={item.name}>
                   <h3>{item.name}</h3>
                   <p>{item.count} problems</p>
                   <p>{item.percentage} of total</p>
                 </article>
               ))}
             </div>
-          </section>
+          </SectionPanel>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Languages</span>
-            <h2>Languages</h2>
-            <div className="feature-grid">
+          <SectionPanel eyebrow="Languages" title="Languages" className="dashboard-panel">
+            <div className="dashboard-grid">
               {analytics.languageCards.map((item) => (
-                <article className="glass-card" key={item.name}>
+                <article className="glass-card widget-card" key={item.name}>
                   <h3>{item.name}</h3>
                   <p>{item.count} problems</p>
                 </article>
               ))}
             </div>
-          </section>
+          </SectionPanel>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Difficulty</span>
-            <h2>Difficulty Breakdown</h2>
-            <div className="feature-grid">
+          <SectionPanel eyebrow="Difficulty" title="Difficulty Breakdown" className="dashboard-panel">
+            <div className="dashboard-grid">
               {analytics.difficultyCards.map((item) => (
-                <article className="glass-card" key={item.name}>
+                <article className="glass-card widget-card" key={item.name}>
                   <h3>{item.name}</h3>
                   <p>{item.count} problems</p>
                 </article>
               ))}
             </div>
-          </section>
+          </SectionPanel>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Tags</span>
-            <h2>Tags Analysis</h2>
-            <div className="feature-grid">
+          <SectionPanel eyebrow="Tags" title="Tags Analysis" className="dashboard-panel">
+            <div className="dashboard-grid">
               {analytics.tagCards.map((item) => (
-                <article className="glass-card" key={item.name}>
+                <article className="glass-card widget-card" key={item.name}>
                   <h3>{item.name}</h3>
                   <p>{item.count} uses</p>
                 </article>
               ))}
             </div>
-          </section>
+          </SectionPanel>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Timeline</span>
-            <h2>Activity Timeline</h2>
+          <SectionPanel eyebrow="Timeline" title="Activity Timeline" className="dashboard-panel">
             {analytics.timelineCards.length ? (
-              <div className="feature-grid">
+              <div className="dashboard-grid">
                 {analytics.timelineCards.map((item) => (
-                  <article className="glass-card" key={item.month}>
+                  <article className="glass-card widget-card" key={item.month}>
                     <h3>{item.month}</h3>
                     <p>{item.count} problems added</p>
                   </article>
@@ -375,46 +365,42 @@ export default function DashboardPage() {
                 </p>
               </article>
             )}
-          </section>
+          </SectionPanel>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Projects</span>
-            <h2>Project Insights</h2>
-            <div className="feature-grid">
-              <article className="glass-card">
+          <SectionPanel eyebrow="Projects" title="Project Insights" className="dashboard-panel">
+            <div className="dashboard-grid">
+              <article className="glass-card widget-card">
                 <h3>Top by Stars</h3>
                 {analytics.projectInsights.byStars.map((project) => (
                   <p key={project.url}>{project.name} • {project.stars || 0} stars</p>
                 ))}
               </article>
-              <article className="glass-card">
+              <article className="glass-card widget-card">
                 <h3>Top by Forks</h3>
                 {analytics.projectInsights.byForks.map((project) => (
                   <p key={project.url}>{project.name} • {project.forks || 0} forks</p>
                 ))}
               </article>
-              <article className="glass-card">
+              <article className="glass-card widget-card">
                 <h3>Latest Updated</h3>
                 {analytics.projectInsights.byUpdated.map((project) => (
                   <p key={project.url}>{project.name} • {formatDate(project.updatedAt) || "Unknown"}</p>
                 ))}
               </article>
             </div>
-          </section>
+          </SectionPanel>
 
-          <section className="section-panel">
-            <span className="section-eyebrow">Milestones</span>
-            <h2>Achievements</h2>
-            <div className="feature-grid">
+          <SectionPanel eyebrow="Milestones" title="Achievements" className="dashboard-panel">
+            <div className="dashboard-grid">
               {analytics.achievements.map((achievement) => (
-                <article className="glass-card" key={achievement.title}>
+                <article className="glass-card widget-card" key={achievement.title}>
                   <h3>{achievement.title}</h3>
                   <p>{achievement.achieved ? "Unlocked" : "In Progress"}</p>
                   <p>{achievement.detail}</p>
                 </article>
               ))}
             </div>
-          </section>
+          </SectionPanel>
         </>
       )}
     </main>

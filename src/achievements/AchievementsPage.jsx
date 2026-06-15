@@ -170,6 +170,7 @@ export default function AchievementsPage() {
         title="Achievements"
         description="Badges generated from real coding-journal activity, not manual claims."
         align="left"
+        className="page-header-achievements"
       />
 
       {loading ? (
@@ -185,10 +186,24 @@ export default function AchievementsPage() {
           <EmptyState title="No achievements available" message="The current coding-journal feeds do not expose enough data to calculate achievements." />
         </SectionPanel>
       ) : (
-        <section className="section-panel">
-          <span className="section-eyebrow">Milestone Board</span>
-          <h2>Unlocked and In Progress</h2>
-          <div className="feature-grid">
+        <>
+          <section className="page-meta-strip compact">
+            <article className="meta-strip-card">
+              <span>Unlocked</span>
+              <strong>{achievements.filter((item) => item.unlocked).length}</strong>
+            </article>
+            <article className="meta-strip-card">
+              <span>In Progress</span>
+              <strong>{achievements.filter((item) => !item.unlocked).length}</strong>
+            </article>
+            <article className="meta-strip-card">
+              <span>Total</span>
+              <strong>{achievements.length}</strong>
+            </article>
+          </section>
+
+          <SectionPanel eyebrow="Milestone Board" title="Unlocked and In Progress" className="achievement-wall-panel">
+          <div className="achievement-wall">
             {achievements.map((achievement) => {
               const progress = clampProgress(achievement.current, achievement.goal);
 
@@ -211,7 +226,8 @@ export default function AchievementsPage() {
               );
             })}
           </div>
-        </section>
+          </SectionPanel>
+        </>
       )}
     </main>
   );

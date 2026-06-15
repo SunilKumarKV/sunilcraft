@@ -12,8 +12,9 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="About SunilCraft"
         title="Builder profile, craft, and credibility"
-        description={`A premium overview of ${profile.name}: product thinking, frontend craft, full-stack execution, and the rewards that reflect that growth.`}
+        description={`${profile.name} is an MCA student at Bangalore University building developer tools, portfolio systems, and product-style web applications with a strong focus on frontend quality.`}
         align="left"
+        className="page-header-about"
       />
 
       <SectionPanel
@@ -37,7 +38,7 @@ export default function AboutPage() {
       <SectionPanel
         eyebrow="Recognition"
         title="Rewards & Certificates"
-        description="A compact archive of professional recognition and performance highlights."
+        description="A compact archive of work recognition and performance highlights."
         className="embedded-section-panel"
       >
         <CertificateGallery />
