@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { profile, services } from "../data/profile";
 import Badge from "./ui/Badge";
 import "../styles/AboutSection.css";
-import profilePic from "/assets/images/SunilKumar.JPG";
+import profilePic from "/assets/images/SunilKumar.png";
 
 const AboutSection = () => {
   return (
