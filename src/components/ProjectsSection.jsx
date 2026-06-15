@@ -1,23 +1,40 @@
-import React from "react";
-import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
-import { projectsData } from "../data/projects";
+import { getJournalProjects, toProjectSlug } from "../lib/codingJournal";
 import "../styles/ProjectsSection.css";
 
-const filters = ["All", "React", "Full-stack", "JavaScript", "UI"];
+export default function ProjectsSection() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.45, ease: "easeOut" } }),
-};
+  useEffect(() => {
+    let ignore = false;
 
-const ProjectsSection = () => {
-  const [activeFilter, setActiveFilter] = useState("All");
-  const filteredProjects = useMemo(
-    () => activeFilter === "All" ? projectsData : projectsData.filter((project) => project.category === activeFilter),
-    [activeFilter]
+    getJournalProjects()
+      .then((data) => {
+        if (ignore) return;
+        setProjects(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch((fetchError) => {
+        if (ignore) return;
+        setError(fetchError.message || "Unable to load featured projects.");
+        setProjects([]);
+        setLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  const featuredProjects = useMemo(
+    () =>
+      [...projects]
+        .sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0))
+        .slice(0, 6),
+    [projects]
   );
 
   return (
@@ -25,44 +42,73 @@ const ProjectsSection = () => {
       <div className="projects-header">
         <span className="section-eyebrow">Selected Work</span>
         <h2 className="projects-title">Featured Projects</h2>
-        <p className="projects-subtitle">Real deployed URLs, responsive layouts, clean interfaces, and practical full-stack/front-end implementation.</p>
+        <p className="projects-subtitle">
+          Live repositories from coding-journal, automatically updated as new projects and GitHub
+          metadata change.
+        </p>
       </div>
 
-      <div className="featured-banner">
-        <span>Featured</span>
-        <strong>ChessPlay</strong>
-        <p>React + Node + Socket.IO + MongoDB + Stockfish chess platform.</p>
-        <a href="https://chessplay1.vercel.app/" target="_blank" rel="noreferrer">Open ChessPlay</a>
-      </div>
-
-      <div className="filter-tabs" aria-label="Project filters">
-        {filters.map((filter) => (
-          <button key={filter} type="button" className={activeFilter === filter ? "active" : ""} onClick={() => setActiveFilter(filter)}>{filter}</button>
-        ))}
-      </div>
-
-      <div className="project-list">
-        {filteredProjects.map((proj, idx) => (
-          <motion.article className="project-card" key={proj.title} custom={idx} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={cardVariants} whileHover={{ y: -8 }}>
-            <div className="project-image-wrap">
-              <img src={proj.image} alt={`${proj.title} preview screenshot`} className="project-image" loading="lazy" />
-              <span className="project-status">{proj.status}</span>
-            </div>
+      {loading ? (
+        <div className="project-list">
+          <article className="project-card">
             <div className="project-info">
-              <p className="project-category">{proj.stack}</p>
-              <h3 className="project-title">{proj.title}</h3>
-              <p className="project-description">{proj.description}</p>
-              <div className="project-actions">
-                <a href={proj.live} className="project-link primary" target="_blank" rel="noreferrer">Live Demo <FaExternalLinkAlt aria-hidden="true" /></a>
-                <a href={proj.github} className="project-link" target="_blank" rel="noreferrer">Code <FaGithub aria-hidden="true" /></a>
-                <Link to={`/projects/${proj.slug}`} className="project-link">Details</Link>
-              </div>
+              <h3 className="project-title">Loading projects</h3>
+              <p className="project-description">Fetching the latest featured repositories from coding-journal.</p>
             </div>
-          </motion.article>
-        ))}
-      </div>
+          </article>
+        </div>
+      ) : error ? (
+        <div className="project-list">
+          <article className="project-card">
+            <div className="project-info">
+              <h3 className="project-title">Unable to load projects</h3>
+              <p className="project-description">{error}</p>
+            </div>
+          </article>
+        </div>
+      ) : !featuredProjects.length ? (
+        <div className="project-list">
+          <article className="project-card">
+            <div className="project-info">
+              <h3 className="project-title">No projects available</h3>
+              <p className="project-description">coding-journal did not return any repositories.</p>
+            </div>
+          </article>
+        </div>
+      ) : (
+        <>
+          <div className="project-list">
+            {featuredProjects.map((project) => (
+              <article className="project-card" key={project.url}>
+                <div className="project-info">
+                  <p className="project-category">{project.language || "Unknown language"}</p>
+                  <h3 className="project-title">{project.name}</h3>
+                  <p className="project-description">
+                    {project.description || "No repository description provided."}
+                  </p>
+                  <div className="project-actions">
+                    <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">
+                      GitHub
+                    </a>
+                    {project.homepage ? (
+                      <a href={project.homepage} className="project-link" target="_blank" rel="noreferrer">
+                        Homepage
+                      </a>
+                    ) : null}
+                    <Link to={`/projects/${toProjectSlug(project.name)}`} className="project-link">
+                      Details
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <Link to="/projects" className="page-button">
+            Explore All Projects
+          </Link>
+        </>
+      )}
     </section>
   );
-};
-
-export default ProjectsSection;
+}

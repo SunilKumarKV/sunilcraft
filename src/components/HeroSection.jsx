@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import HeroPic from "/assets/images/SunilKumar.JPG";
+import HeroPic from "/assets/images/SunilKumar.PNG";
 import { profile, services } from "../data/profile";
 import {
   getJournalProblems,
@@ -161,6 +161,12 @@ export default function HeroSection() {
             <Badge tone="accent">Remote / part-time ready</Badge>
             <Badge>Verified codebase</Badge>
             <Badge>GitHub synced work</Badge>
+          </div>
+
+          <div className="hero-trust">
+            <Badge tone="accent">GitHub synced</Badge>
+            <Badge tone="success">Verified solutions</Badge>
+            <Badge>Live coding journal</Badge>
           </div>
 
           <div className="hero-stats" aria-label="Portfolio stats">

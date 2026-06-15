@@ -1,7 +1,7 @@
 .skills-section {
-  padding: 4rem 2rem;
-  background: var(--skills-bg);
-  text-align: center;
+  padding: 12px 0 0;
+  background: transparent;
+  text-align: left;
   transition: background 0.3s, color 0.3s;
 }
 
@@ -12,77 +12,78 @@
 }
 
 .category-title {
-  font-size: 1.8rem;
+  font-size: 1.35rem;
   margin: 2rem 0 1rem;
   color: var(--text-color);
   text-align: left;
-  max-width: 900px;
-  margin-inline: auto;
+  max-width: none;
+  margin-inline: 0;
 }
 
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.5rem;
-  max-width: 900px;
-  margin: 0 auto 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1rem;
+  max-width: none;
+  margin: 0 0 2rem;
 }
 
 .skill-card {
-  background: var(--card-bg);
-  padding: 1rem;
-  border-radius: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: color-mix(in srgb, var(--card-bg) 95%, white 5%);
+  padding: 1.1rem;
+  border-radius: 18px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   box-shadow: var(--shadow-light);
-  text-align: center;
+  text-align: left;
   cursor: default;
   position: relative;
+  border: 1px solid var(--input-border);
 }
 
 .skill-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-medium);
+  border-color: color-mix(in srgb, var(--accent-color) 28%, transparent);
 }
 
 .skill-card img {
-  width: 40px;
-  height: 40px;
-  margin-bottom: 0.5rem;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 0.9rem;
 }
 
 .skill-card p {
   margin: 0.5rem 0;
   color: var(--text-color);
+  font-weight: 600;
 }
 
 .progress-bar {
-  background-color: var(--input-border);
-  border-radius: 8px;
-  height: 8px;
+  background-color: color-mix(in srgb, var(--input-border) 75%, transparent);
+  border-radius: 999px;
+  height: 9px;
   width: 100%;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .progress {
   height: 100%;
-  background-color: var(--accent-color);
-  border-radius: 8px;
+  background: linear-gradient(90deg, var(--accent-color), color-mix(in srgb, var(--accent-color) 72%, #22c55e));
+  border-radius: 999px;
   transition: width 0.5s ease;
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .skills-title {
     font-size: 2rem;
   }
 
   .category-title {
-    font-size: 1.4rem;
-    text-align: center;
+    font-size: 1.2rem;
+    text-align: left;
   }
 
   .skills-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
   }
 }
