@@ -1324,6 +1324,62 @@ textarea:focus-visible {
   background: linear-gradient(90deg, var(--accent-color), color-mix(in srgb, var(--accent-color) 70%, #22c55e));
 }
 
+.dashboard-progress .progress-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.progress-row {
+  display: grid;
+  gap: 10px;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+.progress-bar {
+  height: 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-color) 14%, var(--card-bg));
+  overflow: hidden;
+}
+
+.progress-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-color), color-mix(in srgb, var(--accent-color) 70%, #22c55e));
+}
+
+.tag-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent-color) 16%, transparent);
+  background: color-mix(in srgb, var(--accent-color) 8%, var(--card-bg));
+  color: var(--text-color);
+  font-size: 0.92rem;
+}
+
+.tag-chip strong {
+  font-weight: 700;
+}
+
 .timeline-list { display: grid; gap: 18px; margin-bottom: 28px; }
 .timeline-item {
   display: grid;

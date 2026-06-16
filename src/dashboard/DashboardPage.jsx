@@ -134,6 +134,7 @@ export default function DashboardPage() {
     const difficultyCards = difficultyOrder.map((name) => ({
       name,
       count: byDifficulty[name] || 0,
+      percentage: percent(byDifficulty[name] || 0, totalProblems),
     }));
 
     const byTag = problems.reduce((acc, problem) => {
@@ -143,10 +144,10 @@ export default function DashboardPage() {
       return acc;
     }, {});
 
-    const tagCards = trackedTags.map((name) => ({
-      name,
-      count: byTag[name] || 0,
-    }));
+    const tagCards = Object.entries(byTag)
+      .sort(([, countA], [, countB]) => countB - countA)
+      .slice(0, 6)
+      .map(([name, count]) => ({ name, count }));
 
     const problemsWithDate = problems.filter(
       (problem) => problem.addedAt || problem.createdAt || problem.updatedAt || problem.solvedAt
@@ -240,21 +241,77 @@ export default function DashboardPage() {
       />
 
       {!loading && !error ? (
-        <SectionPanel
-          eyebrow="Activity Overview"
-          title="Activity Overview"
-          description="Live calculations from the synced coding-journal feeds for problems, projects, verification, language usage, and GitHub metrics."
-        >
-          <div className="dashboard-grid">
-            {analytics.overview.map((metric) => (
-              <article className="glass-card" key={metric.label}>
-                <span className="section-eyebrow">{metric.label}</span>
-                <h3>{metric.value}</h3>
-              </article>
-            ))}
+        <>
+          <SectionPanel
+            eyebrow="Activity Overview"
+            title="Activity Overview"
+            description="Live calculations from the synced coding-journal feeds for problems, projects, verification, language usage, and GitHub metrics."
+          >
+            <div className="dashboard-grid">
+              {analytics.overview.map((metric) => (
+                <article className="glass-card" key={metric.label}>
+                  <span className="section-eyebrow">{metric.label}</span>
+                  <h3>{metric.value}</h3>
+                </article>
+              ))}
+            </div>
+          </SectionPanel>
+
+          <SectionPanel
+            className="dashboard-progress"
+            eyebrow="Coding Progress"
+            title="Coding Progress"
+            description="Problem solving performance and platform, difficulty, and topic distributions from live coding-journal problem data."
+          >
+          <div className="feature-grid">
+            <article className="glass-card">
+              <h3>Difficulty Progress</h3>
+              <div className="progress-stack">
+                {analytics.difficultyCards.map((item) => (
+                  <div className="progress-row" key={item.name}>
+                    <div className="progress-label">
+                      <span>{item.name}</span>
+                      <span>{item.count}</span>
+                    </div>
+                    <div className="progress-bar" aria-label={`${item.name} difficulty`}>
+                      <span style={{ width: item.percentage }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article className="glass-card">
+              <h3>Platform Breakdown</h3>
+              <div className="progress-stack">
+                {analytics.platformCards.map((item) => (
+                  <div className="progress-row" key={item.name}>
+                    <div className="progress-label">
+                      <span>{item.name}</span>
+                      <span>{item.count}</span>
+                    </div>
+                    <div className="progress-bar" aria-label={`${item.name} platform count`}>
+                      <span style={{ width: item.percentage }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article className="glass-card">
+              <h3>Top Topics</h3>
+              <div className="tag-chip-list">
+                {analytics.tagCards.map((item) => (
+                  <span className="tag-chip" key={item.name}>
+                    {item.name}
+                    <strong>{item.count}</strong>
+                  </span>
+                ))}
+              </div>
+            </article>
           </div>
         </SectionPanel>
-      ) : null}
+      </> ) : null}
 
       {loading ? (
         <SectionPanel eyebrow="Loading" title="Preparing Dashboard">
