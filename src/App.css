@@ -1380,6 +1380,22 @@ textarea:focus-visible {
   font-weight: 700;
 }
 
+.career-list {
+  display: grid;
+  gap: 12px;
+  padding-left: 0;
+  margin: 18px 0 0;
+  list-style: none;
+}
+
+.career-list li {
+  color: var(--text-secondary);
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--card-bg) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 12%, transparent);
+}
+
 .timeline-list { display: grid; gap: 18px; margin-bottom: 28px; }
 .timeline-item {
   display: grid;

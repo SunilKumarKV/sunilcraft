@@ -398,6 +398,45 @@ export default function DashboardPage() {
             </article>
           </div>
         </SectionPanel>
+
+        <SectionPanel
+          eyebrow="Career Focus"
+          title="Career Focus"
+          description="Recruiter-friendly availability and current engineering priorities for internships, freelance work, and part-time roles."
+        >
+          <div className="feature-grid">
+            <article className="glass-card">
+              <h3>Current Focus</h3>
+              <ul className="career-list">
+                <li>MCA @ Bangalore University</li>
+                <li>React Development</li>
+                <li>Node.js APIs</li>
+                <li>DSA Problem Solving</li>
+                <li>Full Stack Projects</li>
+                <li>coding-journal</li>
+              </ul>
+            </article>
+
+            <article className="glass-card">
+              <h3>Open To Work</h3>
+              <ul className="career-list">
+                <li>Remote Internship</li>
+                <li>Part-Time Developer Roles</li>
+                <li>Freelance Projects</li>
+                <li>React Development</li>
+                <li>Full Stack Development</li>
+              </ul>
+              <div className="card-row" style={{ marginTop: "18px" }}>
+                <Link className="page-button" to="/contact">
+                  Contact Me
+                </Link>
+                <Link className="page-button" to="/projects">
+                  View Projects
+                </Link>
+              </div>
+            </article>
+          </div>
+        </SectionPanel>
       </> ) : null}
 
       {loading ? (
