@@ -68,6 +68,15 @@ function getContributionLevel(count, maxCount) {
   return Math.min(4, Math.ceil((count / maxCount) * 4));
 }
 
+function getProblemSolvedAt(problem) {
+  return (
+    problem?.solvedAt ||
+    problem?.completedAt ||
+    problem?.updatedAt ||
+    null
+  );
+}
+
 function useDashboardData() {
   const [state, setState] = useState({
     stats: null,
