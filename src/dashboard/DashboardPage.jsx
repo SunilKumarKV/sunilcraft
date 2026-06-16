@@ -250,6 +250,44 @@ export default function DashboardPage() {
         slug: toProjectSlug(project.name),
       }));
 
+    const timelineEvents = [
+      ...projects
+        .filter((project) => project.updatedAt)
+        .map((project) => ({
+          type: "Project Updated",
+          title: project.name,
+          date: new Date(project.updatedAt),
+          description: project.description
+            ? `Updated project ${project.name} on coding-journal.`
+            : `Updated project ${project.name}.`,
+          link: `/projects/${toProjectSlug(project.name)}`,
+          badge: project.language || "Project",
+        })),
+      ...problems
+        .filter((problem) => problem.solvedAt || problem.updatedAt)
+        .map((problem) => ({
+          type: "Problem Solved",
+          title: problem.title,
+          date: new Date(problem.solvedAt || problem.updatedAt),
+          description: `Solved on ${problem.platform || "a platform"} with ${problem.difficulty || "unknown"} difficulty.`,
+          link: `/problems/${toPlatformSegment(problem.platform)}/${problem.slug}`,
+          badge: problem.platform || "Problem",
+        })),
+      ...problems
+        .filter((problem) => problem.verified && (problem.solvedAt || problem.updatedAt || problem.createdAt))
+        .map((problem) => ({
+          type: "Solution Verified",
+          title: problem.title,
+          date: new Date(problem.solvedAt || problem.updatedAt || problem.createdAt),
+          description: `Verified solution for ${problem.title} on ${problem.platform || "a platform"}.`,
+          link: `/problems/${toPlatformSegment(problem.platform)}/${problem.slug}`,
+          badge: "Verified",
+        })),
+    ]
+      .filter((event) => !Number.isNaN(event.date.getTime()))
+      .sort((a, b) => b.date.getTime() - a.date.getTime())
+      .slice(0, 8);
+
     const problemsWithDate = problems.filter(
       (problem) => problem.addedAt || problem.createdAt || problem.updatedAt || problem.solvedAt
     );
@@ -525,6 +563,37 @@ export default function DashboardPage() {
                 </Link>
               </article>
             ))}
+          </div>
+        </SectionPanel>
+
+        <SectionPanel
+          eyebrow="Build In Public"
+          title="Build In Public Timeline"
+          description="Real timeline events generated from project updates, verified solutions, and solved problems in coding-journal."
+        >
+          <div className="timeline-list">
+            {analytics.timelineEvents.length ? (
+              analytics.timelineEvents.map((event) => (
+                <article className="timeline-item glass-card" key={`${event.type}-${event.title}-${event.date.toISOString()}`}>
+                  <span>{formatDate(event.date)}</span>
+                  <div>
+                    <div className="card-row" style={{ justifyContent: "space-between", gap: "12px" }}>
+                      <h3>{event.title}</h3>
+                      <span className="ui-badge accent">{event.type}</span>
+                    </div>
+                    <p>{event.description}</p>
+                    <Link className="page-button compact" to={event.link}>
+                      View Details
+                    </Link>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <article className="glass-card">
+                <h3>No public build events available</h3>
+                <p>There are currently not enough dated project or problem events in the live coding-journal feed to build a timeline.</p>
+              </article>
+            )}
           </div>
         </SectionPanel>
       </> ) : null}
