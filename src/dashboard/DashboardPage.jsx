@@ -572,29 +572,35 @@ export default function DashboardPage() {
           description="Real timeline events generated from project updates, verified solutions, and solved problems in coding-journal."
         >
           <div className="timeline-list">
-            {analytics.timelineEvents.length ? (
-              analytics.timelineEvents.map((event) => (
-                <article className="timeline-item glass-card" key={`${event.type}-${event.title}-${event.date.toISOString()}`}>
-                  <span>{formatDate(event.date)}</span>
-                  <div>
-                    <div className="card-row" style={{ justifyContent: "space-between", gap: "12px" }}>
-                      <h3>{event.title}</h3>
-                      <span className="ui-badge accent">{event.type}</span>
-                    </div>
-                    <p>{event.description}</p>
-                    <Link className="page-button compact" to={event.link}>
-                      View Details
-                    </Link>
-                  </div>
-                </article>
-              ))
-            ) : (
-              <article className="glass-card">
-                <h3>No public build events available</h3>
-                <p>There are currently not enough dated project or problem events in the live coding-journal feed to build a timeline.</p>
-              </article>
-            )}
+  {(analytics.timelineEvents || []).length ? (
+    (analytics.timelineEvents || []).map((event) => (
+      <article
+        className="timeline-item glass-card"
+        key={`${event.type}-${event.title}-${String(event.date)}`}
+      >
+        <span>{formatDate(event.date) || "Unknown"}</span>
+        <div>
+          <div className="card-row" style={{ justifyContent: "space-between", gap: "12px" }}>
+            <h3>{event.title}</h3>
+            <span className="ui-badge accent">{event.type}</span>
           </div>
+          <p>{event.description}</p>
+          <Link className="page-button compact" to={event.link}>
+            View Details
+          </Link>
+        </div>
+      </article>
+    ))
+  ) : (
+    <article className="glass-card">
+      <h3>No public build events available</h3>
+      <p>
+        There are currently not enough dated project or problem events in the live
+        coding-journal feed to build a timeline.
+      </p>
+    </article>
+  )}
+</div>
         </SectionPanel>
       </> ) : null}
 
