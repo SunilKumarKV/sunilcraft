@@ -4,6 +4,8 @@ const CODING_JOURNAL_REPO_API =
   "https://api.github.com/repos/SunilKumarKV/coding-journal/contents";
 const CODING_JOURNAL_REPO_WEB =
   "https://github.com/SunilKumarKV/coding-journal/tree/main";
+const CODING_JOURNAL_REPO_BLOB =
+  "https://github.com/SunilKumarKV/coding-journal/blob/main";
 
 const PROBLEMS_URL = `${CODING_JOURNAL_BASE}/problems.json`;
 const PROJECTS_URL = `${CODING_JOURNAL_BASE}/projects.json`;
@@ -82,6 +84,55 @@ export function getJournalProblemFolderListing(platform, slug) {
 
 export function getCachedText(url) {
   return fetchCachedText(`text:${url}`, url);
+}
+
+export function normalizeProblemSolutions(problem) {
+  if (Array.isArray(problem?.solutions) && problem.solutions.length) {
+    return problem.solutions
+      .map((solution, index) => ({
+        id: `${solution.language || "solution"}-${solution.filename || index}`,
+        language: solution.language || "Plain Text",
+        filename: solution.filename || "",
+        code: solution.code || "",
+        path: solution.path || "",
+      }))
+      .filter((solution) => solution.code);
+  }
+
+  const fallbackCode =
+    problem?.solutionCode || problem?.solution || problem?.code || "";
+  if (!fallbackCode) return [];
+
+  return [
+    {
+      id: `${problem?.language || "solution"}-fallback`,
+      language: problem?.language || "Plain Text",
+      filename: "",
+      code: fallbackCode,
+      path: "",
+    },
+  ];
+}
+
+export function getProblemLanguages(problem) {
+  return uniqueValues(
+    normalizeProblemSolutions(problem).map((solution) => solution.language)
+  );
+}
+
+export function getProblemSourceUrl(solutionPath) {
+  if (!solutionPath) return "";
+  return `${CODING_JOURNAL_REPO_BLOB}/${solutionPath.replace(/^\//, "")}`;
+}
+
+export function getProblemSolvedAt(problem) {
+  return (
+    problem?.solvedAt ||
+    problem?.updatedAt ||
+    problem?.createdAt ||
+    problem?.addedAt ||
+    ""
+  );
 }
 
 export function toPlatformSegment(platform) {

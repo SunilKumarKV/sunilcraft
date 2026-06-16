@@ -658,6 +658,57 @@ a:hover {
   min-width: 0;
 }
 
+.metric-list {
+  display: grid;
+  gap: 12px;
+}
+
+.metric-list-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  color: var(--text-secondary);
+  border-bottom: 1px solid color-mix(in srgb, var(--input-border) 80%, transparent);
+  padding-bottom: 10px;
+}
+
+.metric-list-row strong {
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.recent-problem-list {
+  display: grid;
+  gap: 12px;
+}
+
+.recent-problem-item {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--card-bg) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--input-border) 72%, transparent);
+}
+
+.recent-problem-item strong {
+  color: var(--text-color);
+  line-height: 1.35;
+}
+
+.recent-problem-item span,
+.tracker-date {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
 .empty-state.small {
   margin-top: 32px;
 }
@@ -706,6 +757,15 @@ a:hover {
   .section-gloss-divider {
     width: min(560px, 86%);
     margin-bottom: 28px;
+  }
+
+  .solution-tabs {
+    gap: 8px;
+  }
+
+  .solution-tab {
+    flex: 1 1 140px;
+    text-align: center;
   }
 }
 
@@ -832,6 +892,76 @@ a:hover {
 
 .glass-card h3 { margin-bottom: 10px; line-height: 1.25; }
 .glass-card p, .timeline-item p { color: var(--text-secondary); line-height: 1.7; }
+
+.codebase-card h2,
+.problem-detail-card h2 {
+  line-height: 1.18;
+}
+
+.solution-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.solution-tab {
+  border: 1px solid color-mix(in srgb, var(--input-border) 88%, transparent);
+  background: color-mix(in srgb, var(--card-bg) 82%, transparent);
+  color: var(--text-color);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.solution-tab.active {
+  color: var(--accent-color);
+  border-color: color-mix(in srgb, var(--accent-color) 32%, transparent);
+  background: color-mix(in srgb, var(--accent-color) 12%, var(--card-bg));
+}
+
+.markdown-article {
+  display: grid;
+  gap: 16px;
+}
+
+.markdown-article h1,
+.markdown-article h2,
+.markdown-article h3,
+.markdown-article h4 {
+  color: var(--text-color);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.markdown-article p,
+.markdown-article li {
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.markdown-article ul,
+.markdown-article ol {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.markdown-article pre {
+  margin: 0;
+}
+
+.inline-code {
+  background: color-mix(in srgb, var(--card-bg) 74%, transparent);
+  border: 1px solid color-mix(in srgb, var(--input-border) 78%, transparent);
+  padding: 0.12rem 0.4rem;
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.92em;
+}
 
 .problem-card::before,
 .glass-card::before,
@@ -1269,6 +1399,10 @@ textarea:focus-visible {
   .card-row,
   .page-header-actions {
     gap: 10px;
+  }
+
+  .metric-list-row {
+    align-items: flex-start;
   }
 }
 

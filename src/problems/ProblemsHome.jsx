@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import DeveloperMetrics from "../components/DeveloperMetrics";
 import PageHeader from "../components/ui/PageHeader";
 import SectionPanel from "../components/ui/SectionPanel";
 import FilterBar from "../components/ui/FilterBar";
@@ -8,7 +7,36 @@ import LoadingState from "../components/ui/LoadingState";
 import ErrorState from "../components/ui/ErrorState";
 import EmptyState from "../components/ui/EmptyState";
 import Badge from "../components/ui/Badge";
-import { getJournalProblems, toPlatformSegment, uniqueValues } from "../lib/codingJournal";
+import {
+  formatDate,
+  getJournalProblems,
+  getProblemSolvedAt,
+  toPlatformSegment,
+  uniqueValues,
+} from "../lib/codingJournal";
+
+function sortBySolvedDate(items) {
+  return [...items].sort((a, b) => {
+    const aDate = new Date(getProblemSolvedAt(a) || 0).getTime();
+    const bDate = new Date(getProblemSolvedAt(b) || 0).getTime();
+
+    if (aDate && bDate && aDate !== bDate) {
+      return bDate - aDate;
+    }
+    if (aDate) return -1;
+    if (bDate) return 1;
+    return 0;
+  });
+}
+
+function countBy(items, selector) {
+  return items.reduce((acc, item) => {
+    const key = selector(item);
+    if (!key) return acc;
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+}
 
 export default function ProblemsHome() {
   const [problems, setProblems] = useState([]);
@@ -41,30 +69,34 @@ export default function ProblemsHome() {
     };
   }, []);
 
-  const platforms = useMemo(
-    () => ["All", ...uniqueValues(problems.map((problem) => problem.platform)).sort()],
+  const solvedProblems = useMemo(
+    () => problems.filter((problem) => (problem.status || "Solved") === "Solved"),
     [problems]
+  );
+
+  const platforms = useMemo(
+    () => ["All", ...uniqueValues(solvedProblems.map((problem) => problem.platform)).sort()],
+    [solvedProblems]
   );
 
   const difficulties = useMemo(
-    () => ["All", ...uniqueValues(problems.map((problem) => problem.difficulty)).sort()],
-    [problems]
+    () => ["All", ...uniqueValues(solvedProblems.map((problem) => problem.difficulty)).sort()],
+    [solvedProblems]
   );
 
   const tags = useMemo(
-    () => ["All", ...uniqueValues(problems.flatMap((problem) => problem.tags || [])).sort()],
-    [problems]
+    () => ["All", ...uniqueValues(solvedProblems.flatMap((problem) => problem.tags || [])).sort()],
+    [solvedProblems]
   );
 
   const filteredProblems = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
-    return problems.filter((problem) => {
+    return solvedProblems.filter((problem) => {
       const matchesSearch = [
         problem.title,
         problem.platform,
         problem.difficulty,
-        problem.language,
         ...(problem.tags || []),
       ]
         .filter(Boolean)
@@ -72,8 +104,7 @@ export default function ProblemsHome() {
         .toLowerCase()
         .includes(normalizedQuery);
       const matchesPlatform = platform === "All" || problem.platform === platform;
-      const matchesDifficulty =
-        difficulty === "All" || problem.difficulty === difficulty;
+      const matchesDifficulty = difficulty === "All" || problem.difficulty === difficulty;
       const matchesVerified =
         verified === "All" ||
         (verified === "Verified" && problem.verified) ||
@@ -88,27 +119,162 @@ export default function ProblemsHome() {
         matchesTag
       );
     });
-  }, [difficulty, platform, problems, query, tag, verified]);
+  }, [difficulty, platform, query, solvedProblems, tag, verified]);
+
+  const analytics = useMemo(() => {
+    const verifiedCount = solvedProblems.filter((problem) => problem.verified).length;
+    const byDifficulty = countBy(solvedProblems, (problem) => problem.difficulty || "Unknown");
+    const byPlatform = Object.entries(countBy(solvedProblems, (problem) => problem.platform || "Unknown"))
+      .sort((a, b) => b[1] - a[1]);
+    const byTag = Object.entries(
+      solvedProblems.reduce((acc, problem) => {
+        for (const item of problem.tags || []) {
+          acc[item] = (acc[item] || 0) + 1;
+        }
+        return acc;
+      }, {})
+    ).sort((a, b) => b[1] - a[1]);
+
+    return {
+      totalSolved: solvedProblems.length,
+      verifiedSolved: verifiedCount,
+      easy: byDifficulty.Easy || 0,
+      medium: byDifficulty.Medium || 0,
+      hard: byDifficulty.Hard || 0,
+      platforms: byPlatform,
+      tags: byTag,
+      recent: solvedProblems.some((problem) => getProblemSolvedAt(problem))
+        ? sortBySolvedDate(solvedProblems).slice(0, 6)
+        : solvedProblems.slice(0, 6),
+    };
+  }, [solvedProblems]);
 
   return (
     <main className="page-shell problems-home">
       <PageHeader
-        eyebrow="Coding Journal"
+        eyebrow="Problem Solving Tracker"
         title="Problems"
-        description="A verified record of coding problems I’ve solved, tested, and documented."
+        description="Track solved problems, verified progress, platforms, and topic coverage without turning the page into a code library."
         align="left"
       />
 
-      <DeveloperMetrics />
+      <SectionPanel
+        eyebrow="Overview"
+        title="Solved Progress"
+        description="A quick tracker view of consistency, verification, and difficulty coverage."
+      >
+        {loading ? (
+          <LoadingState title="Loading tracker" message="Fetching solved problem history from coding-journal." />
+        ) : error ? (
+          <ErrorState title="Unable to load tracker" message={error} />
+        ) : !solvedProblems.length ? (
+          <EmptyState title="No solved problems yet" message="coding-journal does not contain solved problem history yet." />
+        ) : (
+          <div className="problem-grid">
+            <article className="problem-card stat-card">
+              <span className="problem-stat">Solved</span>
+              <h2>{analytics.totalSolved}</h2>
+              <p>Total solved problems tracked in coding-journal.</p>
+            </article>
+            <article className="problem-card stat-card">
+              <span className="problem-stat">Verified</span>
+              <h2>{analytics.verifiedSolved}</h2>
+              <p>Entries currently marked as verified.</p>
+            </article>
+            <article className="problem-card stat-card">
+              <span className="problem-stat">Easy</span>
+              <h2>{analytics.easy}</h2>
+              <p>Easy problems completed so far.</p>
+            </article>
+            <article className="problem-card stat-card">
+              <span className="problem-stat">Medium</span>
+              <h2>{analytics.medium}</h2>
+              <p>Medium problems completed so far.</p>
+            </article>
+            <article className="problem-card stat-card">
+              <span className="problem-stat">Hard</span>
+              <h2>{analytics.hard}</h2>
+              <p>Hard problems completed so far.</p>
+            </article>
+          </div>
+        )}
+      </SectionPanel>
 
-      <SectionPanel eyebrow="Problem Explorer" title="Browse Problems">
+      <SectionPanel
+        eyebrow="Coverage"
+        title="Platforms and Topics"
+        description="Use this view to see where the practice is concentrated."
+      >
+        {loading ? (
+          <LoadingState title="Loading coverage" message="Preparing platform and topic breakdowns." />
+        ) : error ? (
+          <ErrorState title="Unable to load coverage" message={error} />
+        ) : (
+          <div className="feature-grid">
+            <article className="glass-card">
+              <h3>Platform Breakdown</h3>
+              {analytics.platforms.length ? (
+                <div className="metric-list">
+                  {analytics.platforms.map(([name, count]) => (
+                    <div className="metric-list-row" key={name}>
+                      <span>{name}</span>
+                      <strong>{count}</strong>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>No platform data available yet.</p>
+              )}
+            </article>
+            <article className="glass-card">
+              <h3>Topic Breakdown</h3>
+              {analytics.tags.length ? (
+                <div className="tag-cloud">
+                  {analytics.tags.slice(0, 12).map(([name, count]) => (
+                    <Badge key={name}>{name} ({count})</Badge>
+                  ))}
+                </div>
+              ) : (
+                <p>No topic tags available yet.</p>
+              )}
+            </article>
+            <article className="glass-card">
+              <h3>Recently Solved</h3>
+              {analytics.recent.length ? (
+                <div className="recent-problem-list">
+                  {analytics.recent.slice(0, 4).map((problem) => (
+                    <Link
+                      key={`${problem.platform}-${problem.slug}`}
+                      className="recent-problem-item"
+                      to={`/problems/${toPlatformSegment(problem.platform)}/${problem.slug}`}
+                    >
+                      <strong>{problem.title}</strong>
+                      <span>
+                        {problem.platform} • {problem.difficulty || "Unknown"}
+                        {getProblemSolvedAt(problem) ? ` • ${formatDate(getProblemSolvedAt(problem))}` : ""}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p>No recent problem history available yet.</p>
+              )}
+            </article>
+          </div>
+        )}
+      </SectionPanel>
 
+      <SectionPanel
+        eyebrow="History"
+        title="Search Problem History"
+        description="Search and filter solved problems by platform, difficulty, verification, and tags."
+      >
         <FilterBar>
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search title, platform, language, or tag..."
+            placeholder="Search title, platform, difficulty, or tag..."
             aria-label="Search problems"
           />
           <select value={platform} onChange={(event) => setPlatform(event.target.value)} aria-label="Filter by platform">
@@ -140,13 +306,11 @@ export default function ProblemsHome() {
         </FilterBar>
 
         {loading ? (
-          <LoadingState title="Loading problems" message="Fetching the latest problems feed from coding-journal." />
+          <LoadingState title="Loading problem history" message="Fetching the latest problem feed from coding-journal." />
         ) : error ? (
-          <ErrorState title="Unable to load problems" message={error} />
-        ) : !problems.length ? (
-          <EmptyState title="No problems found" message="coding-journal returned an empty problems feed." />
+          <ErrorState title="Unable to load problem history" message={error} />
         ) : !filteredProblems.length ? (
-          <EmptyState title="No matching problems" message="Try clearing one or more filters to see more results." />
+          <EmptyState title="No matching problems" message="Try clearing one or more filters to see more solved history." />
         ) : (
           <div className="problem-grid">
             {filteredProblems.map((problem) => (
@@ -158,7 +322,7 @@ export default function ProblemsHome() {
                 <div className="card-row">
                   <Badge tone="accent">{problem.platform}</Badge>
                   <Badge>{problem.difficulty || "Unknown"}</Badge>
-                  <Badge>{problem.language || "Unknown"}</Badge>
+                  <Badge>{problem.status || "Solved"}</Badge>
                   {problem.verified ? <Badge tone="success">Verified</Badge> : null}
                 </div>
                 <h2>{problem.title}</h2>
@@ -168,6 +332,11 @@ export default function ProblemsHome() {
                       <Badge key={tagName}>{tagName}</Badge>
                     ))}
                   </div>
+                ) : (
+                  <p>No tags attached yet.</p>
+                )}
+                {getProblemSolvedAt(problem) ? (
+                  <p className="tracker-date">Solved {formatDate(getProblemSolvedAt(problem))}</p>
                 ) : null}
               </Link>
             ))}
