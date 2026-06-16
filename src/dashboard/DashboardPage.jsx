@@ -5,6 +5,9 @@ import {
   getJournalProblems,
   getJournalProjects,
   getJournalStats,
+  getProblemLanguages,
+  toPlatformSegment,
+  toProjectSlug,
   sumNumber,
   uniqueValues,
 } from "../lib/codingJournal";
@@ -209,6 +212,44 @@ export default function DashboardPage() {
         percentage: percent(count, technologyCandidates.length),
       }));
 
+    const recentVerifiedProblems = [...problems]
+      .filter((problem) => problem.verified)
+      .sort((a, b) => {
+        const dateA = new Date(a.solvedAt || a.updatedAt || a.createdAt || 0).getTime();
+        const dateB = new Date(b.solvedAt || b.updatedAt || b.createdAt || 0).getTime();
+        const hasDateA = Boolean(dateA);
+        const hasDateB = Boolean(dateB);
+
+        if (hasDateA && hasDateB) return dateB - dateA;
+        if (hasDateA) return -1;
+        if (hasDateB) return 1;
+        return 0;
+      })
+      .slice(0, 6)
+      .map((problem) => ({
+        ...problem,
+        languageCount: getProblemLanguages(problem).length,
+        platformSegment: toPlatformSegment(problem.platform),
+      }));
+
+    const recentProjects = [...projects]
+      .sort((a, b) => {
+        const dateA = new Date(a.updatedAt || 0).getTime();
+        const dateB = new Date(b.updatedAt || 0).getTime();
+        const hasDateA = Boolean(dateA);
+        const hasDateB = Boolean(dateB);
+
+        if (hasDateA && hasDateB) return dateB - dateA;
+        if (hasDateA) return -1;
+        if (hasDateB) return 1;
+        return 0;
+      })
+      .slice(0, 6)
+      .map((project) => ({
+        ...project,
+        slug: toProjectSlug(project.name),
+      }));
+
     const problemsWithDate = problems.filter(
       (problem) => problem.addedAt || problem.createdAt || problem.updatedAt || problem.solvedAt
     );
@@ -281,6 +322,8 @@ export default function DashboardPage() {
       difficultyCards,
       tagCards,
       technologyCards,
+      recentVerifiedProblems,
+      recentProjects,
       timelineCards,
       projectInsights: {
         byStars,
@@ -435,6 +478,53 @@ export default function DashboardPage() {
                 </Link>
               </div>
             </article>
+          </div>
+        </SectionPanel>
+
+        <SectionPanel
+          eyebrow="Recent Activity"
+          title="Recent Problems"
+          description="Verified problems from coding-journal, sorted by most recent solved dates and linked to the tracker detail page."
+        >
+          <div className="feature-grid">
+            {analytics.recentVerifiedProblems.map((problem) => (
+              <article className="glass-card" key={problem.slug}>
+                <div className="card-row">
+                  <span>{problem.platform}</span>
+                  <span>{problem.difficulty || "Unknown"}</span>
+                </div>
+                <h3>{problem.title}</h3>
+                <p>{problem.languageCount} solution language{problem.languageCount === 1 ? "" : "s"}</p>
+                <div className="card-row" style={{ gap: "10px", flexWrap: "wrap" }}>
+                  <span className="ui-badge success">Verified</span>
+                  <Link className="page-button compact" to={`/problems/${problem.platformSegment}/${problem.slug}`}>
+                    View Problem
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </SectionPanel>
+
+        <SectionPanel
+          eyebrow="Recent Activity"
+          title="Recent Projects"
+          description="Latest updated repositories from coding-journal, sorted by update date and linked to project detail pages."
+        >
+          <div className="feature-grid">
+            {analytics.recentProjects.map((project) => (
+              <article className="glass-card" key={project.slug}>
+                <div className="card-row">
+                  <span>{project.language || "Unknown"}</span>
+                  <span>⭐ {project.stars || 0}</span>
+                </div>
+                <h3>{project.name}</h3>
+                <p>{project.forks || 0} forks • Updated {formatDate(project.updatedAt) || "Unknown"}</p>
+                <Link className="page-button compact" to={`/projects/${project.slug}`}>
+                  View Project
+                </Link>
+              </article>
+            ))}
           </div>
         </SectionPanel>
       </> ) : null}
