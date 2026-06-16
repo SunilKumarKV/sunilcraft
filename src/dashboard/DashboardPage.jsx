@@ -31,6 +31,26 @@ const languageOrder = [
 const difficultyOrder = ["Easy", "Medium", "Hard"];
 const trackedTags = ["Array", "Hash Map", "String", "Tree", "Graph", "DP"];
 
+const technologyAliases = {
+  js: "JavaScript",
+  javascript: "JavaScript",
+  ts: "TypeScript",
+  typescript: "TypeScript",
+  react: "React",
+  reactjs: "React",
+  node: "Node.js",
+  "node.js": "Node.js",
+  nodejs: "Node.js",
+  "c lang": "C",
+  c: "C",
+};
+
+function normalizeTechnology(value) {
+  if (!value || typeof value !== "string") return "";
+  const normalized = value.trim().toLowerCase();
+  return technologyAliases[normalized] || value.trim();
+}
+
 function percent(value, total) {
   if (!total) return "0%";
   return `${Math.round((value / total) * 100)}%`;
@@ -149,6 +169,46 @@ export default function DashboardPage() {
       .slice(0, 6)
       .map(([name, count]) => ({ name, count }));
 
+    const technologyCandidates = [];
+
+    projects.forEach((project) => {
+      const projectLanguage = normalizeTechnology(project.language);
+      if (projectLanguage) technologyCandidates.push(projectLanguage);
+
+      (project.topics || []).forEach((topic) => {
+        const normalizedTopic = normalizeTechnology(topic);
+        if (normalizedTopic) technologyCandidates.push(normalizedTopic);
+      });
+    });
+
+    problems.forEach((problem) => {
+      const solutionLanguages = Array.isArray(problem.solutions)
+        ? problem.solutions.map((solution) => normalizeTechnology(solution.language)).filter(Boolean)
+        : [];
+
+      if (solutionLanguages.length) {
+        technologyCandidates.push(...solutionLanguages);
+      } else {
+        const fallbackLanguage = normalizeTechnology(problem.language);
+        if (fallbackLanguage) technologyCandidates.push(fallbackLanguage);
+      }
+    });
+
+    const technologyCounts = technologyCandidates.reduce((acc, tech) => {
+      if (!tech) return acc;
+      acc[tech] = (acc[tech] || 0) + 1;
+      return acc;
+    }, {});
+
+    const technologyCards = Object.entries(technologyCounts)
+      .sort(([, countA], [, countB]) => countB - countA)
+      .slice(0, 10)
+      .map(([name, count]) => ({
+        name,
+        count,
+        percentage: percent(count, technologyCandidates.length),
+      }));
+
     const problemsWithDate = problems.filter(
       (problem) => problem.addedAt || problem.createdAt || problem.updatedAt || problem.solvedAt
     );
@@ -220,6 +280,7 @@ export default function DashboardPage() {
       languageCards,
       difficultyCards,
       tagCards,
+      technologyCards,
       timelineCards,
       projectInsights: {
         byStars,
@@ -263,7 +324,7 @@ export default function DashboardPage() {
             title="Coding Progress"
             description="Problem solving performance and platform, difficulty, and topic distributions from live coding-journal problem data."
           >
-          <div className="feature-grid">
+            <div className="feature-grid">
             <article className="glass-card">
               <h3>Difficulty Progress</h3>
               <div className="progress-stack">
@@ -306,6 +367,32 @@ export default function DashboardPage() {
                     {item.name}
                     <strong>{item.count}</strong>
                   </span>
+                ))}
+              </div>
+            </article>
+          </div>
+        </SectionPanel>
+
+        <SectionPanel
+          className="dashboard-progress"
+          eyebrow="Technology Usage"
+          title="Technology Usage"
+          description="Live technology usage calculated from coding-journal project metadata, topics, and solution languages."
+        >
+          <div className="feature-grid">
+            <article className="glass-card">
+              <h3>Top Technologies</h3>
+              <div className="progress-stack">
+                {analytics.technologyCards.map((item) => (
+                  <div className="progress-row" key={item.name}>
+                    <div className="progress-label">
+                      <span>{item.name}</span>
+                      <span>{item.count}</span>
+                    </div>
+                    <div className="progress-bar" aria-label={`${item.name} usage`}>
+                      <span style={{ width: item.percentage }} />
+                    </div>
+                  </div>
                 ))}
               </div>
             </article>
