@@ -59,6 +59,15 @@ function percent(value, total) {
   return `${Math.round((value / total) * 100)}%`;
 }
 
+function getDateKey(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function getContributionLevel(count, maxCount) {
+  if (!count || !maxCount) return 0;
+  return Math.min(4, Math.ceil((count / maxCount) * 4));
+}
+
 function useDashboardData() {
   const [state, setState] = useState({
     stats: null,
@@ -311,6 +320,69 @@ export default function DashboardPage() {
       count,
     }));
 
+    const heatmapDays = (() => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const daysCount = 365;
+      const startDate = new Date(today);
+      startDate.setDate(startDate.getDate() - (daysCount - 1));
+
+      const contributions = {};
+      const recordEvent = (rawDate) => {
+        if (!rawDate) return;
+        const eventDate = new Date(rawDate);
+        if (Number.isNaN(eventDate.getTime())) return;
+        eventDate.setHours(0, 0, 0, 0);
+        if (eventDate < startDate || eventDate > today) return;
+        const key = getDateKey(eventDate);
+        contributions[key] = (contributions[key] || 0) + 1;
+      };
+
+      problems.forEach((problem) => recordEvent(getProblemSolvedAt(problem)));
+      projects.forEach((project) => recordEvent(project.updatedAt));
+
+      return Array.from({ length: daysCount }, (_, index) => {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + index);
+        const key = getDateKey(date);
+        return {
+          key,
+          date,
+          count: contributions[key] || 0,
+        };
+      });
+    })();
+
+    const maxHeatCount = Math.max(...heatmapDays.map((day) => day.count), 1);
+    const contributionWeeks = Array.from(
+      { length: Math.ceil(heatmapDays.length / 7) },
+      (_, weekIndex) => heatmapDays.slice(weekIndex * 7, weekIndex * 7 + 7)
+    );
+
+    const contributionTotals = heatmapDays.reduce((total, day) => total + day.count, 0);
+    const currentContributionStreak = (() => {
+      let streak = 0;
+      for (let i = heatmapDays.length - 1; i >= 0; i -= 1) {
+        if (heatmapDays[i].count > 0) streak += 1;
+        else break;
+      }
+      return streak;
+    })();
+
+    const longestContributionStreak = heatmapDays.reduce(
+      (streakState, day) => {
+        if (day.count > 0) {
+          const nextCount = streakState.current + 1;
+          return {
+            current: nextCount,
+            longest: Math.max(streakState.longest, nextCount),
+          };
+        }
+        return { current: 0, longest: streakState.longest };
+      },
+      { current: 0, longest: 0 }
+    ).longest;
+
     const byStars = [...projects]
       .sort((a, b) => (b.stars || 0) - (a.stars || 0) || a.name.localeCompare(b.name))
       .slice(0, 3);
@@ -363,6 +435,14 @@ export default function DashboardPage() {
       recentVerifiedProblems,
       recentProjects,
       timelineCards,
+      timelineEvents,
+      contributionHeatmap: {
+        weeks: contributionWeeks,
+        total: contributionTotals,
+        currentStreak: currentContributionStreak,
+        longestStreak: longestContributionStreak,
+        maxCount: maxHeatCount,
+      },
       projectInsights: {
         byStars,
         byForks,
@@ -515,6 +595,57 @@ export default function DashboardPage() {
                   View Projects
                 </Link>
               </div>
+            </article>
+          </div>
+        </SectionPanel>
+
+        <SectionPanel
+          eyebrow="GitHub Activity"
+          title="Contribution Heatmap"
+          description="A 365-day contribution intensity heatmap built from live problem and project date events in the synced coding-journal feeds."
+        >
+          <div className="feature-grid">
+            <article className="glass-card">
+              <div className="card-row" style={{ justifyContent: "space-between", gap: "18px", flexWrap: "wrap" }}>
+                <div>
+                  <h3>365-Day Activity</h3>
+                  <p>
+                    {analytics.contributionHeatmap.total} recorded events in the last year • {analytics.contributionHeatmap.currentStreak} day current streak • {analytics.contributionHeatmap.longestStreak} day longest streak.
+                  </p>
+                </div>
+                <div className="contribution-legend">
+                  <span>Less</span>
+                  <div className="legend-squares">
+                    {[0, 1, 2, 3, 4].map((level) => (
+                      <span key={level} className={`legend-square level-${level}`} />
+                    ))}
+                  </div>
+                  <span>More</span>
+                </div>
+              </div>
+
+              <div className="contribution-heatmap-container">
+                <div className="contribution-heatmap-grid" role="grid" aria-label="GitHub-style contribution heatmap">
+                  {analytics.contributionHeatmap.weeks.map((week, weekIndex) => (
+                    <div className="contribution-week" key={`week-${weekIndex}`}>
+                      {week.map((day) => (
+                        <div
+                          key={day.key}
+                          className={`contribution-cell level-${getContributionLevel(day.count, analytics.contributionHeatmap.maxCount)}`}
+                          title={`${formatDate(day.date)} — ${day.count} event${day.count === 1 ? "" : "s"}`}
+                          aria-label={`${formatDate(day.date)}: ${day.count} event${day.count === 1 ? "" : "s"}`}
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {!analytics.contributionHeatmap.total ? (
+                <p style={{ marginTop: "16px", color: "var(--text-secondary)" }}>
+                  Live date events are not yet available in the synced feed to build a detailed contribution history.
+                </p>
+              ) : null}
             </article>
           </div>
         </SectionPanel>
