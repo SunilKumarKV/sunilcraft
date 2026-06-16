@@ -88,6 +88,10 @@ export default function DashboardPage() {
     const totalProjects = stats?.totalProjects ?? projects.length;
     const totalStars = stats?.totalStars ?? sumNumber(projects, "stars");
     const totalForks = stats?.totalForks ?? sumNumber(projects, "forks");
+    const languagesUsed = uniqueValues([
+      ...projects.map((project) => project.language),
+      ...problems.map((problem) => problem.language),
+    ]).length;
 
     const byPlatform = problems.reduce((acc, problem) => {
       const key = problem.platform || "Custom";
@@ -207,8 +211,9 @@ export default function DashboardPage() {
         { label: "Total Problems", value: totalProblems },
         { label: "Verified Problems", value: verifiedProblems },
         { label: "Total Projects", value: totalProjects },
-        { label: "Total Stars", value: totalStars },
-        { label: "Total Forks", value: totalForks },
+        { label: "Languages Used", value: languagesUsed },
+        { label: "GitHub Stars", value: totalStars },
+        { label: "GitHub Forks", value: totalForks },
       ],
       platformCards,
       languageCards,
@@ -233,6 +238,23 @@ export default function DashboardPage() {
         description="A live snapshot of my developer activity across projects, problem solving, and verified code."
         align="left"
       />
+
+      {!loading && !error ? (
+        <SectionPanel
+          eyebrow="Activity Overview"
+          title="Activity Overview"
+          description="Live calculations from the synced coding-journal feeds for problems, projects, verification, language usage, and GitHub metrics."
+        >
+          <div className="dashboard-grid">
+            {analytics.overview.map((metric) => (
+              <article className="glass-card" key={metric.label}>
+                <span className="section-eyebrow">{metric.label}</span>
+                <h3>{metric.value}</h3>
+              </article>
+            ))}
+          </div>
+        </SectionPanel>
+      ) : null}
 
       {loading ? (
         <SectionPanel eyebrow="Loading" title="Preparing Dashboard">
