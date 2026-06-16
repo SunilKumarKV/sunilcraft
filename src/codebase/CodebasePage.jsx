@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   getJournalProblems,
+  getProblemLanguages,
+  normalizeProblemSolutions,
   toPlatformSegment,
   uniqueValues,
 } from "../lib/codingJournal";
@@ -12,6 +14,14 @@ import LoadingState from "../components/ui/LoadingState";
 import ErrorState from "../components/ui/ErrorState";
 import EmptyState from "../components/ui/EmptyState";
 import Badge from "../components/ui/Badge";
+
+function getExplanationAvailable(problem) {
+  return Boolean(String(problem.explanation || "").trim());
+}
+
+function getTestsAvailable(problem) {
+  return Boolean(problem.verified);
+}
 
 export default function CodebasePage() {
   const [problems, setProblems] = useState([]);
@@ -44,36 +54,47 @@ export default function CodebasePage() {
     };
   }, []);
 
-  const languages = useMemo(
-    () => ["All", ...uniqueValues(problems.map((problem) => problem.language)).sort()],
+  const libraryEntries = useMemo(
+    () =>
+      problems.filter((problem) => normalizeProblemSolutions(problem).length || getExplanationAvailable(problem)),
     [problems]
+  );
+
+  const languages = useMemo(
+    () => [
+      "All",
+      ...uniqueValues(libraryEntries.flatMap((problem) => getProblemLanguages(problem))).sort(),
+    ],
+    [libraryEntries]
   );
 
   const platforms = useMemo(
-    () => ["All", ...uniqueValues(problems.map((problem) => problem.platform)).sort()],
-    [problems]
+    () => ["All", ...uniqueValues(libraryEntries.map((problem) => problem.platform)).sort()],
+    [libraryEntries]
   );
 
   const tags = useMemo(
-    () => ["All", ...uniqueValues(problems.flatMap((problem) => problem.tags || [])).sort()],
-    [problems]
+    () => ["All", ...uniqueValues(libraryEntries.flatMap((problem) => problem.tags || [])).sort()],
+    [libraryEntries]
   );
 
   const filteredProblems = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
-    return problems.filter((problem) => {
+    return libraryEntries.filter((problem) => {
+      const solutionLanguages = getProblemLanguages(problem);
       const matchesSearch = [
         problem.title,
         problem.platform,
-        problem.language,
+        problem.difficulty,
+        ...solutionLanguages,
         ...(problem.tags || []),
       ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()
         .includes(normalizedQuery);
-      const matchesLanguage = language === "All" || problem.language === language;
+      const matchesLanguage = language === "All" || solutionLanguages.includes(language);
       const matchesPlatform = platform === "All" || problem.platform === platform;
       const matchesVerified =
         verified === "All" ||
@@ -89,120 +110,89 @@ export default function CodebasePage() {
         matchesTag
       );
     });
-  }, [language, platform, problems, query, tag, verified]);
+  }, [language, libraryEntries, platform, query, tag, verified]);
 
-  const groupedMetrics = useMemo(() => {
-    const byLanguage = problems.reduce((acc, problem) => {
-      const key = problem.language || "Unknown";
-      acc[key] = (acc[key] || 0) + 1;
-      return acc;
-    }, {});
-
-    const byPlatform = problems.reduce((acc, problem) => {
-      const key = problem.platform || "Unknown";
-      acc[key] = (acc[key] || 0) + 1;
-      return acc;
-    }, {});
-
-    const byTag = problems.reduce((acc, problem) => {
-      for (const item of problem.tags || []) {
-        acc[item] = (acc[item] || 0) + 1;
-      }
-      return acc;
-    }, {});
+  const libraryStats = useMemo(() => {
+    const verifiedCount = libraryEntries.filter((problem) => problem.verified).length;
+    const withExplanation = libraryEntries.filter((problem) => getExplanationAvailable(problem)).length;
+    const solutionCount = libraryEntries.reduce(
+      (total, problem) => total + normalizeProblemSolutions(problem).length,
+      0
+    );
+    const languagesTracked = uniqueValues(
+      libraryEntries.flatMap((problem) => getProblemLanguages(problem))
+    ).length;
 
     return {
-      languages: Object.entries(byLanguage),
-      platforms: Object.entries(byPlatform),
-      tags: Object.entries(byTag),
+      verifiedCount,
+      withExplanation,
+      solutionCount,
+      languagesTracked,
     };
-  }, [problems]);
-
-  const workflowSteps = [
-    "Solve problem",
-    "Run `cj add <platform> <slug>`",
-    "Add solution + tests + explanation",
-    "Run `cj verify`",
-    "Run `cj publish`",
-    "Portfolio updates automatically",
-  ];
-
-  const syncBadges = [
-    "Verified by tests",
-    "Powered by coding-journal",
-    "No mock data",
-    "Multi-platform ready",
-  ];
+  }, [libraryEntries]);
 
   return (
     <main className="page-shell">
       <PageHeader
-        eyebrow="Coding Journal Codebase"
+        eyebrow="Verified Solution Library"
         title="Codebase"
-        description="My personal solution library with source code, tests, explanations, and complexity notes."
+        description="Browse solution articles, multiple languages, verification status, explanations, and complexity notes from live coding-journal data."
         align="left"
       />
 
-      <section className="section-panel">
-        <span className="section-eyebrow">Workflow Guide</span>
-        <h2>How this Codebase updates</h2>
-        <div className="feature-grid">
-          {workflowSteps.map((step, index) => (
-            <article className="glass-card" key={step}>
-              <h3>Step {index + 1}</h3>
-              <p>{step}</p>
-            </article>
-          ))}
-        </div>
-
-        <div className="problem-grid" style={{ marginTop: "24px" }}>
-          {syncBadges.map((badge) => (
-            <article className="problem-card" key={badge}>
-              <span className="problem-stat">Codebase</span>
-              <h2>{badge}</h2>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section-panel">
-        <span className="section-eyebrow">Code Groups</span>
-        <h2>By Language, Platform, and Tag</h2>
-
+      <SectionPanel
+        eyebrow="Library Overview"
+        title="What this Codebase contains"
+        description="This side of the portfolio is about implementation depth: solutions, explanations, and engineering detail."
+      >
         {loading ? (
-          <LoadingState title="Loading code groups" message="Fetching grouped codebase data from coding-journal." />
+          <LoadingState title="Loading codebase overview" message="Preparing the solution library from coding-journal." />
         ) : error ? (
-          <ErrorState title="Unable to load code groups" message={error} />
-        ) : !problems.length ? (
-          <EmptyState title="No code entries found" message="coding-journal returned an empty problems feed." />
+          <ErrorState title="Unable to load codebase overview" message={error} />
+        ) : !libraryEntries.length ? (
+          <EmptyState title="No codebase entries found" message="coding-journal did not return any solution entries." />
         ) : (
-          <div className="feature-grid">
-            <article className="glass-card">
-              <h3>Languages</h3>
-              <p>{groupedMetrics.languages.map(([name, count]) => `${name} (${count})`).join(", ")}</p>
+          <div className="problem-grid">
+            <article className="problem-card stat-card">
+              <span className="problem-stat">Entries</span>
+              <h2>{libraryEntries.length}</h2>
+              <p>Problems with solution material available.</p>
             </article>
-            <article className="glass-card">
-              <h3>Platforms</h3>
-              <p>{groupedMetrics.platforms.map(([name, count]) => `${name} (${count})`).join(", ")}</p>
+            <article className="problem-card stat-card">
+              <span className="problem-stat">Solutions</span>
+              <h2>{libraryStats.solutionCount}</h2>
+              <p>Total solutions published across all languages.</p>
             </article>
-            <article className="glass-card">
-              <h3>Tags</h3>
-              <p>{groupedMetrics.tags.map(([name, count]) => `${name} (${count})`).join(", ")}</p>
+            <article className="problem-card stat-card">
+              <span className="problem-stat">Verified</span>
+              <h2>{libraryStats.verifiedCount}</h2>
+              <p>Entries currently marked as verified.</p>
+            </article>
+            <article className="problem-card stat-card">
+              <span className="problem-stat">Explanations</span>
+              <h2>{libraryStats.withExplanation}</h2>
+              <p>Entries with markdown explanations available.</p>
+            </article>
+            <article className="problem-card stat-card">
+              <span className="problem-stat">Languages</span>
+              <h2>{libraryStats.languagesTracked}</h2>
+              <p>Programming languages represented in the library.</p>
             </article>
           </div>
         )}
-      </section>
+      </SectionPanel>
 
-      <section className="section-panel">
-        <span className="section-eyebrow">Explorer</span>
-        <h2>Browse Solved Code</h2>
-
+      <SectionPanel
+        eyebrow="Explorer"
+        title="Browse Solution Articles"
+        description="Search by problem title, platform, tags, available languages, and verification status."
+      >
         <FilterBar>
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search title, language, platform, or tag..."
+            placeholder="Search title, platform, language, or tag..."
             aria-label="Search codebase"
           />
           <select value={language} onChange={(event) => setLanguage(event.target.value)} aria-label="Filter by language">
@@ -234,40 +224,48 @@ export default function CodebasePage() {
         </FilterBar>
 
         {loading ? (
-          <LoadingState title="Loading codebase" message="Fetching solved code entries from coding-journal." />
+          <LoadingState title="Loading solution library" message="Fetching codebase entries from coding-journal." />
         ) : error ? (
-          <ErrorState title="Unable to load codebase" message={error} />
+          <ErrorState title="Unable to load solution library" message={error} />
         ) : !filteredProblems.length ? (
-          <EmptyState title="No matching code entries" message="Try clearing one or more filters to see more solved code." />
+          <EmptyState title="No matching codebase entries" message="Try clearing one or more filters to see more solution articles." />
         ) : (
           <div className="problem-grid">
-            {filteredProblems.map((problem) => (
-              <Link
-                key={`${problem.platform}-${problem.slug}`}
-                className="problem-card"
-                to={`/codebase/${toPlatformSegment(problem.platform)}/${problem.slug}`}
-              >
-                <div className="card-row">
-                  <Badge tone="accent">{problem.platform}</Badge>
-                  <Badge>{problem.difficulty || "Unknown"}</Badge>
-                  <Badge>{problem.language || "Unknown"}</Badge>
-                  {problem.verified ? <Badge tone="success">Verified</Badge> : null}
-                </div>
-                <h2>{problem.title}</h2>
-                {(problem.tags || []).length ? (
+            {filteredProblems.map((problem) => {
+              const solutions = normalizeProblemSolutions(problem);
+              const solutionLanguages = getProblemLanguages(problem);
+
+              return (
+                <Link
+                  key={`${problem.platform}-${problem.slug}`}
+                  className="problem-card codebase-card"
+                  to={`/codebase/${toPlatformSegment(problem.platform)}/${problem.slug}`}
+                >
                   <div className="card-row">
-                    {problem.tags.slice(0, 4).map((tagName) => (
-                      <Badge key={tagName}>{tagName}</Badge>
-                    ))}
+                    <Badge tone="accent">{problem.platform}</Badge>
+                    <Badge>{problem.difficulty || "Unknown"}</Badge>
+                    {problem.verified ? <Badge tone="success">Verified</Badge> : null}
                   </div>
-                ) : (
-                  <p>Open the entry for source code, notes, and verification details.</p>
-                )}
-              </Link>
-            ))}
+                  <h2>{problem.title}</h2>
+                  <div className="card-row">
+                    <Badge>{solutions.length} {solutions.length === 1 ? "Solution" : "Solutions"}</Badge>
+                    <Badge>{solutionLanguages.length} {solutionLanguages.length === 1 ? "Language" : "Languages"}</Badge>
+                    {getExplanationAvailable(problem) ? <Badge tone="success">Explanation Available</Badge> : null}
+                    {getTestsAvailable(problem) ? <Badge tone="success">Tests Available</Badge> : <Badge>Tests Pending</Badge>}
+                  </div>
+                  {solutionLanguages.length ? (
+                    <div className="card-row">
+                      {solutionLanguages.slice(0, 4).map((languageName) => (
+                        <Badge key={languageName}>{languageName}</Badge>
+                      ))}
+                    </div>
+                  ) : null}
+                </Link>
+              );
+            })}
           </div>
         )}
-      </section>
+      </SectionPanel>
     </main>
   );
 }

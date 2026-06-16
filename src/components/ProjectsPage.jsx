@@ -156,18 +156,47 @@ export default function ProjectsPage() {
                   </div>
                 ) : null}
                 <div className="project-actions">
-                  <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">
-                    GitHub
-                  </a>
-                  {project.homepage ? (
-                    <a href={project.homepage} className="project-link" target="_blank" rel="noreferrer">
-                      Homepage
-                    </a>
-                  ) : null}
-                  <Link to={`/projects/${toProjectSlug(project.name)}`} className="project-link">
-                    Details
-                  </Link>
-                </div>
+  {project.url ? (
+    <>
+      <a
+        href={project.url}
+        className="project-link primary"
+        target="_blank"
+        rel="noreferrer"
+      >
+        GitHub
+      </a>
+
+      <a
+        href={`${project.url}/stargazers`}
+        className="project-link"
+        target="_blank"
+        rel="noreferrer"
+        title="Star this repository on GitHub"
+      >
+        ⭐ Star
+      </a>
+    </>
+  ) : null}
+
+  {project.homepage ? (
+    <a
+      href={project.homepage}
+      className="project-link"
+      target="_blank"
+      rel="noreferrer"
+    >
+      Homepage
+    </a>
+  ) : null}
+
+  <Link
+    to={`/projects/${toProjectSlug(project.name)}`}
+    className="project-link"
+  >
+    Details
+  </Link>
+</div>
               </article>
             ))}
           </div>
@@ -230,7 +259,10 @@ export default function ProjectsPage() {
                 </div>
                 <h2>{project.name}</h2>
                 <p>{project.description || "No repository description provided."}</p>
-                <p>Stars: {project.stars || 0} • Forks: {project.forks || 0}</p>
+                <div className="card-row">
+  <Badge tone="success">⭐ {project.stars || 0} Stars</Badge>
+  <Badge>{project.forks || 0} Forks</Badge>
+</div>
                 <p>Updated: {formatDate(project.updatedAt) || "Unknown"}</p>
                 {(project.topics || []).length ? (
                   <div className="card-row">

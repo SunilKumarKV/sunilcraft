@@ -85,18 +85,26 @@ export default function ProjectDetail() {
         description="A live project view pulled from the synced GitHub repository feed."
         align="left"
       />
+
       <Link to="/projects" className="problem-back">← Back to Projects</Link>
+
       <section className="project-detail-hero">
         <div>
           <div className="card-row">
             <Badge tone="accent">{project.language || "Unknown"}</Badge>
             {project.featured ? <Badge tone="success">Featured</Badge> : null}
+            <Badge>⭐ {project.stars || 0} Stars</Badge>
+            <Badge>{project.forks || 0} Forks</Badge>
           </div>
+
           <h1>{project.name}</h1>
+
           <p>{project.description || "No repository description provided."}</p>
+
           <p className="project-category">
-            Stars: {project.stars || 0} • Forks: {project.forks || 0} • Updated: {formatDate(project.updatedAt) || "Unknown"}
+            Updated: {formatDate(project.updatedAt) || "Unknown"}
           </p>
+
           {(project.topics || []).length ? (
             <div className="card-row">
               {project.topics.slice(0, 6).map((item) => (
@@ -104,16 +112,48 @@ export default function ProjectDetail() {
               ))}
             </div>
           ) : null}
+
           <div className="project-actions">
-            <a href={project.url} className="project-link primary" target="_blank" rel="noreferrer">GitHub</a>
+            {project.url ? (
+              <>
+                <a
+                  href={project.url}
+                  className="project-link primary"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  GitHub
+                </a>
+
+                <a
+                  href={`${project.url}/stargazers`}
+                  className="project-link"
+                  target="_blank"
+                  rel="noreferrer"
+                  title="Star this repository on GitHub"
+                >
+                  ⭐ Star Repo
+                </a>
+              </>
+            ) : null}
+
             {project.homepage ? (
-              <a href={project.homepage} className="project-link" target="_blank" rel="noreferrer">Live Project</a>
+              <a
+                href={project.homepage}
+                className="project-link"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Live Project
+              </a>
             ) : null}
           </div>
         </div>
       </section>
+
       <section className="section-panel">
         <h2>Topics</h2>
+
         <div className="feature-grid">
           {(project.topics || []).length ? (
             project.topics.map((item) => (
