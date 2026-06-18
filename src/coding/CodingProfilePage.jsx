@@ -289,6 +289,12 @@ export default function CodingProfilePage() {
       recentSolves,
       multiLanguageProblems,
       timelineEvents,
+      goal: {
+        currentSolved: problems.length,
+        targetSolved: 300,
+        percentage: Math.min(100, Math.round((problems.length / 300) * 100)),
+        remaining: Math.max(0, 300 - problems.length),
+      },
       heatmap: {
         weeks: contributionWeeks,
         totalActivityEvents,
@@ -364,6 +370,50 @@ export default function CodingProfilePage() {
                   <h3>{item.value}</h3>
                 </article>
               ))}
+            </div>
+          </SectionPanel>
+
+          <SectionPanel
+            eyebrow="Coding Goal"
+            title="Progress toward 300 solved problems"
+            description="A simple target view based on the current solved count in coding-journal, with streak context from the live activity calculation."
+          >
+            <div className="feature-grid">
+              <article className="glass-card">
+                <div className="card-row">
+                  <span className="section-eyebrow">Target 300</span>
+                  <span className="ui-badge accent">{analytics.goal.percentage}% complete</span>
+                </div>
+                <h3>{analytics.goal.currentSolved} solved so far</h3>
+                <p>{analytics.goal.remaining} problems remaining to reach the current coding goal.</p>
+                <div className="progress-stack" style={{ marginTop: "18px" }}>
+                  <div className="progress-row">
+                    <div className="progress-label">
+                      <span>Goal progress</span>
+                      <span>{analytics.goal.currentSolved} / {analytics.goal.targetSolved}</span>
+                    </div>
+                    <div className="progress-bar" aria-label="Coding goal progress">
+                      <span style={{ width: `${analytics.goal.percentage}%` }} />
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article className="glass-card">
+                <div className="coding-card-row" style={{ gap: "18px" }}>
+                  <div>
+                    <h3>{analytics.heatmap.currentStreak}</h3>
+                    <p>Current streak</p>
+                  </div>
+                  <div>
+                    <h3>{analytics.heatmap.longestStreak}</h3>
+                    <p>Longest streak</p>
+                  </div>
+                </div>
+                <p style={{ marginTop: "16px" }}>
+                  Streaks are based on the same live activity timeline used for the heatmap, combining solved problems and project updates.
+                </p>
+              </article>
             </div>
           </SectionPanel>
 

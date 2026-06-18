@@ -1564,6 +1564,12 @@ textarea:focus-visible {
 .project-detail-hero h1 { font-size: clamp(2rem, 5vw, 4rem); margin: 16px 0; }
 .project-detail-hero p { color: var(--text-secondary); line-height: 1.8; }
 
+.project-proof-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+}
+
 .solution-tabs {
   display: flex;
   flex-wrap: wrap;

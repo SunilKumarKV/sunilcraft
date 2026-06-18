@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import HeroPic from "/assets/images/SunilKumar.png";
 import { profile, services } from "../data/profile";
 import {
+  formatDate,
   getJournalProblems,
   getJournalProjects,
+  getProblemSolvedAt,
   toPlatformSegment,
   toProjectSlug,
 } from "../lib/codingJournal";
@@ -73,6 +75,57 @@ export default function HeroSection() {
 
   const featuredProjects = useMemo(() => [...projects].sort(sortProjects).slice(0, 3), [projects]);
   const verifiedProblems = useMemo(() => problems.filter((problem) => problem.verified).slice(0, 3), [problems]);
+  const liveCodingActivity = useMemo(() => {
+    const latestSolvedProblem = [...problems]
+      .filter((problem) => getProblemSolvedAt(problem))
+      .sort((a, b) => new Date(getProblemSolvedAt(b)) - new Date(getProblemSolvedAt(a)))[0] || null;
+
+    const latestProjectUpdate = [...projects]
+      .filter((project) => project.updatedAt)
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))[0] || null;
+
+    const contributions = {};
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - 364);
+
+    const addEvent = (rawDate) => {
+      if (!rawDate) return;
+      const date = new Date(rawDate);
+      if (Number.isNaN(date.getTime())) return;
+      date.setHours(0, 0, 0, 0);
+      if (date < startDate || date > today) return;
+      const key = date.toISOString().slice(0, 10);
+      contributions[key] = (contributions[key] || 0) + 1;
+    };
+
+    problems.forEach((problem) => addEvent(getProblemSolvedAt(problem)));
+    projects.forEach((project) => addEvent(project.updatedAt));
+
+    const heatmapDays = Array.from({ length: 365 }, (_, index) => {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + index);
+      const key = date.toISOString().slice(0, 10);
+      return contributions[key] || 0;
+    });
+
+    const currentStreak = (() => {
+      let streak = 0;
+      for (let i = heatmapDays.length - 1; i >= 0; i -= 1) {
+        if (heatmapDays[i] > 0) streak += 1;
+        else break;
+      }
+      return streak;
+    })();
+
+    return {
+      latestSolvedProblem,
+      latestProjectUpdate,
+      currentStreak,
+    };
+  }, [problems, projects]);
+
   const summary = useMemo(() => {
     const verified = problems.filter((problem) => problem.verified).length;
     const platforms = new Set(problems.map((problem) => problem.platform).filter(Boolean)).size;
@@ -308,6 +361,83 @@ export default function HeroSection() {
                 ))}
               </div>
               <Link to="/projects" className="page-button">Go to Work</Link>
+            </>
+          )}
+        </SectionPanel>
+
+        <SectionPanel
+          eyebrow="Live Coding Activity"
+          title="What changed most recently"
+          description="A quick live snapshot from coding-journal showing the latest solved problem, the latest project update, and the current streak."
+          className="explorer-panel"
+        >
+          {loading ? (
+            <LoadingState title="Loading live coding activity" message="Preparing the latest synced coding updates." />
+          ) : error ? (
+            <ErrorState title="Unable to load live coding activity" message={error} />
+          ) : !liveCodingActivity.latestSolvedProblem && !liveCodingActivity.latestProjectUpdate ? (
+            <EmptyState title="No recent coding activity yet" message="Live activity will appear here as coding-journal syncs problems and projects with dates." />
+          ) : (
+            <>
+              <div className="feature-grid">
+                <article className="glass-card">
+                  <div className="card-row">
+                    <Badge tone="accent">Latest solved problem</Badge>
+                    {liveCodingActivity.latestSolvedProblem?.difficulty ? (
+                      <Badge>{liveCodingActivity.latestSolvedProblem.difficulty}</Badge>
+                    ) : null}
+                  </div>
+                  <h3>{liveCodingActivity.latestSolvedProblem?.title || "No solved problem yet"}</h3>
+                  <p>
+                    {liveCodingActivity.latestSolvedProblem
+                      ? `${liveCodingActivity.latestSolvedProblem.platform || "Unknown platform"} solved on ${formatDate(getProblemSolvedAt(liveCodingActivity.latestSolvedProblem)) || "Unknown date"}.`
+                      : "The problem feed does not yet contain a dated solved entry."}
+                  </p>
+                  {liveCodingActivity.latestSolvedProblem ? (
+                    <Link
+                      to={`/problems/${toPlatformSegment(liveCodingActivity.latestSolvedProblem.platform)}/${liveCodingActivity.latestSolvedProblem.slug}`}
+                      className="page-button compact"
+                    >
+                      View Latest Problem
+                    </Link>
+                  ) : null}
+                </article>
+
+                <article className="glass-card">
+                  <div className="card-row">
+                    <Badge tone="accent">Latest project update</Badge>
+                    {liveCodingActivity.latestProjectUpdate?.language ? (
+                      <Badge>{liveCodingActivity.latestProjectUpdate.language}</Badge>
+                    ) : null}
+                  </div>
+                  <h3>{liveCodingActivity.latestProjectUpdate?.name || "No project update yet"}</h3>
+                  <p>
+                    {liveCodingActivity.latestProjectUpdate
+                      ? `Updated on ${formatDate(liveCodingActivity.latestProjectUpdate.updatedAt) || "Unknown date"} with ${liveCodingActivity.latestProjectUpdate.stars || 0} stars and ${liveCodingActivity.latestProjectUpdate.forks || 0} forks.`
+                      : "The project feed does not yet contain a recent update."}
+                  </p>
+                  {liveCodingActivity.latestProjectUpdate ? (
+                    <Link
+                      to={`/projects/${toProjectSlug(liveCodingActivity.latestProjectUpdate.name)}`}
+                      className="page-button compact"
+                    >
+                      View Project Update
+                    </Link>
+                  ) : null}
+                </article>
+
+                <article className="glass-card">
+                  <div className="card-row">
+                    <Badge tone="success">Current streak</Badge>
+                    <Badge>Live</Badge>
+                  </div>
+                  <h3>{liveCodingActivity.currentStreak} day{liveCodingActivity.currentStreak === 1 ? "" : "s"}</h3>
+                  <p>The streak uses the same coding activity timeline as the coding profile and counts recent solved problems plus project updates.</p>
+                  <Link to="/coding" className="page-button compact">
+                    Open Coding Hub
+                  </Link>
+                </article>
+              </div>
             </>
           )}
         </SectionPanel>
