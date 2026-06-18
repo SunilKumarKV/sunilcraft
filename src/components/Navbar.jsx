@@ -24,6 +24,7 @@ export default function Navbar() {
     if (id === "Work") return location.pathname.startsWith("/projects");
     if (id === "Problems") return location.pathname.startsWith("/problems");
     if (id === "Codebase") return location.pathname.startsWith("/codebase");
+    if (id === "Coding") return location.pathname.startsWith("/coding");
     if (id === "About") {
       return (
         location.pathname.startsWith("/about") ||
@@ -50,6 +51,8 @@ export default function Navbar() {
       navigate("/codebase");
     } else if (id === "About") {
       navigate("/about");
+    } else if (id === "Coding") {
+      navigate("/coding");
     } else if (id === "Contact") {
       navigate("/contact");
     } else {
@@ -98,6 +101,7 @@ export default function Navbar() {
                 "Work",
                 "Problems",
                 "Codebase",
+                "Coding",
                 "About",
                 "Contact",
               ].map((id) => (
