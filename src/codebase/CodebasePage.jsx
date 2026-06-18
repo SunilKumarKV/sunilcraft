@@ -136,14 +136,14 @@ export default function CodebasePage() {
       <PageHeader
         eyebrow="Verified Solution Library"
         title="Codebase"
-        description="Browse solution articles, multiple languages, verification status, explanations, and complexity notes from live coding-journal data."
+        description="A solution library for code, explanations, language variants, verification status, and complexity notes from coding-journal."
         align="left"
       />
 
       <SectionPanel
         eyebrow="Library Overview"
-        title="What this Codebase contains"
-        description="This side of the portfolio is about implementation depth: solutions, explanations, and engineering detail."
+        title="What this library contains"
+        description="This page is for implementation depth: source code, explanation quality, language coverage, and verification detail."
       >
         {loading ? (
           <LoadingState title="Loading codebase overview" message="Preparing the solution library from coding-journal." />
@@ -184,8 +184,8 @@ export default function CodebasePage() {
 
       <SectionPanel
         eyebrow="Explorer"
-        title="Browse Solution Articles"
-        description="Search by problem title, platform, tags, available languages, and verification status."
+        title="Browse solution articles"
+        description="Search the code library by title, platform, tags, languages, and verification status."
       >
         <FilterBar>
           <input

@@ -21,17 +21,19 @@ export default function Navbar() {
 
   const isNavActive = (id) => {
     if (id === "Home") return location.pathname === "/";
-    if (id === "Work") return location.pathname.startsWith("/projects");
-    if (id === "Problems") return location.pathname.startsWith("/problems");
-    if (id === "Codebase") return location.pathname.startsWith("/codebase");
+    if (id === "Projects") return location.pathname.startsWith("/projects");
     if (id === "Coding") return location.pathname.startsWith("/coding");
-    if (id === "About") {
+    if (id === "Dashboard") {
       return (
-        location.pathname.startsWith("/about") ||
-        location.pathname.startsWith("/rewards") ||
         location.pathname.startsWith("/dashboard") ||
         location.pathname.startsWith("/journey") ||
         location.pathname.startsWith("/achievements")
+      );
+    }
+    if (id === "About") {
+      return (
+        location.pathname.startsWith("/about") ||
+        location.pathname.startsWith("/rewards")
       );
     }
     if (id === "Contact") return location.pathname.startsWith("/contact");
@@ -43,16 +45,14 @@ export default function Navbar() {
 
     if (id === "Home") {
       navigate("/");
-    } else if (id === "Work") {
+    } else if (id === "Projects") {
       navigate("/projects");
-    } else if (id === "Problems") {
-      navigate("/problems");
-    } else if (id === "Codebase") {
-      navigate("/codebase");
     } else if (id === "About") {
       navigate("/about");
     } else if (id === "Coding") {
       navigate("/coding");
+    } else if (id === "Dashboard") {
+      navigate("/dashboard");
     } else if (id === "Contact") {
       navigate("/contact");
     } else {
@@ -98,10 +98,9 @@ export default function Navbar() {
             <ul>
               {[
                 "Home",
-                "Work",
-                "Problems",
-                "Codebase",
+                "Projects",
                 "Coding",
+                "Dashboard",
                 "About",
                 "Contact",
               ].map((id) => (

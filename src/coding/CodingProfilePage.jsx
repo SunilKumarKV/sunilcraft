@@ -307,16 +307,55 @@ export default function CodingProfilePage() {
       <PageHeader
         eyebrow="Coding Profile"
         title="Coding Profile"
-        description="Live problem-solving progress, accepted solutions, and multi-language code captured from coding-journal."
+        description="A public coding hub for problem-solving progress, verified solutions, language breadth, and recent activity captured from coding-journal."
         align="left"
       />
 
       {!loading && !error && hasProblemData ? (
         <>
           <SectionPanel
+            eyebrow="Coding Hub"
+            title="Start from the right coding view"
+            description="Use Coding as the overview, then jump into the tracker, the solution library, or the full analytics center depending on what you want to inspect."
+          >
+            <div className="coding-profile-grid">
+              <article className="glass-card">
+                <span className="section-eyebrow">Problems Tracker</span>
+                <h3>Problem history and progress</h3>
+                <p>Open the tracker for solved lists, difficulty coverage, platforms, tags, and recent progress.</p>
+                <div className="card-row" style={{ marginTop: "16px" }}>
+                  <Link className="page-button compact" to="/problems">
+                    Open Problems Tracker
+                  </Link>
+                </div>
+              </article>
+              <article className="glass-card">
+                <span className="section-eyebrow">Codebase Library</span>
+                <h3>Solution articles and code</h3>
+                <p>Go deeper into explanations, language tabs, complexity notes, and verified implementation detail.</p>
+                <div className="card-row" style={{ marginTop: "16px" }}>
+                  <Link className="page-button compact" to="/codebase">
+                    Open Codebase Library
+                  </Link>
+                </div>
+              </article>
+              <article className="glass-card">
+                <span className="section-eyebrow">Developer Dashboard</span>
+                <h3>Analytics and activity center</h3>
+                <p>See broader engineering signals across projects, coding activity, verification, and portfolio metrics.</p>
+                <div className="card-row" style={{ marginTop: "16px" }}>
+                  <Link className="page-button compact" to="/dashboard">
+                    Open Developer Dashboard
+                  </Link>
+                </div>
+              </article>
+            </div>
+          </SectionPanel>
+
+          <SectionPanel
             eyebrow="Proof Profile"
-            title="Coding Journey Snapshot"
-            description="Recruiter-ready coding profile from live problem and project activity captured by coding-journal."
+            title="Coding journey snapshot"
+            description="High-level proof of coding consistency, verification, language coverage, and platform breadth."
           >
             <div className="coding-hero-grid">
               {analytics.heroStats.map((item) => (
@@ -330,8 +369,8 @@ export default function CodingProfilePage() {
 
           <SectionPanel
             eyebrow="Activity Heatmap"
-            title="Problem Solving Consistency"
-            description="A year of live coding activity from solved problems and project updates, presented as a contribution-style intensity heatmap."
+            title="Recent coding consistency"
+            description="A year of coding-journal activity from solved problems and project updates, shown as a contribution-style timeline."
           >
             <div className="feature-grid">
               <article className="glass-card">
@@ -374,7 +413,7 @@ export default function CodingProfilePage() {
             </div>
           </SectionPanel>
 
-          <SectionPanel eyebrow="Difficulty" title="Difficulty Breakdown" description="Live difficulty distribution for tracked coding-journal problems.">
+          <SectionPanel eyebrow="Difficulty" title="Difficulty breakdown" description="Difficulty spread across the problems captured in this coding profile.">
             <div className="feature-grid">
               <article className="glass-card">
                 <div className="progress-stack">
@@ -394,7 +433,7 @@ export default function CodingProfilePage() {
             </div>
           </SectionPanel>
 
-          <SectionPanel eyebrow="Languages" title="Language Breakdown" description="Languages used across solved problems and solution entries.">
+          <SectionPanel eyebrow="Languages" title="Language breakdown" description="Languages represented across submitted and stored solutions.">
             <div className="feature-grid">
               {analytics.languageCards.map((item) => (
                 <article className="glass-card" key={item.name}>
@@ -405,7 +444,7 @@ export default function CodingProfilePage() {
             </div>
           </SectionPanel>
 
-          <SectionPanel eyebrow="Platforms" title="Platform Breakdown" description="Platform distribution based on synced coding-journal problem data.">
+          <SectionPanel eyebrow="Platforms" title="Platform breakdown" description="Where the current problem-solving record is coming from.">
             <div className="feature-grid">
               {analytics.platformCards.map((item) => (
                 <article className="glass-card" key={item.name}>
@@ -416,7 +455,7 @@ export default function CodingProfilePage() {
             </div>
           </SectionPanel>
 
-          <SectionPanel eyebrow="Recent Solves" title="Recent Solved Problems" description="Latest verified or captured problem solves from live coding-journal data.">
+          <SectionPanel eyebrow="Recent Solves" title="Recent accepted solves" description="Latest accepted or captured problem records, with quick paths into the tracker and code library.">
             {analytics.recentSolves.length ? (
               <div className="coding-profile-grid">
                 {analytics.recentSolves.map((problem) => (
@@ -458,7 +497,7 @@ export default function CodingProfilePage() {
             )}
           </SectionPanel>
 
-          <SectionPanel eyebrow="Solutions" title="Multi-language Solutions" description="Problems with more than one tracked solution language in coding-journal.">
+          <SectionPanel eyebrow="Solutions" title="Latest multi-language solutions" description="Problems that already have more than one stored implementation language.">
             {analytics.multiLanguageProblems.length ? (
               <div className="coding-profile-grid">
                 {analytics.multiLanguageProblems.map((problem) => (
@@ -483,7 +522,7 @@ export default function CodingProfilePage() {
             )}
           </SectionPanel>
 
-          <SectionPanel eyebrow="Timeline" title="Learning Timeline" description="Actual solved and updated problem events sorted by most recent date.">
+          <SectionPanel eyebrow="Timeline" title="Learning timeline" description="Real solved and updated coding events, ordered from newest to oldest.">
             <div className="feature-grid">
               {analytics.timelineEvents.length ? (
                 analytics.timelineEvents.map((event) => (
