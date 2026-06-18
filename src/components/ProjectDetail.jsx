@@ -132,7 +132,27 @@ export default function ProjectDetail() {
                   rel="noreferrer"
                   title="Star this repository on GitHub"
                 >
-                  ⭐ Star Repo
+                  ⭐ Star on GitHub
+                </a>
+
+                <a
+                  href={`${project.url}/fork`}
+                  className="project-link"
+                  target="_blank"
+                  rel="noreferrer"
+                  title="Fork this repository on GitHub"
+                >
+                  🍴 Fork Repository
+                </a>
+
+                <a
+                  href={`${project.url}/watchers`}
+                  className="project-link"
+                  target="_blank"
+                  rel="noreferrer"
+                  title="Watch this repository on GitHub"
+                >
+                  👀 Watch Repository
                 </a>
               </>
             ) : null}
@@ -149,6 +169,52 @@ export default function ProjectDetail() {
             ) : null}
           </div>
         </div>
+      </section>
+
+      <section className="section-panel">
+        <div className="section-gloss-divider" aria-hidden="true" />
+        <div className="section-heading">
+          <span className="section-eyebrow">Repository Proof</span>
+          <h2>Live repo proof</h2>
+          <p className="section-copy">
+            These signals come directly from the synced repository feed and make the project easier to evaluate quickly.
+          </p>
+        </div>
+
+        <div className="project-proof-strip">
+          <article className="meta-strip-card">
+            <span>Stars</span>
+            <strong>{project.stars || 0}</strong>
+          </article>
+          <article className="meta-strip-card">
+            <span>Forks</span>
+            <strong>{project.forks || 0}</strong>
+          </article>
+          <article className="meta-strip-card">
+            <span>Language</span>
+            <strong>{project.language || "Unknown"}</strong>
+          </article>
+          <article className="meta-strip-card">
+            <span>Last Updated</span>
+            <strong>{formatDate(project.updatedAt) || "Unknown"}</strong>
+          </article>
+          <article className="meta-strip-card">
+            <span>Topics</span>
+            <strong>{(project.topics || []).length}</strong>
+          </article>
+        </div>
+
+        {(project.topics || []).length ? (
+          <div className="tag-cloud" style={{ marginTop: "18px" }}>
+            {project.topics.map((item) => (
+              <Badge key={item}>{item}</Badge>
+            ))}
+          </div>
+        ) : (
+          <p className="section-copy" style={{ marginTop: "18px" }}>
+            No repository topics are currently exposed for this project.
+          </p>
+        )}
       </section>
 
       <section className="section-panel">

@@ -378,7 +378,7 @@ export default function DashboardPage() {
       <PageHeader
         eyebrow="Developer Analytics"
         title="Dashboard"
-        description="A live snapshot of my developer activity across projects, problem solving, and verified code."
+        description="A broader analytics view across projects, coding output, verification, and portfolio activity."
         align="left"
       />
 
@@ -387,7 +387,7 @@ export default function DashboardPage() {
           <SectionPanel
             eyebrow="Activity Overview"
             title="Activity Overview"
-            description="Live calculations from the synced coding-journal feeds for problems, projects, verification, language usage, and GitHub metrics."
+            description="Live calculations from coding-journal for projects, problems, verification, language usage, and GitHub-facing metrics."
           >
             <div className="dashboard-grid">
               {analytics.overview.map((metric) => (
@@ -403,7 +403,7 @@ export default function DashboardPage() {
             className="dashboard-progress"
             eyebrow="Coding Progress"
             title="Coding Progress"
-            description="Problem solving performance and platform, difficulty, and topic distributions from live coding-journal problem data."
+            description="Analytics across problem-solving performance, platform spread, difficulty mix, and topic distribution."
           >
             <div className="feature-grid">
             <article className="glass-card">

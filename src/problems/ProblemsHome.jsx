@@ -154,14 +154,14 @@ export default function ProblemsHome() {
       <PageHeader
         eyebrow="Problem Solving Tracker"
         title="Problems"
-        description="Track solved problems, verified progress, platforms, and topic coverage without turning the page into a code library."
+        description="A progress tracker for solved problems, verification, platforms, and topic coverage without showing full solution articles."
         align="left"
       />
 
       <SectionPanel
         eyebrow="Overview"
-        title="Solved Progress"
-        description="A quick tracker view of consistency, verification, and difficulty coverage."
+        title="Solved progress"
+        description="A tracker-first summary of volume, verification, and difficulty coverage."
       >
         {loading ? (
           <LoadingState title="Loading tracker" message="Fetching solved problem history from coding-journal." />
@@ -202,8 +202,8 @@ export default function ProblemsHome() {
 
       <SectionPanel
         eyebrow="Coverage"
-        title="Platforms and Topics"
-        description="Use this view to see where the practice is concentrated."
+        title="Platforms and topics"
+        description="Use this page to understand where problem-solving effort is concentrated over time."
       >
         {loading ? (
           <LoadingState title="Loading coverage" message="Preparing platform and topic breakdowns." />
@@ -266,8 +266,8 @@ export default function ProblemsHome() {
 
       <SectionPanel
         eyebrow="History"
-        title="Search Problem History"
-        description="Search and filter solved problems by platform, difficulty, verification, and tags."
+        title="Search problem history"
+        description="Filter the solved record by platform, difficulty, verification, and tags."
       >
         <FilterBar>
           <input
