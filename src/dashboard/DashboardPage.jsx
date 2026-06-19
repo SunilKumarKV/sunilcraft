@@ -7,6 +7,8 @@ import {
   getJournalStats,
   getProblemLanguages,
   getProblemSolvedAt,
+  getProblemTrackedCount,
+  isPlatformProfileSummary,
   normalizePlatformName,
   toPlatformSegment,
   toProjectSlug,
@@ -107,20 +109,26 @@ export default function DashboardPage() {
   const { stats, problems, projects, loading, error } = useDashboardData();
 
   const analytics = useMemo(() => {
-    const totalProblems = stats?.totalProblems ?? problems.length;
+    const profileSummaries = problems.filter((problem) => isPlatformProfileSummary(problem));
+    const trackedProblems = problems.filter((problem) => !isPlatformProfileSummary(problem));
+    const summarySolvedTotal = profileSummaries.reduce(
+      (total, problem) => total + getProblemTrackedCount(problem),
+      0
+    );
+    const totalProblems = (stats?.totalProblems ?? trackedProblems.length) + summarySolvedTotal;
     const verifiedProblems =
-      stats?.verifiedProblems ?? problems.filter((problem) => problem.verified).length;
+      stats?.verifiedProblems ?? trackedProblems.filter((problem) => problem.verified).length;
     const totalProjects = stats?.totalProjects ?? projects.length;
     const totalStars = stats?.totalStars ?? sumNumber(projects, "stars");
     const totalForks = stats?.totalForks ?? sumNumber(projects, "forks");
     const languagesUsed = uniqueValues([
       ...projects.map((project) => project.language),
-      ...problems.flatMap((problem) => getProblemLanguages(problem)),
+      ...trackedProblems.flatMap((problem) => getProblemLanguages(problem)),
     ]).length;
 
     const byPlatform = problems.reduce((acc, problem) => {
       const key = normalizePlatformName(problem.platform || "Custom");
-      acc[key] = (acc[key] || 0) + 1;
+      acc[key] = (acc[key] || 0) + getProblemTrackedCount(problem);
       return acc;
     }, {});
 
@@ -130,7 +138,7 @@ export default function DashboardPage() {
       percentage: percent(byPlatform[name] || 0, totalProblems),
     }));
 
-    const byLanguage = problems.reduce((acc, problem) => {
+    const byLanguage = trackedProblems.reduce((acc, problem) => {
       const languages = getProblemLanguages(problem);
       if (!languages.length) {
         acc.Others = (acc.Others || 0) + 1;
@@ -193,7 +201,7 @@ export default function DashboardPage() {
       });
     });
 
-    problems.forEach((problem) => {
+    trackedProblems.forEach((problem) => {
       const solutionLanguages = getProblemLanguages(problem)
         .map((language) => normalizeTechnology(language))
         .filter(Boolean);
@@ -218,7 +226,7 @@ export default function DashboardPage() {
         percentage: percent(count, technologyCandidates.length),
       }));
 
-    const recentProblems = [...problems]
+    const recentProblems = [...trackedProblems]
       .filter((problem) => getProblemSolvedAt(problem))
       .sort((a, b) => {
         const dateA = new Date(getProblemSolvedAt(a) || 0).getTime();
@@ -270,7 +278,7 @@ export default function DashboardPage() {
           link: `/projects/${toProjectSlug(project.name)}`,
           badge: project.language || "Project",
         })),
-      ...problems
+      ...trackedProblems
         .filter((problem) => problem.solvedAt || problem.updatedAt)
         .map((problem) => ({
           type: "Problem Solved",
@@ -280,7 +288,7 @@ export default function DashboardPage() {
           link: `/problems/${toPlatformSegment(problem.platform)}/${problem.slug}`,
           badge: normalizePlatformName(problem.platform) || "Problem",
         })),
-      ...problems
+      ...trackedProblems
         .filter((problem) => problem.verified && (problem.solvedAt || problem.updatedAt || problem.createdAt))
         .map((problem) => ({
           type: "Solution Verified",
@@ -295,7 +303,7 @@ export default function DashboardPage() {
       .sort((a, b) => b.date.getTime() - a.date.getTime())
       .slice(0, 8);
 
-    const problemsWithDate = problems.filter(
+    const problemsWithDate = trackedProblems.filter(
       (problem) => problem.addedAt || problem.createdAt || problem.updatedAt || problem.solvedAt
     );
 
@@ -375,6 +383,14 @@ export default function DashboardPage() {
         byForks,
         byUpdated,
       },
+      profileSummaries: profileSummaries.map((problem) => ({
+        slug: problem.slug,
+        platform: normalizePlatformName(problem.platform),
+        solvedCount: Number(problem.solvedCount) || 0,
+        username: problem.username || "",
+        source: problem.source || "",
+      })),
+      summarySolvedTotal,
       achievements,
       availableLanguages: uniqueValues(projects.map((project) => project.language)),
     };
@@ -404,6 +420,23 @@ export default function DashboardPage() {
                 </article>
               ))}
             </div>
+            {analytics.profileSummaries.length ? (
+              <div className="feature-grid" style={{ marginTop: "20px" }}>
+                {analytics.profileSummaries.map((summary) => (
+                  <article className="glass-card" key={summary.slug}>
+                    <div className="card-row">
+                      <span className="section-eyebrow">{summary.platform}</span>
+                      <span className="ui-badge accent">Profile summary data</span>
+                    </div>
+                    <h3>{summary.solvedCount} solved</h3>
+                    <p>
+                      {summary.username ? `${summary.username} • ` : ""}
+                      Source: {(summary.source || "profile summary").replace(/-/g, " ")}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            ) : null}
           </SectionPanel>
 
           <SectionPanel

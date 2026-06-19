@@ -152,6 +152,23 @@ export function getProblemLanguages(problem) {
   return uniqueValues([problem?.language || ""]);
 }
 
+export function isPlatformProfileSummary(problem) {
+  return Boolean(
+    problem &&
+      String(problem.slug || "").startsWith("profile-") &&
+      Number(problem.solvedCount) > 0 &&
+      String(problem.source || "").toLowerCase().includes("summary")
+  );
+}
+
+export function getProblemTrackedCount(problem) {
+  if (isPlatformProfileSummary(problem)) {
+    return Number(problem.solvedCount) || 0;
+  }
+
+  return 1;
+}
+
 export function getProblemSourceUrl(solutionPath) {
   if (!solutionPath) return "";
   return `${CODING_JOURNAL_REPO_BLOB}/${solutionPath.replace(/^\//, "")}`;

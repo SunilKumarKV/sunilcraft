@@ -13,6 +13,7 @@ import {
   getProblemLanguages,
   getProblemSolvedAt,
   hasProblemCode,
+  isPlatformProfileSummary,
   normalizePlatformName,
   toPlatformSegment,
   uniqueValues,
@@ -73,7 +74,15 @@ export default function ProblemsHome() {
   }, []);
 
   const solvedProblems = useMemo(
-    () => problems.filter((problem) => (problem.status || "Solved") === "Solved"),
+    () =>
+      problems.filter(
+        (problem) => !isPlatformProfileSummary(problem) && (problem.status || "Solved") === "Solved"
+      ),
+    [problems]
+  );
+
+  const profileSummaries = useMemo(
+    () => problems.filter((problem) => isPlatformProfileSummary(problem)),
     [problems]
   );
 
@@ -204,6 +213,28 @@ export default function ProblemsHome() {
           </div>
         )}
       </SectionPanel>
+
+      {profileSummaries.length ? (
+        <SectionPanel
+          eyebrow="Platform Summary"
+          title="Profile summary records"
+          description="Some platforms currently sync solved totals as profile summaries rather than individual problem records."
+        >
+          <div className="feature-grid">
+            {profileSummaries.map((summary) => (
+              <article className="glass-card" key={summary.slug}>
+                <div className="card-row">
+                  <Badge tone="accent">{normalizePlatformName(summary.platform)}</Badge>
+                  <Badge>{Number(summary.solvedCount) || 0} solved</Badge>
+                </div>
+                <h3>{summary.username || summary.slug}</h3>
+                <p>Source: {(summary.source || "profile summary").replace(/-/g, " ")}</p>
+                {summary.username ? <p>Username: {summary.username}</p> : null}
+              </article>
+            ))}
+          </div>
+        </SectionPanel>
+      ) : null}
 
       <SectionPanel
         eyebrow="Coverage"
