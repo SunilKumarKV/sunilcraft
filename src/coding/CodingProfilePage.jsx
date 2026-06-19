@@ -6,7 +6,10 @@ import {
   getJournalProjects,
   getJournalStats,
   getProblemLanguages,
+  getProblemTrackedCount,
   getProblemSolvedAt,
+  isPlatformProfileSummary,
+  normalizePlatformName,
   toPlatformSegment,
   uniqueValues,
 } from "../lib/codingJournal";
@@ -36,16 +39,6 @@ function normalizeProfileLanguage(value) {
   if (/^javascript?$/.test(normalized) || /^typescript?$/.test(normalized)) return "JavaScript";
   if (/^java$/.test(normalized)) return "Java";
   if (/^c($|[^a-z])/.test(normalized) || normalized === "c") return "C";
-  return "Others";
-}
-
-function normalizePlatform(value) {
-  const normalized = String(value || "").trim();
-  if (!normalized) return "Others";
-  if (/leetcode/i.test(normalized)) return "LeetCode";
-  if (/codeforces/i.test(normalized)) return "Codeforces";
-  if (/codechef/i.test(normalized)) return "CodeChef";
-  if (/hackerrank/i.test(normalized)) return "HackerRank";
   return "Others";
 }
 
@@ -96,10 +89,15 @@ export default function CodingProfilePage() {
   const { stats, problems, projects, loading, error } = useCodingProfileData();
 
   const analytics = useMemo(() => {
-    const totalProblems = stats?.totalProblems ?? problems.length;
-    const verifiedSolutions = stats?.verifiedProblems ?? problems.filter((problem) => problem.verified).length;
+    const profileSummaries = problems.filter((problem) => isPlatformProfileSummary(problem));
+    const trackedProblems = problems.filter((problem) => !isPlatformProfileSummary(problem));
+    const totalProblems =
+      trackedProblems.length +
+      profileSummaries.reduce((total, problem) => total + getProblemTrackedCount(problem), 0);
+    const verifiedSolutions =
+      stats?.verifiedProblems ?? trackedProblems.filter((problem) => problem.verified).length;
 
-    const problemLanguages = problems.flatMap((problem) => {
+    const problemLanguages = trackedProblems.flatMap((problem) => {
       const languages = getProblemLanguages(problem);
       if (languages.length) return languages;
       return problem.language ? [problem.language] : [];
@@ -107,10 +105,10 @@ export default function CodingProfilePage() {
 
     const languageUsedSet = uniqueValues(problemLanguages.map((language) => normalizeProfileLanguage(language)));
     const languagesUsed = languageUsedSet.filter(Boolean).length;
-    const platformUsedSet = uniqueValues(problems.map((problem) => normalizePlatform(problem.platform)));
+    const platformUsedSet = uniqueValues(problems.map((problem) => normalizePlatformName(problem.platform)));
     const platformsUsed = platformUsedSet.filter(Boolean).length;
 
-    const difficultyCounts = problems.reduce(
+    const difficultyCounts = trackedProblems.reduce(
       (acc, problem) => {
         const key = problem.difficulty || "Unknown";
         acc[key] = (acc[key] || 0) + 1;
@@ -139,8 +137,8 @@ export default function CodingProfilePage() {
     ];
 
     const platformCounts = problems.reduce((acc, problem) => {
-      const key = normalizePlatform(problem.platform);
-      acc[key] = (acc[key] || 0) + 1;
+      const key = normalizePlatformName(problem.platform);
+      acc[key] = (acc[key] || 0) + getProblemTrackedCount(problem);
       return acc;
     }, {});
 
@@ -169,7 +167,7 @@ export default function CodingProfilePage() {
       contributions[key] = (contributions[key] || 0) + 1;
     };
 
-    problems.forEach((problem) => recordEvent(getProblemSolvedAt(problem)));
+    trackedProblems.forEach((problem) => recordEvent(getProblemSolvedAt(problem)));
     projects.forEach((project) => recordEvent(project.updatedAt));
 
     const heatmapDays = Array.from({ length: daysCount }, (_, index) => {
@@ -214,7 +212,7 @@ export default function CodingProfilePage() {
       { current: 0, longest: 0 }
     ).longest;
 
-    const recentSolves = [...problems]
+    const recentSolves = [...trackedProblems]
       .filter((problem) => getProblemSolvedAt(problem))
       .sort((a, b) => new Date(getProblemSolvedAt(b)) - new Date(getProblemSolvedAt(a)))
       .slice(0, 8)
@@ -228,7 +226,7 @@ export default function CodingProfilePage() {
           : [],
       }));
 
-    const multiLanguageProblems = [...problems]
+    const multiLanguageProblems = [...trackedProblems]
       .map((problem) => {
         const solutionLanguages = getProblemLanguages(problem).length
           ? getProblemLanguages(problem)
@@ -245,7 +243,7 @@ export default function CodingProfilePage() {
       .sort((a, b) => new Date(b.activityDate) - new Date(a.activityDate))
       .slice(0, 6);
 
-    const timelineEvents = [...problems]
+    const timelineEvents = [...trackedProblems]
       .flatMap((problem) => {
         const solvedDate = problem.solvedAt ? new Date(problem.solvedAt) : null;
         const updatedDate = problem.updatedAt ? new Date(problem.updatedAt) : null;
@@ -255,7 +253,7 @@ export default function CodingProfilePage() {
           events.push({
             date: solvedDate,
             title: `${problem.title} solved`,
-            description: `${normalizePlatform(problem.platform)} problem solved (${problem.difficulty || "Unknown"}).`,
+            description: `${normalizePlatformName(problem.platform)} problem solved (${problem.difficulty || "Unknown"}).`,
             verified: Boolean(problem.verified),
             link: `/problems/${toPlatformSegment(problem.platform)}/${problem.slug}`,
           });
@@ -289,11 +287,18 @@ export default function CodingProfilePage() {
       recentSolves,
       multiLanguageProblems,
       timelineEvents,
+      profileSummaries: profileSummaries.map((problem) => ({
+        slug: problem.slug,
+        platform: normalizePlatformName(problem.platform),
+        solvedCount: Number(problem.solvedCount) || 0,
+        source: problem.source || "",
+        username: problem.username || "",
+      })),
       goal: {
-        currentSolved: problems.length,
+        currentSolved: totalProblems,
         targetSolved: 300,
-        percentage: Math.min(100, Math.round((problems.length / 300) * 100)),
-        remaining: Math.max(0, 300 - problems.length),
+        percentage: Math.min(100, Math.round((totalProblems / 300) * 100)),
+        remaining: Math.max(0, 300 - totalProblems),
       },
       heatmap: {
         weeks: contributionWeeks,
@@ -372,6 +377,28 @@ export default function CodingProfilePage() {
               ))}
             </div>
           </SectionPanel>
+
+          {analytics.profileSummaries.length ? (
+            <SectionPanel
+              eyebrow="Platform Summary"
+              title="Profile summary records"
+              description="These platform records come from profile-level syncs rather than individual problem imports, so they are shown separately from recent solved entries."
+            >
+              <div className="feature-grid">
+                {analytics.profileSummaries.map((summary) => (
+                  <article className="glass-card" key={summary.slug}>
+                    <div className="card-row">
+                      <span className="section-eyebrow">{summary.platform}</span>
+                      <span className="ui-badge accent">{summary.solvedCount} solved</span>
+                    </div>
+                    <h3>{summary.username || summary.platform}</h3>
+                    <p>Source: {summary.source.replace(/-/g, " ") || "profile summary"}</p>
+                    {summary.username ? <p>Username: {summary.username}</p> : null}
+                  </article>
+                ))}
+              </div>
+            </SectionPanel>
+          ) : null}
 
           <SectionPanel
             eyebrow="Coding Goal"
@@ -494,7 +521,7 @@ export default function CodingProfilePage() {
             </div>
           </SectionPanel>
 
-          <SectionPanel eyebrow="Platforms" title="Platform breakdown" description="Where the current problem-solving record is coming from.">
+          <SectionPanel eyebrow="Platforms" title="Platform breakdown" description="Where the current problem-solving record is coming from, including profile summary data when available.">
             <div className="feature-grid">
               {analytics.platformCards.map((item) => (
                 <article className="glass-card" key={item.name}>
@@ -511,7 +538,7 @@ export default function CodingProfilePage() {
                 {analytics.recentSolves.map((problem) => (
                   <article className="glass-card" key={problem.slug || problem.title}>
                     <div className="coding-card-row" style={{ justifyContent: "space-between" }}>
-                      <span>{normalizePlatform(problem.platform)}</span>
+                      <span>{normalizePlatformName(problem.platform)}</span>
                       <span>{problem.difficulty || "Unknown"}</span>
                     </div>
                     <h3>{problem.title}</h3>

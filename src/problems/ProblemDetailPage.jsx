@@ -2,8 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   formatDate,
+  getProblemLanguages,
+  getProblemPrimaryUrl,
   getJournalProblems,
   getProblemSolvedAt,
+  hasProblemCode,
+  normalizePlatformName,
   toPlatformSegment,
 } from "../lib/codingJournal";
 import PageHeader from "../components/ui/PageHeader";
@@ -49,6 +53,9 @@ export default function ProblemDetailPage() {
   );
 
   const solvedAt = problem ? getProblemSolvedAt(problem) : "";
+  const hasCode = problem ? hasProblemCode(problem) : false;
+  const problemUrl = problem ? getProblemPrimaryUrl(problem) : "";
+  const acceptedLanguages = problem ? getProblemLanguages(problem) : [];
 
   return (
     <main className="page-shell">
@@ -63,12 +70,12 @@ export default function ProblemDetailPage() {
         <Link className="page-button compact" to="/problems">
           ← Back to Problems
         </Link>
-        {problem?.url ? (
-          <a className="page-button compact" href={problem.url} target="_blank" rel="noreferrer">
+        {problemUrl ? (
+          <a className="page-button compact" href={problemUrl} target="_blank" rel="noreferrer">
             Original Problem
           </a>
         ) : null}
-        {problem ? (
+        {problem && hasCode ? (
           <Link className="page-button compact" to={`/codebase/${toPlatformSegment(problem.platform)}/${problem.slug}`}>
             View Solution in Codebase
           </Link>
@@ -97,12 +104,12 @@ export default function ProblemDetailPage() {
             <div className="problem-grid">
               <article className="problem-card">
                 <div className="card-row">
-                  <Badge tone="accent">{problem.platform}</Badge>
-                  <Badge>{problem.difficulty || "Unknown"}</Badge>
+                  <Badge tone="accent">{normalizePlatformName(problem.platform)}</Badge>
+                  <Badge>{problem.rating ? `Rating ${problem.rating}` : problem.difficulty || "Unknown"}</Badge>
                 </div>
                 <h2>Platform and Difficulty</h2>
                 <p>
-                  {problem.platform} • {problem.difficulty || "Difficulty not set"}
+                  {normalizePlatformName(problem.platform)} • {problem.rating ? `Rating ${problem.rating}` : problem.difficulty || "Difficulty not set"}
                 </p>
               </article>
               <article className="problem-card">
@@ -139,26 +146,53 @@ export default function ProblemDetailPage() {
                 <h2>{solvedAt ? formatDate(solvedAt) : "Date unavailable"}</h2>
                 <p>{solvedAt ? "Recorded in the tracked problem history." : "No solved date was provided in the current feed."}</p>
               </article>
+              <article className="problem-card">
+                <div className="card-row">
+                  <Badge>{acceptedLanguages.length ? "Accepted language" : "Language unavailable"}</Badge>
+                  {!hasCode ? <Badge>Metadata only</Badge> : <Badge tone="success">Code attached</Badge>}
+                </div>
+                <h2>{acceptedLanguages.length ? acceptedLanguages.join(", ") : "No accepted language recorded"}</h2>
+                <p>
+                  {acceptedLanguages.length
+                    ? "Accepted submission language captured from coding-journal metadata."
+                    : "No accepted submission language was provided in the current feed."}
+                </p>
+              </article>
             </div>
           </SectionPanel>
 
-          <SectionPanel
-            eyebrow="Next Step"
-            title="Open the engineering-side solution"
-            description="Problems tracks progress. Codebase is where the implementation, explanation, languages, and complexity notes live."
-          >
-            <div className="cta-panel">
-              <div>
-                <h3>View the full solution article</h3>
-                <p>Open the Codebase detail page for code, explanations, multiple languages, and complexity breakdowns.</p>
+          {hasCode ? (
+            <SectionPanel
+              eyebrow="Next Step"
+              title="Open the engineering-side solution"
+              description="Problems tracks progress. Codebase is where the implementation, explanation, languages, and complexity notes live."
+            >
+              <div className="cta-panel">
+                <div>
+                  <h3>View the full solution article</h3>
+                  <p>Open the Codebase detail page for code, explanations, multiple languages, and complexity breakdowns.</p>
+                </div>
+                <div className="problem-actions-row">
+                  <Link className="page-button compact" to={`/codebase/${toPlatformSegment(problem.platform)}/${problem.slug}`}>
+                    View Solution in Codebase
+                  </Link>
+                </div>
               </div>
-              <div className="problem-actions-row">
-                <Link className="page-button compact" to={`/codebase/${toPlatformSegment(problem.platform)}/${problem.slug}`}>
-                  View Solution in Codebase
-                </Link>
+            </SectionPanel>
+          ) : (
+            <SectionPanel
+              eyebrow="Code Missing"
+              title="Solution code has not been attached yet."
+              description="This problem was imported as metadata-only activity, so the tracker can show the accepted record even without a checked-in solution file."
+            >
+              <div className="cta-panel">
+                <div>
+                  <h3>Attach code in coding-journal using `cj import-submission`</h3>
+                  <p>Once a solution file is attached and published, this problem can appear in the Codebase library as a full engineering entry.</p>
+                </div>
               </div>
-            </div>
-          </SectionPanel>
+            </SectionPanel>
+          )}
         </>
       )}
     </main>

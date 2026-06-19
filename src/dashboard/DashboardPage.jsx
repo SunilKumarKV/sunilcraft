@@ -6,6 +6,10 @@ import {
   getJournalProjects,
   getJournalStats,
   getProblemLanguages,
+  getProblemSolvedAt,
+  getProblemTrackedCount,
+  isPlatformProfileSummary,
+  normalizePlatformName,
   toPlatformSegment,
   toProjectSlug,
   sumNumber,
@@ -105,20 +109,26 @@ export default function DashboardPage() {
   const { stats, problems, projects, loading, error } = useDashboardData();
 
   const analytics = useMemo(() => {
-    const totalProblems = stats?.totalProblems ?? problems.length;
+    const profileSummaries = problems.filter((problem) => isPlatformProfileSummary(problem));
+    const trackedProblems = problems.filter((problem) => !isPlatformProfileSummary(problem));
+    const summarySolvedTotal = profileSummaries.reduce(
+      (total, problem) => total + getProblemTrackedCount(problem),
+      0
+    );
+    const totalProblems = (stats?.totalProblems ?? trackedProblems.length) + summarySolvedTotal;
     const verifiedProblems =
-      stats?.verifiedProblems ?? problems.filter((problem) => problem.verified).length;
+      stats?.verifiedProblems ?? trackedProblems.filter((problem) => problem.verified).length;
     const totalProjects = stats?.totalProjects ?? projects.length;
     const totalStars = stats?.totalStars ?? sumNumber(projects, "stars");
     const totalForks = stats?.totalForks ?? sumNumber(projects, "forks");
     const languagesUsed = uniqueValues([
       ...projects.map((project) => project.language),
-      ...problems.map((problem) => problem.language),
+      ...trackedProblems.flatMap((problem) => getProblemLanguages(problem)),
     ]).length;
 
     const byPlatform = problems.reduce((acc, problem) => {
-      const key = problem.platform || "Custom";
-      acc[key] = (acc[key] || 0) + 1;
+      const key = normalizePlatformName(problem.platform || "Custom");
+      acc[key] = (acc[key] || 0) + getProblemTrackedCount(problem);
       return acc;
     }, {});
 
@@ -128,9 +138,16 @@ export default function DashboardPage() {
       percentage: percent(byPlatform[name] || 0, totalProblems),
     }));
 
-    const byLanguage = problems.reduce((acc, problem) => {
-      const key = problem.language || "Others";
-      acc[key] = (acc[key] || 0) + 1;
+    const byLanguage = trackedProblems.reduce((acc, problem) => {
+      const languages = getProblemLanguages(problem);
+      if (!languages.length) {
+        acc.Others = (acc.Others || 0) + 1;
+        return acc;
+      }
+
+      languages.forEach((language) => {
+        acc[language] = (acc[language] || 0) + 1;
+      });
       return acc;
     }, {});
 
@@ -184,16 +201,13 @@ export default function DashboardPage() {
       });
     });
 
-    problems.forEach((problem) => {
-      const solutionLanguages = Array.isArray(problem.solutions)
-        ? problem.solutions.map((solution) => normalizeTechnology(solution.language)).filter(Boolean)
-        : [];
+    trackedProblems.forEach((problem) => {
+      const solutionLanguages = getProblemLanguages(problem)
+        .map((language) => normalizeTechnology(language))
+        .filter(Boolean);
 
       if (solutionLanguages.length) {
         technologyCandidates.push(...solutionLanguages);
-      } else {
-        const fallbackLanguage = normalizeTechnology(problem.language);
-        if (fallbackLanguage) technologyCandidates.push(fallbackLanguage);
       }
     });
 
@@ -212,11 +226,11 @@ export default function DashboardPage() {
         percentage: percent(count, technologyCandidates.length),
       }));
 
-    const recentVerifiedProblems = [...problems]
-      .filter((problem) => problem.verified)
+    const recentProblems = [...trackedProblems]
+      .filter((problem) => getProblemSolvedAt(problem))
       .sort((a, b) => {
-        const dateA = new Date(a.solvedAt || a.updatedAt || a.createdAt || 0).getTime();
-        const dateB = new Date(b.solvedAt || b.updatedAt || b.createdAt || 0).getTime();
+        const dateA = new Date(getProblemSolvedAt(a) || 0).getTime();
+        const dateB = new Date(getProblemSolvedAt(b) || 0).getTime();
         const hasDateA = Boolean(dateA);
         const hasDateB = Boolean(dateB);
 
@@ -230,6 +244,7 @@ export default function DashboardPage() {
         ...problem,
         languageCount: getProblemLanguages(problem).length,
         platformSegment: toPlatformSegment(problem.platform),
+        platformLabel: normalizePlatformName(problem.platform),
       }));
 
     const recentProjects = [...projects]
@@ -263,17 +278,17 @@ export default function DashboardPage() {
           link: `/projects/${toProjectSlug(project.name)}`,
           badge: project.language || "Project",
         })),
-      ...problems
+      ...trackedProblems
         .filter((problem) => problem.solvedAt || problem.updatedAt)
         .map((problem) => ({
           type: "Problem Solved",
           title: problem.title,
-          date: new Date(problem.solvedAt || problem.updatedAt),
-          description: `Solved on ${problem.platform || "a platform"} with ${problem.difficulty || "unknown"} difficulty.`,
+          date: new Date(getProblemSolvedAt(problem)),
+          description: `Solved on ${normalizePlatformName(problem.platform) || "a platform"}${problem.rating ? ` with rating ${problem.rating}` : ` with ${problem.difficulty || "unknown"} difficulty`}.`,
           link: `/problems/${toPlatformSegment(problem.platform)}/${problem.slug}`,
-          badge: problem.platform || "Problem",
+          badge: normalizePlatformName(problem.platform) || "Problem",
         })),
-      ...problems
+      ...trackedProblems
         .filter((problem) => problem.verified && (problem.solvedAt || problem.updatedAt || problem.createdAt))
         .map((problem) => ({
           type: "Solution Verified",
@@ -288,7 +303,7 @@ export default function DashboardPage() {
       .sort((a, b) => b.date.getTime() - a.date.getTime())
       .slice(0, 8);
 
-    const problemsWithDate = problems.filter(
+    const problemsWithDate = trackedProblems.filter(
       (problem) => problem.addedAt || problem.createdAt || problem.updatedAt || problem.solvedAt
     );
 
@@ -360,7 +375,7 @@ export default function DashboardPage() {
       difficultyCards,
       tagCards,
       technologyCards,
-      recentVerifiedProblems,
+      recentProblems,
       recentProjects,
       timelineCards,
       projectInsights: {
@@ -368,6 +383,14 @@ export default function DashboardPage() {
         byForks,
         byUpdated,
       },
+      profileSummaries: profileSummaries.map((problem) => ({
+        slug: problem.slug,
+        platform: normalizePlatformName(problem.platform),
+        solvedCount: Number(problem.solvedCount) || 0,
+        username: problem.username || "",
+        source: problem.source || "",
+      })),
+      summarySolvedTotal,
       achievements,
       availableLanguages: uniqueValues(projects.map((project) => project.language)),
     };
@@ -397,6 +420,23 @@ export default function DashboardPage() {
                 </article>
               ))}
             </div>
+            {analytics.profileSummaries.length ? (
+              <div className="feature-grid" style={{ marginTop: "20px" }}>
+                {analytics.profileSummaries.map((summary) => (
+                  <article className="glass-card" key={summary.slug}>
+                    <div className="card-row">
+                      <span className="section-eyebrow">{summary.platform}</span>
+                      <span className="ui-badge accent">Profile summary data</span>
+                    </div>
+                    <h3>{summary.solvedCount} solved</h3>
+                    <p>
+                      {summary.username ? `${summary.username} • ` : ""}
+                      Source: {(summary.source || "profile summary").replace(/-/g, " ")}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            ) : null}
           </SectionPanel>
 
           <SectionPanel
@@ -522,19 +562,21 @@ export default function DashboardPage() {
         <SectionPanel
           eyebrow="Recent Activity"
           title="Recent Problems"
-          description="Verified problems from coding-journal, sorted by most recent solved dates and linked to the tracker detail page."
+          description="Recent problem activity from coding-journal, including metadata-only submissions such as Codeforces records."
         >
           <div className="feature-grid">
-            {analytics.recentVerifiedProblems.map((problem) => (
+            {analytics.recentProblems.map((problem) => (
               <article className="glass-card" key={problem.slug}>
                 <div className="card-row">
-                  <span>{problem.platform}</span>
-                  <span>{problem.difficulty || "Unknown"}</span>
+                  <span>{problem.platformLabel}</span>
+                  <span>{problem.rating ? `Rating ${problem.rating}` : problem.difficulty || "Unknown"}</span>
                 </div>
                 <h3>{problem.title}</h3>
-                <p>{problem.languageCount} solution language{problem.languageCount === 1 ? "" : "s"}</p>
+                <p>{problem.languageCount} accepted language{problem.languageCount === 1 ? "" : "s"}</p>
                 <div className="card-row" style={{ gap: "10px", flexWrap: "wrap" }}>
-                  <span className="ui-badge success">Verified</span>
+                  <span className={`ui-badge ${problem.verified ? "success" : "accent"}`}>
+                    {problem.verified ? "Verified" : "Metadata only"}
+                  </span>
                   <Link className="page-button compact" to={`/problems/${problem.platformSegment}/${problem.slug}`}>
                     View Problem
                   </Link>

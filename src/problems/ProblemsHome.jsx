@@ -10,7 +10,11 @@ import Badge from "../components/ui/Badge";
 import {
   formatDate,
   getJournalProblems,
+  getProblemLanguages,
   getProblemSolvedAt,
+  hasProblemCode,
+  isPlatformProfileSummary,
+  normalizePlatformName,
   toPlatformSegment,
   uniqueValues,
 } from "../lib/codingJournal";
@@ -70,12 +74,20 @@ export default function ProblemsHome() {
   }, []);
 
   const solvedProblems = useMemo(
-    () => problems.filter((problem) => (problem.status || "Solved") === "Solved"),
+    () =>
+      problems.filter(
+        (problem) => !isPlatformProfileSummary(problem) && (problem.status || "Solved") === "Solved"
+      ),
+    [problems]
+  );
+
+  const profileSummaries = useMemo(
+    () => problems.filter((problem) => isPlatformProfileSummary(problem)),
     [problems]
   );
 
   const platforms = useMemo(
-    () => ["All", ...uniqueValues(solvedProblems.map((problem) => problem.platform)).sort()],
+    () => ["All", ...uniqueValues(solvedProblems.map((problem) => normalizePlatformName(problem.platform))).sort()],
     [solvedProblems]
   );
 
@@ -95,15 +107,17 @@ export default function ProblemsHome() {
     return solvedProblems.filter((problem) => {
       const matchesSearch = [
         problem.title,
-        problem.platform,
+        normalizePlatformName(problem.platform),
         problem.difficulty,
+        problem.rating,
+        ...getProblemLanguages(problem),
         ...(problem.tags || []),
       ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()
         .includes(normalizedQuery);
-      const matchesPlatform = platform === "All" || problem.platform === platform;
+      const matchesPlatform = platform === "All" || normalizePlatformName(problem.platform) === platform;
       const matchesDifficulty = difficulty === "All" || problem.difficulty === difficulty;
       const matchesVerified =
         verified === "All" ||
@@ -124,7 +138,7 @@ export default function ProblemsHome() {
   const analytics = useMemo(() => {
     const verifiedCount = solvedProblems.filter((problem) => problem.verified).length;
     const byDifficulty = countBy(solvedProblems, (problem) => problem.difficulty || "Unknown");
-    const byPlatform = Object.entries(countBy(solvedProblems, (problem) => problem.platform || "Unknown"))
+    const byPlatform = Object.entries(countBy(solvedProblems, (problem) => normalizePlatformName(problem.platform) || "Unknown"))
       .sort((a, b) => b[1] - a[1]);
     const byTag = Object.entries(
       solvedProblems.reduce((acc, problem) => {
@@ -200,6 +214,28 @@ export default function ProblemsHome() {
         )}
       </SectionPanel>
 
+      {profileSummaries.length ? (
+        <SectionPanel
+          eyebrow="Platform Summary"
+          title="Profile summary records"
+          description="Some platforms currently sync solved totals as profile summaries rather than individual problem records."
+        >
+          <div className="feature-grid">
+            {profileSummaries.map((summary) => (
+              <article className="glass-card" key={summary.slug}>
+                <div className="card-row">
+                  <Badge tone="accent">{normalizePlatformName(summary.platform)}</Badge>
+                  <Badge>{Number(summary.solvedCount) || 0} solved</Badge>
+                </div>
+                <h3>{summary.username || summary.slug}</h3>
+                <p>Source: {(summary.source || "profile summary").replace(/-/g, " ")}</p>
+                {summary.username ? <p>Username: {summary.username}</p> : null}
+              </article>
+            ))}
+          </div>
+        </SectionPanel>
+      ) : null}
+
       <SectionPanel
         eyebrow="Coverage"
         title="Platforms and topics"
@@ -250,7 +286,7 @@ export default function ProblemsHome() {
                     >
                       <strong>{problem.title}</strong>
                       <span>
-                        {problem.platform} • {problem.difficulty || "Unknown"}
+                        {normalizePlatformName(problem.platform)} • {problem.rating ? `Rating ${problem.rating}` : problem.difficulty || "Unknown"}
                         {getProblemSolvedAt(problem) ? ` • ${formatDate(getProblemSolvedAt(problem))}` : ""}
                       </span>
                     </Link>
@@ -320,10 +356,13 @@ export default function ProblemsHome() {
                 key={`${problem.platform}-${problem.slug}`}
               >
                 <div className="card-row">
-                  <Badge tone="accent">{problem.platform}</Badge>
-                  <Badge>{problem.difficulty || "Unknown"}</Badge>
+                  <Badge tone="accent">{normalizePlatformName(problem.platform)}</Badge>
+                  <Badge>{problem.rating ? `Rating ${problem.rating}` : problem.difficulty || "Unknown"}</Badge>
                   <Badge>{problem.status || "Solved"}</Badge>
                   {problem.verified ? <Badge tone="success">Verified</Badge> : null}
+                  {!hasProblemCode(problem) ? (
+                    <Badge>Metadata only</Badge>
+                  ) : null}
                 </div>
                 <h2>{problem.title}</h2>
                 {(problem.tags || []).length ? (
@@ -335,6 +374,9 @@ export default function ProblemsHome() {
                 ) : (
                   <p>No tags attached yet.</p>
                 )}
+                {getProblemLanguages(problem).length ? (
+                  <p>Accepted language: {getProblemLanguages(problem).join(", ")}</p>
+                ) : null}
                 {getProblemSolvedAt(problem) ? (
                   <p className="tracker-date">Solved {formatDate(getProblemSolvedAt(problem))}</p>
                 ) : null}
