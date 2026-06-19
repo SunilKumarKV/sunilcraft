@@ -69,6 +69,17 @@ export function getJournalStats() {
   return fetchCachedJson("stats", STATS_URL);
 }
 
+export function normalizePlatformName(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (!normalized) return "Others";
+  if (normalized === "leetcode") return "LeetCode";
+  if (normalized === "hackerrank") return "HackerRank";
+  if (normalized === "codechef") return "CodeChef";
+  if (normalized === "codeforces") return "Codeforces";
+  if (normalized === "custom") return "Custom";
+  return String(value || "").trim();
+}
+
 export function getJournalProblemFolderApiUrl(platform, slug) {
   return `${CODING_JOURNAL_REPO_API}/problems/${toPlatformSegment(platform)}/${slug}`;
 }
@@ -114,15 +125,44 @@ export function normalizeProblemSolutions(problem) {
   ];
 }
 
-export function getProblemLanguages(problem) {
+export function getProblemSubmissionLanguages(problem) {
+  if (!Array.isArray(problem?.submissions)) return [];
+
   return uniqueValues(
-    normalizeProblemSolutions(problem).map((solution) => solution.language)
+    problem.submissions
+      .map((submission) => submission?.language || submission?.programmingLanguage || "")
+      .filter(Boolean)
   );
+}
+
+export function getProblemLanguages(problem) {
+  const solutionLanguages = normalizeProblemSolutions(problem).map(
+    (solution) => solution.language
+  );
+
+  if (solutionLanguages.length) {
+    return uniqueValues(solutionLanguages);
+  }
+
+  const submissionLanguages = getProblemSubmissionLanguages(problem);
+  if (submissionLanguages.length) {
+    return submissionLanguages;
+  }
+
+  return uniqueValues([problem?.language || ""]);
 }
 
 export function getProblemSourceUrl(solutionPath) {
   if (!solutionPath) return "";
   return `${CODING_JOURNAL_REPO_BLOB}/${solutionPath.replace(/^\//, "")}`;
+}
+
+export function hasProblemCode(problem) {
+  return normalizeProblemSolutions(problem).length > 0;
+}
+
+export function getProblemPrimaryUrl(problem) {
+  return problem?.url || problem?.detailUrl || problem?.questionUrl || "";
 }
 
 export function getProblemSolvedAt(problem) {

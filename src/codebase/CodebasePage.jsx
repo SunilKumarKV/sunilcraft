@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import {
   getJournalProblems,
   getProblemLanguages,
+  hasProblemCode,
+  normalizePlatformName,
   normalizeProblemSolutions,
   toPlatformSegment,
   uniqueValues,
@@ -55,8 +57,7 @@ export default function CodebasePage() {
   }, []);
 
   const libraryEntries = useMemo(
-    () =>
-      problems.filter((problem) => normalizeProblemSolutions(problem).length || getExplanationAvailable(problem)),
+    () => problems.filter((problem) => hasProblemCode(problem)),
     [problems]
   );
 
@@ -69,7 +70,7 @@ export default function CodebasePage() {
   );
 
   const platforms = useMemo(
-    () => ["All", ...uniqueValues(libraryEntries.map((problem) => problem.platform)).sort()],
+    () => ["All", ...uniqueValues(libraryEntries.map((problem) => normalizePlatformName(problem.platform))).sort()],
     [libraryEntries]
   );
 
@@ -85,7 +86,7 @@ export default function CodebasePage() {
       const solutionLanguages = getProblemLanguages(problem);
       const matchesSearch = [
         problem.title,
-        problem.platform,
+        normalizePlatformName(problem.platform),
         problem.difficulty,
         ...solutionLanguages,
         ...(problem.tags || []),
@@ -95,7 +96,7 @@ export default function CodebasePage() {
         .toLowerCase()
         .includes(normalizedQuery);
       const matchesLanguage = language === "All" || solutionLanguages.includes(language);
-      const matchesPlatform = platform === "All" || problem.platform === platform;
+      const matchesPlatform = platform === "All" || normalizePlatformName(problem.platform) === platform;
       const matchesVerified =
         verified === "All" ||
         (verified === "Verified" && problem.verified) ||
@@ -242,8 +243,8 @@ export default function CodebasePage() {
                   to={`/codebase/${toPlatformSegment(problem.platform)}/${problem.slug}`}
                 >
                   <div className="card-row">
-                    <Badge tone="accent">{problem.platform}</Badge>
-                    <Badge>{problem.difficulty || "Unknown"}</Badge>
+                    <Badge tone="accent">{normalizePlatformName(problem.platform)}</Badge>
+                    <Badge>{problem.rating ? `Rating ${problem.rating}` : problem.difficulty || "Unknown"}</Badge>
                     {problem.verified ? <Badge tone="success">Verified</Badge> : null}
                   </div>
                   <h2>{problem.title}</h2>

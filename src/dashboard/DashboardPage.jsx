@@ -6,6 +6,8 @@ import {
   getJournalProjects,
   getJournalStats,
   getProblemLanguages,
+  getProblemSolvedAt,
+  normalizePlatformName,
   toPlatformSegment,
   toProjectSlug,
   sumNumber,
@@ -113,11 +115,11 @@ export default function DashboardPage() {
     const totalForks = stats?.totalForks ?? sumNumber(projects, "forks");
     const languagesUsed = uniqueValues([
       ...projects.map((project) => project.language),
-      ...problems.map((problem) => problem.language),
+      ...problems.flatMap((problem) => getProblemLanguages(problem)),
     ]).length;
 
     const byPlatform = problems.reduce((acc, problem) => {
-      const key = problem.platform || "Custom";
+      const key = normalizePlatformName(problem.platform || "Custom");
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {});
@@ -129,8 +131,15 @@ export default function DashboardPage() {
     }));
 
     const byLanguage = problems.reduce((acc, problem) => {
-      const key = problem.language || "Others";
-      acc[key] = (acc[key] || 0) + 1;
+      const languages = getProblemLanguages(problem);
+      if (!languages.length) {
+        acc.Others = (acc.Others || 0) + 1;
+        return acc;
+      }
+
+      languages.forEach((language) => {
+        acc[language] = (acc[language] || 0) + 1;
+      });
       return acc;
     }, {});
 
@@ -185,15 +194,12 @@ export default function DashboardPage() {
     });
 
     problems.forEach((problem) => {
-      const solutionLanguages = Array.isArray(problem.solutions)
-        ? problem.solutions.map((solution) => normalizeTechnology(solution.language)).filter(Boolean)
-        : [];
+      const solutionLanguages = getProblemLanguages(problem)
+        .map((language) => normalizeTechnology(language))
+        .filter(Boolean);
 
       if (solutionLanguages.length) {
         technologyCandidates.push(...solutionLanguages);
-      } else {
-        const fallbackLanguage = normalizeTechnology(problem.language);
-        if (fallbackLanguage) technologyCandidates.push(fallbackLanguage);
       }
     });
 
@@ -212,11 +218,11 @@ export default function DashboardPage() {
         percentage: percent(count, technologyCandidates.length),
       }));
 
-    const recentVerifiedProblems = [...problems]
-      .filter((problem) => problem.verified)
+    const recentProblems = [...problems]
+      .filter((problem) => getProblemSolvedAt(problem))
       .sort((a, b) => {
-        const dateA = new Date(a.solvedAt || a.updatedAt || a.createdAt || 0).getTime();
-        const dateB = new Date(b.solvedAt || b.updatedAt || b.createdAt || 0).getTime();
+        const dateA = new Date(getProblemSolvedAt(a) || 0).getTime();
+        const dateB = new Date(getProblemSolvedAt(b) || 0).getTime();
         const hasDateA = Boolean(dateA);
         const hasDateB = Boolean(dateB);
 
@@ -230,6 +236,7 @@ export default function DashboardPage() {
         ...problem,
         languageCount: getProblemLanguages(problem).length,
         platformSegment: toPlatformSegment(problem.platform),
+        platformLabel: normalizePlatformName(problem.platform),
       }));
 
     const recentProjects = [...projects]
@@ -268,10 +275,10 @@ export default function DashboardPage() {
         .map((problem) => ({
           type: "Problem Solved",
           title: problem.title,
-          date: new Date(problem.solvedAt || problem.updatedAt),
-          description: `Solved on ${problem.platform || "a platform"} with ${problem.difficulty || "unknown"} difficulty.`,
+          date: new Date(getProblemSolvedAt(problem)),
+          description: `Solved on ${normalizePlatformName(problem.platform) || "a platform"}${problem.rating ? ` with rating ${problem.rating}` : ` with ${problem.difficulty || "unknown"} difficulty`}.`,
           link: `/problems/${toPlatformSegment(problem.platform)}/${problem.slug}`,
-          badge: problem.platform || "Problem",
+          badge: normalizePlatformName(problem.platform) || "Problem",
         })),
       ...problems
         .filter((problem) => problem.verified && (problem.solvedAt || problem.updatedAt || problem.createdAt))
@@ -360,7 +367,7 @@ export default function DashboardPage() {
       difficultyCards,
       tagCards,
       technologyCards,
-      recentVerifiedProblems,
+      recentProblems,
       recentProjects,
       timelineCards,
       projectInsights: {
@@ -522,19 +529,21 @@ export default function DashboardPage() {
         <SectionPanel
           eyebrow="Recent Activity"
           title="Recent Problems"
-          description="Verified problems from coding-journal, sorted by most recent solved dates and linked to the tracker detail page."
+          description="Recent problem activity from coding-journal, including metadata-only submissions such as Codeforces records."
         >
           <div className="feature-grid">
-            {analytics.recentVerifiedProblems.map((problem) => (
+            {analytics.recentProblems.map((problem) => (
               <article className="glass-card" key={problem.slug}>
                 <div className="card-row">
-                  <span>{problem.platform}</span>
-                  <span>{problem.difficulty || "Unknown"}</span>
+                  <span>{problem.platformLabel}</span>
+                  <span>{problem.rating ? `Rating ${problem.rating}` : problem.difficulty || "Unknown"}</span>
                 </div>
                 <h3>{problem.title}</h3>
-                <p>{problem.languageCount} solution language{problem.languageCount === 1 ? "" : "s"}</p>
+                <p>{problem.languageCount} accepted language{problem.languageCount === 1 ? "" : "s"}</p>
                 <div className="card-row" style={{ gap: "10px", flexWrap: "wrap" }}>
-                  <span className="ui-badge success">Verified</span>
+                  <span className={`ui-badge ${problem.verified ? "success" : "accent"}`}>
+                    {problem.verified ? "Verified" : "Metadata only"}
+                  </span>
                   <Link className="page-button compact" to={`/problems/${problem.platformSegment}/${problem.slug}`}>
                     View Problem
                   </Link>
