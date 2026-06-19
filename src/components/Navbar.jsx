@@ -23,6 +23,7 @@ export default function Navbar() {
     if (id === "Home") return location.pathname === "/";
     if (id === "Projects") return location.pathname.startsWith("/projects");
     if (id === "Coding") return location.pathname.startsWith("/coding");
+    if (id === "Career") return location.pathname.startsWith("/career");
     if (id === "Dashboard") {
       return (
         location.pathname.startsWith("/dashboard") ||
@@ -51,6 +52,8 @@ export default function Navbar() {
       navigate("/about");
     } else if (id === "Coding") {
       navigate("/coding");
+    } else if (id === "Career") {
+      navigate("/career");
     } else if (id === "Dashboard") {
       navigate("/dashboard");
     } else if (id === "Contact") {
@@ -100,6 +103,7 @@ export default function Navbar() {
                 "Home",
                 "Projects",
                 "Coding",
+                "Career",
                 "Dashboard",
                 "About",
                 "Contact",
