@@ -196,9 +196,14 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px 18px;
   }
+
+  .footer-bottom {
+    margin-top: 26px;
+    padding-top: 18px;
+  }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 640px) {
   .footer {
     padding-inline: 12px;
     padding-top: 40px;
@@ -211,7 +216,7 @@
 
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 20px;
   }
 
   .footer-column {
@@ -257,6 +262,12 @@
 
   .footer-brand-column h2 {
     font-size: clamp(1.32rem, 8vw, 1.6rem);
+  }
+
+  .footer-role-list span,
+  .footer-social-chip {
+    width: 100%;
+    justify-content: center;
   }
 
   .footer-text,

@@ -117,6 +117,7 @@
 
 .contact-form button {
   padding: 16px 0;
+  min-height: 52px;
   background: var(--button-bg);
   color: var(--card-bg);
   border: none;
@@ -148,5 +149,6 @@
 @media (max-width: 860px) {
   .contact-layout {
     grid-template-columns: 1fr;
+    gap: 22px;
   }
 }

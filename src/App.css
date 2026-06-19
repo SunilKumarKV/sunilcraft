@@ -336,7 +336,7 @@ a:hover {
 
 .problem-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: 22px;
 }
 
@@ -444,6 +444,7 @@ a:hover {
   display: inline-flex;
   margin-top: 24px;
   padding: 12px 18px;
+  min-height: 48px;
   border: 1px solid color-mix(in srgb, var(--accent-color) 22%, var(--input-border));
   border-radius: 999px;
   align-items: center;
@@ -451,6 +452,7 @@ a:hover {
   text-align: center;
   max-width: 100%;
   white-space: normal;
+  overflow-wrap: anywhere;
   background: color-mix(in srgb, var(--card-bg) 88%, transparent);
   box-shadow: var(--shadow-light);
   transition: transform 0.18s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
@@ -654,7 +656,14 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  align-items: center;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.problem-actions-row > *,
+.page-header-actions > *,
+.home-section-actions > *,
+.cta-panel > * {
   min-width: 0;
 }
 
@@ -1536,6 +1545,16 @@ textarea:focus-visible {
 }
 .timeline-item span { color: var(--accent-color); font-weight: 800; }
 
+@media (max-width: 1024px) {
+  .page-meta-strip.compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .timeline-item {
+    grid-template-columns: 120px 1fr;
+  }
+}
+
 .widget-card p + p {
   margin-top: 6px;
 }
@@ -1750,6 +1769,21 @@ textarea:focus-visible {
   .card-row,
   .page-header-actions {
     gap: 10px;
+  }
+
+  .problem-actions-row > *,
+  .page-header-actions > *,
+  .home-section-actions > *,
+  .cta-panel > *,
+  .problem-toolbar > *,
+  .problem-toolbar-wrap > * {
+    flex: 1 1 100%;
+  }
+
+  .page-button,
+  .copy-button,
+  .solution-tab {
+    width: 100%;
   }
 
   .metric-list-row {
