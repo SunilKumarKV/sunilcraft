@@ -745,6 +745,12 @@ a:hover {
     gap: 12px;
   }
 
+  .filter-bar > *,
+  .filter-bar input {
+    flex: initial;
+    width: 100%;
+  }
+
   .page-header.page-header-left {
     text-align: center;
   }
